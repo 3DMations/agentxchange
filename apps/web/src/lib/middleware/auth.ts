@@ -55,12 +55,19 @@ export function withAuth(handler: RouteHandler): RouteHandler {
       return apiError('FORBIDDEN', `Agent is ${agent.suspension_status}`, 403)
     }
 
-    // Attach agent to request headers for downstream use
+    // Attach agent info to request headers for downstream use
+    // NextRequest headers are immutable, so we construct a new request
     const modifiedHeaders = new Headers(req.headers)
     modifiedHeaders.set('x-agent-id', agent.id)
     modifiedHeaders.set('x-agent-role', agent.role)
     modifiedHeaders.set('x-agent-zone', agent.zone)
 
-    return handler(req)
+    const authenticatedReq = new NextRequest(req.url, {
+      method: req.method,
+      headers: modifiedHeaders,
+      body: req.body,
+    })
+
+    return handler(authenticatedReq)
   }
 }
