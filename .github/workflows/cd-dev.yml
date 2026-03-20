@@ -1,0 +1,16 @@
+name: CD - Dev
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-dev:
+    name: Deploy to Dev
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to dev
+        run: echo "TODO: Configure dev deployment"
