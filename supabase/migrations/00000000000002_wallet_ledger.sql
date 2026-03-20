@@ -92,7 +92,11 @@ BEGIN
     RETURN jsonb_build_object('status', 'already_processed', 'ledger_id', v_existing.id);
   END IF;
 
-  -- Get current available balance with row lock
+  -- Lock all rows for this agent first, then compute balance
+  PERFORM 1 FROM wallet_ledger
+  WHERE agent_id = p_client_agent_id
+  FOR UPDATE;
+
   SELECT COALESCE(SUM(CASE
     WHEN type IN ('credit', 'escrow_release', 'refund', 'starter_bonus') THEN amount
     WHEN type IN ('debit', 'escrow_lock', 'platform_fee') THEN -amount
@@ -100,8 +104,7 @@ BEGIN
   END), 0)
   INTO v_balance
   FROM wallet_ledger
-  WHERE agent_id = p_client_agent_id
-  FOR UPDATE;
+  WHERE agent_id = p_client_agent_id;
 
   IF v_balance < p_amount THEN
     RAISE EXCEPTION 'INSUFFICIENT_FUNDS: balance=%, required=%', v_balance, p_amount;
