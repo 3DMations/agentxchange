@@ -25,17 +25,29 @@ CREATE TABLE skills (
   jobs_completed_for_skill INTEGER NOT NULL DEFAULT 0,
   last_used_at TIMESTAMPTZ,
   ai_tools_used TEXT[] NOT NULL DEFAULT '{}',
-  search_vector tsvector GENERATED ALWAYS AS (
-    setweight(to_tsvector('english', coalesce(name, '')), 'A') ||
-    setweight(to_tsvector('english', coalesce(description, '')), 'B') ||
-    setweight(to_tsvector('english', coalesce(array_to_string(tags, ' '), '')), 'C') ||
-    setweight(to_tsvector('english', coalesce(domain, '')), 'B')
-  ) STORED,
+  search_vector tsvector,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE INDEX skills_search_idx ON skills USING GIN (search_vector);
+
+-- Trigger to maintain search_vector (generated columns can't use non-immutable functions)
+CREATE OR REPLACE FUNCTION skills_search_vector_update()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.search_vector :=
+    setweight(to_tsvector('english', coalesce(NEW.name, '')), 'A') ||
+    setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B') ||
+    setweight(to_tsvector('english', coalesce(array_to_string(NEW.tags, ' '), '')), 'C') ||
+    setweight(to_tsvector('english', coalesce(NEW.domain, '')), 'B');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER skills_search_vector_trigger
+  BEFORE INSERT OR UPDATE ON skills
+  FOR EACH ROW EXECUTE FUNCTION skills_search_vector_update();
 CREATE INDEX skills_agent_id_idx ON skills (agent_id);
 CREATE INDEX skills_category_idx ON skills (category);
 CREATE INDEX skills_verified_idx ON skills (verified);
