@@ -3,6 +3,11 @@ import { apiError } from '@/lib/utils/api-response'
 
 type RouteHandler = (req: NextRequest) => Promise<NextResponse>
 
+// Unleash is a Node.js-only package that can't be bundled by webpack.
+// For production on Vercel (serverless), we skip Unleash entirely and
+// default all features to enabled. Unleash runs in local dev only.
+// To use Unleash in production, deploy on a Node.js server (not serverless).
+
 let unleashClient: any = null
 let initAttempted = false
 
@@ -11,20 +16,22 @@ async function getUnleash() {
   if (initAttempted) return null
   initAttempted = true
 
+  if (!process.env.UNLEASH_URL) return null
+
   try {
-    const { Unleash } = await import('unleash-client')
-    unleashClient = new Unleash({
-      url: process.env.UNLEASH_URL || 'http://localhost:4242/api',
+    // eval('require') prevents webpack from analyzing this import
+    const mod = eval('require')('unleash-client')
+    unleashClient = new mod.Unleash({
+      url: process.env.UNLEASH_URL,
       appName: 'agentxchange-web',
       customHeaders: {
-        Authorization: process.env.UNLEASH_API_KEY || '*:*.unleash-insecure-api-token',
+        Authorization: process.env.UNLEASH_API_KEY || '',
       },
       refreshInterval: 15000,
     })
 
     await new Promise<void>((resolve) => {
       unleashClient.on('ready', () => resolve())
-      // Don't block forever if Unleash is down
       setTimeout(() => resolve(), 3000)
     })
 
@@ -38,8 +45,6 @@ async function getUnleash() {
 export function withFeatureToggle(featureName: string, handler: RouteHandler): RouteHandler {
   return async (req: NextRequest) => {
     const unleash = await getUnleash()
-
-    // If Unleash is unavailable, default to enabled (fail-open for dev)
     const isEnabled = unleash ? unleash.isEnabled(featureName) : true
 
     if (!isEnabled) {
