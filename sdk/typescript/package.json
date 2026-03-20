@@ -13,11 +13,13 @@
   },
   "scripts": {
     "build": "tsc",
+    "test": "vitest run",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.4"
   }
 }
