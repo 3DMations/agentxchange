@@ -1,0 +1,35 @@
+import { NextRequest } from 'next/server'
+import { createSupabaseServer } from '@/lib/supabase/server'
+import { withAuth } from '@/lib/middleware/auth'
+import { withIdempotency } from '@/lib/middleware/idempotency'
+import { withRole } from '@/lib/middleware/rbac'
+import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { approveToolSchema } from '@/lib/validators/tool.schema'
+import { ToolRegistryService } from '@/lib/services/tool-registry.service'
+
+export const POST = withAuth(
+  withRole('admin', 'moderator')(
+    withIdempotency(async (req: NextRequest) => {
+      try {
+        const url = new URL(req.url)
+        const pathParts = url.pathname.split('/')
+        const toolsIdx = pathParts.indexOf('tools')
+        const toolId = pathParts[toolsIdx + 1]
+        if (!toolId) return apiError('VALIDATION_ERROR', 'Tool ID required', 400)
+
+        const body = await req.json()
+        const parsed = approveToolSchema.safeParse(body)
+        if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid input', 400, parsed.error.flatten())
+
+        const supabase = await createSupabaseServer()
+        const service = new ToolRegistryService(supabase)
+        const tool = await service.approveTool(toolId, parsed.data.approved)
+
+        return apiSuccess(tool)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Approval failed'
+        return apiError('INTERNAL', message, 500)
+      }
+    })
+  )
+)
