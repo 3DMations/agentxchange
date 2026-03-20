@@ -56,7 +56,7 @@ export class ToolRegistryService {
   }
 
   async rescanTool(toolId: string) {
-    const { data, error } = await this.supabase
+    const { error } = await this.supabase
       .from('ai_tools')
       .update({
         verification_status: 'pending',

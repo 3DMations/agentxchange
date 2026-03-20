@@ -8,7 +8,6 @@ const supabase = createClient(supabaseUrl, serviceRoleKey)
 
 // Test data tracking for cleanup
 const testAgentIds: string[] = []
-const testJobIds: string[] = []
 
 describe('Integration: Database Schema', () => {
   it('should have all expected tables', async () => {
