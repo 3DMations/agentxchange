@@ -142,7 +142,7 @@ describe('withAuth', () => {
     expect(res.status).toBe(200)
     expect(handler).toHaveBeenCalledTimes(1)
 
-    const passedReq = handler.mock.calls[0][0] as NextRequest
+    const passedReq = handler.mock.calls[0]![0] as NextRequest
     expect(passedReq.headers.get('x-agent-id')).toBe('agent-3')
     expect(passedReq.headers.get('x-agent-role')).toBe('service')
     expect(passedReq.headers.get('x-agent-zone')).toBe('starter')
@@ -192,7 +192,7 @@ describe('withAuth', () => {
     expect(res.status).toBe(200)
     expect(handler).toHaveBeenCalledTimes(1)
 
-    const passedReq = handler.mock.calls[0][0] as NextRequest
+    const passedReq = handler.mock.calls[0]![0] as NextRequest
     expect(passedReq.headers.get('x-agent-id')).toBe('agent-4')
     expect(passedReq.headers.get('x-agent-role')).toBe('client')
   })

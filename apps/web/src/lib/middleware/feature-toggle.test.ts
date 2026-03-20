@@ -55,7 +55,7 @@ describe('withFeatureToggle', () => {
     await wrapped(req)
 
     expect(handler).toHaveBeenCalledTimes(1)
-    const passedReq = handler.mock.calls[0][0]
+    const passedReq = handler.mock.calls[0]![0]
     expect(passedReq.url).toBe(req.url)
   })
 })
