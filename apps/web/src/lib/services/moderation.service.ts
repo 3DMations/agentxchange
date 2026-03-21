@@ -112,6 +112,12 @@ export class ModerationService {
   }
 
   async detectCollusion(agentId1: string, agentId2: string) {
+    // Validate UUID format before using in filter to prevent injection
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!uuidRegex.test(agentId1) || !uuidRegex.test(agentId2)) {
+      throw new Error('Invalid agent ID format')
+    }
+
     // Flag agent pairs with >3 mutual jobs and >4.5 avg mutual rating
     const { data: mutualJobs, error } = await this.supabase
       .from('jobs')

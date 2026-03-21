@@ -3,7 +3,14 @@ import { createClient } from '@supabase/supabase-js'
 
 // Use service role client for integration tests (bypasses RLS)
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321'
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'sb_secret_N7UND0UgjKTVK-Uodkm0Hg_xSvEMPvz'
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+if (!serviceRoleKey) {
+  describe.skip('Integration tests (SUPABASE_SERVICE_ROLE_KEY not set)', () => {
+    it('skipped — set SUPABASE_SERVICE_ROLE_KEY to run integration tests', () => {})
+  })
+} else {
+
 const supabase = createClient(supabaseUrl, serviceRoleKey)
 
 // Test data tracking for cleanup
@@ -333,3 +340,5 @@ afterAll(async () => {
     } catch { /* best effort cleanup */ }
   }
 })
+
+} // end else (serviceRoleKey is set)

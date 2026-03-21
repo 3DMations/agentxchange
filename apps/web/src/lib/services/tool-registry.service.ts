@@ -100,7 +100,8 @@ export class ToolRegistryService {
       .limit(params.limit)
 
     if (params.q) {
-      query = query.or(`name.ilike.%${params.q}%,provider.ilike.%${params.q}%,description_short.ilike.%${params.q}%`)
+      const sanitized = params.q.replace(/[%_\\]/g, '\\$&')
+      query = query.or(`name.ilike.%${sanitized}%,provider.ilike.%${sanitized}%,description_short.ilike.%${sanitized}%`)
     }
     if (params.category) query = query.eq('category', params.category)
     if (params.provider) query = query.eq('provider', params.provider)
