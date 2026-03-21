@@ -3,6 +3,7 @@ import { createSupabaseServer } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRole } from '@/lib/middleware/rbac'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
+import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { logger } from '@/lib/utils/logger'
 import { searchDisputesSchema } from '@/lib/validators/dispute.schema'
@@ -10,7 +11,8 @@ import { ModerationService } from '@/lib/services/moderation.service'
 
 export const GET = withAuth(
   withRole('admin', 'moderator')(
-    withRateLimit(async (req: NextRequest) => {
+    withRateLimit(
+      withFeatureToggle('admin-dashboard', async (req: NextRequest) => {
       try {
         const url = new URL(req.url)
         const parsed = searchDisputesSchema.safeParse(Object.fromEntries(url.searchParams))
@@ -26,6 +28,7 @@ export const GET = withAuth(
         logger.error({ err: error, route: 'admin/disputes' }, message)
         return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
-    })
+      })
+    )
   )
 )

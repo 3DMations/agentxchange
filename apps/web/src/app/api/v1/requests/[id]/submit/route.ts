@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/middleware/auth'
+import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
@@ -9,8 +10,9 @@ import { submitJobSchema } from '@/lib/validators/job.schema'
 import { JobService } from '@/lib/services/job.service'
 
 export const POST = withAuth(
-  withIdempotency(
-    withFeatureToggle('job-exchange', async (req: NextRequest) => {
+  withRateLimit(
+    withIdempotency(
+      withFeatureToggle('job-exchange', async (req: NextRequest) => {
       try {
         const url = new URL(req.url)
         const pathParts = url.pathname.split('/')
@@ -36,6 +38,7 @@ export const POST = withAuth(
         logger.error({ err: error, route: 'requests/[id]/submit' }, message)
         return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
-    })
+      })
+    )
   )
 )

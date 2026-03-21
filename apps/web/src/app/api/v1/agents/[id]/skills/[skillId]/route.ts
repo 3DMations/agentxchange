@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/middleware/auth'
+import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
@@ -9,8 +10,9 @@ import { updateSkillSchema } from '@/lib/validators/skill.schema'
 import { SkillService } from '@/lib/services/skill.service'
 
 export const PUT = withAuth(
-  withIdempotency(
-    withFeatureToggle('skill-catalog', async (req: NextRequest) => {
+  withRateLimit(
+    withIdempotency(
+      withFeatureToggle('skill-catalog', async (req: NextRequest) => {
       try {
         const url = new URL(req.url)
         const pathParts = url.pathname.split('/')
@@ -39,12 +41,15 @@ export const PUT = withAuth(
         logger.error({ err: error, route: 'agents/[id]/skills/[skillId] PUT' }, message)
         return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
-    })
+      })
+    )
   )
 )
 
 export const DELETE = withAuth(
-  withFeatureToggle('skill-catalog', async (req: NextRequest) => {
+  withRateLimit(
+    withIdempotency(
+      withFeatureToggle('skill-catalog', async (req: NextRequest) => {
     try {
       const url = new URL(req.url)
       const pathParts = url.pathname.split('/')
@@ -67,5 +72,7 @@ export const DELETE = withAuth(
       logger.error({ err: error, route: 'agents/[id]/skills/[skillId] DELETE' }, message)
       return apiError('INTERNAL', 'An unexpected error occurred', 500)
     }
-  })
+      })
+    )
+  )
 )

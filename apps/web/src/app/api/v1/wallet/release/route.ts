@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/middleware/auth'
+import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
@@ -9,8 +10,9 @@ import { escrowReleaseSchema } from '@/lib/validators/wallet.schema'
 import { WalletService } from '@/lib/services/wallet.service'
 
 export const POST = withAuth(
-  withIdempotency(
-    withFeatureToggle('wallet-service', async (req: NextRequest) => {
+  withRateLimit(
+    withIdempotency(
+      withFeatureToggle('wallet-service', async (req: NextRequest) => {
       try {
         const body = await req.json()
         const parsed = escrowReleaseSchema.safeParse(body)
@@ -32,6 +34,7 @@ export const POST = withAuth(
         logger.error({ err: error, route: 'wallet/release' }, message)
         return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
-    })
+      })
+    )
   )
 )

@@ -37,8 +37,9 @@ export const GET = withAuth(
 )
 
 export const PUT = withAuth(
-  withIdempotency(
-    withFeatureToggle('tool-registry', async (req: NextRequest) => {
+  withRateLimit(
+    withIdempotency(
+      withFeatureToggle('tool-registry', async (req: NextRequest) => {
       try {
         const toolId = extractToolId(req.url)
         if (!toolId) return apiError('VALIDATION_ERROR', 'Tool ID required', 400)
@@ -60,6 +61,7 @@ export const PUT = withAuth(
         logger.error({ err: error, route: 'tools/[toolId] PUT' }, message)
         return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
-    })
+      })
+    )
   )
 )
