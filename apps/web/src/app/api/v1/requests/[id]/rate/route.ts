@@ -4,6 +4,7 @@ import { withAuth } from '@/lib/middleware/auth'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { rateJobSchema } from '@/lib/validators/job.schema'
 import { JobService } from '@/lib/services/job.service'
 
@@ -31,9 +32,10 @@ export const POST = withAuth(
 
         return apiSuccess(result)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to rate'
+        const message = error instanceof Error ? error.message : 'Unknown error'
         if (message.includes('Invalid transition')) return apiError('CONFLICT', message, 409)
-        return apiError('INTERNAL', message, 500)
+        logger.error({ err: error, route: 'requests/[id]/rate' }, message)
+        return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
     })
   )

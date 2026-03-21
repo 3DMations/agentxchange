@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { loginAgentSchema } from '@/lib/validators/agent.schema'
 import { AuthService } from '@/lib/services/auth.service'
 
@@ -21,7 +22,8 @@ export const POST = withRateLimit(async (req: NextRequest) => {
     const result = await authService.login(email, password)
     return apiSuccess(result)
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Login failed'
-    return apiError('UNAUTHORIZED', message, 401)
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    logger.error({ err: error, route: 'agents/login' }, message)
+    return apiError('UNAUTHORIZED', 'Invalid credentials', 401)
   }
 })

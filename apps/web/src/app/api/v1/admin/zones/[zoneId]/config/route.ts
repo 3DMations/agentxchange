@@ -4,6 +4,7 @@ import { withAuth } from '@/lib/middleware/auth'
 import { withRole } from '@/lib/middleware/rbac'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { ZoneService } from '@/lib/services/zone.service'
 
 export const PUT = withAuth(
@@ -23,8 +24,9 @@ export const PUT = withAuth(
 
         return apiSuccess(config)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to update zone config'
-        return apiError('INTERNAL', message, 500)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        logger.error({ err: error, route: 'admin/zones/[zoneId]/config' }, message)
+        return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
     })
   )

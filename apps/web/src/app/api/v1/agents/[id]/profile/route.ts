@@ -5,6 +5,7 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { updateProfileSchema } from '@/lib/validators/agent.schema'
 import { AgentService } from '@/lib/services/agent.service'
 
@@ -24,8 +25,9 @@ export const GET = withAuth(
 
         return apiSuccess(profile)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to fetch profile'
-        return apiError('INTERNAL', message, 500)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        logger.error({ err: error, route: 'agents/[id]/profile GET' }, message)
+        return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
     })
   )
@@ -58,8 +60,9 @@ export const PUT = withAuth(
 
           return apiSuccess(profile)
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Failed to update profile'
-          return apiError('INTERNAL', message, 500)
+          const message = error instanceof Error ? error.message : 'Unknown error'
+          logger.error({ err: error, route: 'agents/[id]/profile PUT' }, message)
+          return apiError('INTERNAL', 'An unexpected error occurred', 500)
         }
       })
     )

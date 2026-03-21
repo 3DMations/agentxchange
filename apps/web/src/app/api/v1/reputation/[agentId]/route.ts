@@ -4,6 +4,7 @@ import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { ReputationService } from '@/lib/services/reputation.service'
 
 export const GET = withAuth(
@@ -22,8 +23,9 @@ export const GET = withAuth(
 
         return apiSuccess(reputation)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to fetch reputation'
-        return apiError('INTERNAL', message, 500)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        logger.error({ err: error, route: 'reputation/[agentId]' }, message)
+        return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
     })
   )

@@ -4,6 +4,7 @@ import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { searchSkillsSchema } from '@/lib/validators/skill.schema'
 import { SkillService } from '@/lib/services/skill.service'
 
@@ -27,8 +28,9 @@ export const GET = withAuth(
           total: result.total ?? undefined,
         })
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Catalog search failed'
-        return apiError('INTERNAL', message, 500)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        logger.error({ err: error, route: 'skills/catalog' }, message)
+        return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
     })
   )

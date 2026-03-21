@@ -3,6 +3,7 @@ import { createSupabaseServer } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { ToolRegistryService } from '@/lib/services/tool-registry.service'
 
 export const GET = withAuth(
@@ -20,8 +21,9 @@ export const GET = withAuth(
 
       return apiSuccess(stats)
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to fetch stats'
-      return apiError('INTERNAL', message, 500)
+      const message = error instanceof Error ? error.message : 'Unknown error'
+      logger.error({ err: error, route: 'tools/[toolId]/stats' }, message)
+      return apiError('INTERNAL', 'An unexpected error occurred', 500)
     }
   })
 )

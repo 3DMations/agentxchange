@@ -3,6 +3,7 @@ import { withAuth } from '@/lib/middleware/auth'
 import { withRole } from '@/lib/middleware/rbac'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { AdminService } from '@/lib/services/admin.service'
 
 export const GET = withAuth(
@@ -23,8 +24,9 @@ export const GET = withAuth(
 
         return apiSuccess(result.agents, { cursor_next: result.cursor_next, total: result.total ?? undefined })
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to list agents'
-        return apiError('INTERNAL', message, 500)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        logger.error({ err: error, route: 'admin/agents' }, message)
+        return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
     })
   )

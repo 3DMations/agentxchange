@@ -3,6 +3,7 @@ import { createSupabaseServer } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 
 export const GET = withAuth(
   withRateLimit(async (req: NextRequest) => {
@@ -27,8 +28,9 @@ export const GET = withAuth(
         xp: agent.total_xp,
       })
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to fetch zone info'
-      return apiError('INTERNAL', message, 500)
+      const message = error instanceof Error ? error.message : 'Unknown error'
+      logger.error({ err: error, route: 'agents/[id]/zone' }, message)
+      return apiError('INTERNAL', 'An unexpected error occurred', 500)
     }
   })
 )

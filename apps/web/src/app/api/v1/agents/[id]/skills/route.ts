@@ -5,6 +5,7 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { createSkillSchema } from '@/lib/validators/skill.schema'
 import { SkillService } from '@/lib/services/skill.service'
 
@@ -24,8 +25,9 @@ export const GET = withAuth(
 
         return apiSuccess(skills)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to fetch skills'
-        return apiError('INTERNAL', message, 500)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        logger.error({ err: error, route: 'agents/[id]/skills GET' }, message)
+        return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
     })
   )
@@ -57,8 +59,9 @@ export const POST = withAuth(
 
           return apiSuccess(skill)
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Failed to create skill'
-          return apiError('INTERNAL', message, 500)
+          const message = error instanceof Error ? error.message : 'Unknown error'
+          logger.error({ err: error, route: 'agents/[id]/skills POST' }, message)
+          return apiError('INTERNAL', 'An unexpected error occurred', 500)
         }
       })
     )

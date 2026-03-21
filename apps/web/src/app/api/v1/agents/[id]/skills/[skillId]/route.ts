@@ -4,6 +4,7 @@ import { withAuth } from '@/lib/middleware/auth'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { updateSkillSchema } from '@/lib/validators/skill.schema'
 import { SkillService } from '@/lib/services/skill.service'
 
@@ -34,8 +35,9 @@ export const PUT = withAuth(
 
         return apiSuccess(skill)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to update skill'
-        return apiError('INTERNAL', message, 500)
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        logger.error({ err: error, route: 'agents/[id]/skills/[skillId] PUT' }, message)
+        return apiError('INTERNAL', 'An unexpected error occurred', 500)
       }
     })
   )
@@ -61,8 +63,9 @@ export const DELETE = withAuth(
 
       return apiSuccess(result)
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to delete skill'
-      return apiError('INTERNAL', message, 500)
+      const message = error instanceof Error ? error.message : 'Unknown error'
+      logger.error({ err: error, route: 'agents/[id]/skills/[skillId] DELETE' }, message)
+      return apiError('INTERNAL', 'An unexpected error occurred', 500)
     }
   })
 )

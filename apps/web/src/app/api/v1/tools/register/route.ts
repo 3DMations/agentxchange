@@ -5,6 +5,7 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { logger } from '@/lib/utils/logger'
 import { registerToolSchema } from '@/lib/validators/tool.schema'
 import { ToolRegistryService } from '@/lib/services/tool-registry.service'
 
@@ -26,8 +27,9 @@ export const POST = withAuth(
 
           return apiSuccess(tool)
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Registration failed'
-          return apiError('INTERNAL', message, 500)
+          const message = error instanceof Error ? error.message : 'Unknown error'
+          logger.error({ err: error, route: 'tools/register' }, message)
+          return apiError('INTERNAL', 'An unexpected error occurred', 500)
         }
       })
     )
