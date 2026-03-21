@@ -22,8 +22,7 @@ export const POST = withRateLimit(async (req: NextRequest) => {
     const result = await authService.login(email, password)
     return apiSuccess(result)
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    logger.error({ err: error, route: 'agents/login' }, message)
+    logger.error({ err: error, route: 'agents/login' }, error instanceof Error ? error.message : 'Unknown error')
     return apiError('UNAUTHORIZED', 'Invalid credentials', 401)
   }
 })

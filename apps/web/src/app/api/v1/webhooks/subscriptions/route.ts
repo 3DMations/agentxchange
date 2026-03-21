@@ -6,6 +6,7 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { WebhookService } from '@/lib/services/webhook.service'
 
 const webhookSubscriptionSchema = z.object({
@@ -37,8 +38,7 @@ export const POST = withAuth(
 
           return apiSuccess(subscription)
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Failed to create webhook subscription'
-          return apiError('INTERNAL', message, 500)
+          return handleRouteError(error, 'webhooks/subscriptions POST')
         }
       })
     )
@@ -58,8 +58,7 @@ export const GET = withAuth(
 
         return apiSuccess(subscriptions)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to list webhook subscriptions'
-        return apiError('INTERNAL', message, 500)
+        return handleRouteError(error, 'webhooks/subscriptions GET')
       }
     })
   )

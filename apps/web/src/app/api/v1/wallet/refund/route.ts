@@ -5,7 +5,7 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { refundSchema } from '@/lib/validators/wallet.schema'
 import { WalletService } from '@/lib/services/wallet.service'
 
@@ -27,9 +27,7 @@ export const POST = withAuth(
 
         return apiSuccess(result)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        logger.error({ err: error, route: 'wallet/refund' }, message)
-        return apiError('INTERNAL', 'An unexpected error occurred', 500)
+        return handleRouteError(error, 'wallet/refund')
       }
       })
     )

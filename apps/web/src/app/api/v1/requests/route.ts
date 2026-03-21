@@ -5,7 +5,7 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { createJobSchema, searchJobsSchema } from '@/lib/validators/job.schema'
 import { JobService } from '@/lib/services/job.service'
 
@@ -27,9 +27,7 @@ export const POST = withAuth(
 
           return apiSuccess(job)
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Unknown error'
-          logger.error({ err: error, route: 'requests POST' }, message)
-          return apiError('INTERNAL', 'An unexpected error occurred', 500)
+          return handleRouteError(error, 'requests POST')
         }
       })
     )
@@ -50,9 +48,7 @@ export const GET = withAuth(
 
         return apiSuccess(result.jobs, { cursor_next: result.cursor_next, total: result.total ?? undefined })
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        logger.error({ err: error, route: 'requests GET' }, message)
-        return apiError('INTERNAL', 'An unexpected error occurred', 500)
+        return handleRouteError(error, 'requests GET')
       }
     })
   )

@@ -5,7 +5,7 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { updateSkillSchema } from '@/lib/validators/skill.schema'
 import { SkillService } from '@/lib/services/skill.service'
 
@@ -37,9 +37,7 @@ export const PUT = withAuth(
 
         return apiSuccess(skill)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        logger.error({ err: error, route: 'agents/[id]/skills/[skillId] PUT' }, message)
-        return apiError('INTERNAL', 'An unexpected error occurred', 500)
+        return handleRouteError(error, 'agents/[id]/skills/[skillId] PUT')
       }
       })
     )
@@ -68,9 +66,7 @@ export const DELETE = withAuth(
 
       return apiSuccess(result)
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error'
-      logger.error({ err: error, route: 'agents/[id]/skills/[skillId] DELETE' }, message)
-      return apiError('INTERNAL', 'An unexpected error occurred', 500)
+      return handleRouteError(error, 'agents/[id]/skills/[skillId] DELETE')
     }
       })
     )

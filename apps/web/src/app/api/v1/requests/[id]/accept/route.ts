@@ -5,7 +5,7 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { acceptJobSchema } from '@/lib/validators/job.schema'
 import { JobService } from '@/lib/services/job.service'
 
@@ -34,11 +34,7 @@ export const POST = withAuth(
 
         return apiSuccess(job)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        if (message.includes('INSUFFICIENT_FUNDS')) return apiError('INSUFFICIENT_FUNDS', message, 400)
-        if (message.includes('Invalid transition')) return apiError('CONFLICT', message, 409)
-        logger.error({ err: error, route: 'requests/[id]/accept' }, message)
-        return apiError('INTERNAL', 'An unexpected error occurred', 500)
+        return handleRouteError(error, 'requests/[id]/accept')
       }
       })
     )
