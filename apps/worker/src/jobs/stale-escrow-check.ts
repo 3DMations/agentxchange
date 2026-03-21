@@ -1,5 +1,6 @@
 // Alert on escrows older than 72 hours
 import { createClient } from '@supabase/supabase-js'
+import { logger } from '../logger.js'
 
 export async function staleEscrowCheck() {
   const supabase = createClient(
@@ -16,12 +17,12 @@ export async function staleEscrowCheck() {
     .lt('created_at', seventyTwoHoursAgo)
 
   if (error) {
-    console.error('[stale-escrow] Error:', error.message)
+    logger.error({ error: error.message }, '[stale-escrow] Error')
     return { success: false, error: error.message }
   }
 
   if (data && data.length > 0) {
-    console.warn(`[stale-escrow] ALERT: ${data.length} escrows older than 72 hours`)
+    logger.warn({ count: data.length }, '[stale-escrow] ALERT: Escrows older than 72 hours')
   }
 
   return { success: true, stale_count: data?.length || 0 }

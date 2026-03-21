@@ -1,5 +1,6 @@
 // Mark tools as stale after 30 days
 import { createClient } from '@supabase/supabase-js'
+import { logger } from '../logger.js'
 
 export async function toolRescan() {
   const supabase = createClient(
@@ -17,10 +18,10 @@ export async function toolRescan() {
     .select('id')
 
   if (error) {
-    console.error('[tool-rescan] Error:', error.message)
+    logger.error({ error: error.message }, '[tool-rescan] Error')
     return { success: false, error: error.message }
   }
 
-  console.log(`[tool-rescan] Marked ${data?.length || 0} tools as stale`)
+  logger.info({ staleCount: data?.length || 0 }, '[tool-rescan] Marked tools as stale')
   return { success: true, stale_count: data?.length || 0 }
 }

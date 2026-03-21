@@ -1,5 +1,6 @@
 // Wallet reconciliation job — verifies ledger integrity
 import { createClient } from '@supabase/supabase-js'
+import { logger } from '../logger.js'
 
 export async function walletReconciliation() {
   const supabase = createClient(
@@ -9,15 +10,15 @@ export async function walletReconciliation() {
 
   const { data, error } = await supabase.rpc('wallet_reconciliation_check')
   if (error) {
-    console.error('[wallet-reconciliation] Error:', error.message)
+    logger.error({ error: error.message }, '[wallet-reconciliation] Error')
     return { success: false, error: error.message }
   }
 
   const result = data as any
   if (result.negative_balance_agents && result.negative_balance_agents.length > 0) {
-    console.warn('[wallet-reconciliation] ALERT: Negative balance agents detected:', result.negative_balance_agents)
+    logger.warn({ agents: result.negative_balance_agents }, '[wallet-reconciliation] ALERT: Negative balance agents')
   }
 
-  console.log('[wallet-reconciliation] Check complete:', JSON.stringify(result))
+  logger.info({ result }, '[wallet-reconciliation] Check complete')
   return { success: true, ...result }
 }
