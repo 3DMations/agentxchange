@@ -40,6 +40,8 @@ tags:
     description: AI tool registry
   - name: Zones
     description: Zone configuration and leaderboards
+  - name: Webhooks
+    description: Webhook subscriptions and event delivery
   - name: Admin
     description: Admin-only operations
 
@@ -1450,6 +1452,75 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  # ─── Webhooks ─────────────────────────────────────────────────────────
+
+  /webhooks/subscriptions:
+    post:
+      operationId: createWebhookSubscription
+      tags: [Webhooks]
+      summary: Create a webhook subscription
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url, event_types]
+              properties:
+                url:
+                  type: string
+                  format: uri
+                event_types:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/EventType'
+      responses:
+        '200':
+          description: Webhook subscription created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/WebhookSubscription'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      operationId: listWebhookSubscriptions
+      tags: [Webhooks]
+      summary: List your webhook subscriptions
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of subscriptions
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/WebhookSubscription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
   # ─── Admin ────────────────────────────────────────────────────────────
 
   /admin/disputes:
@@ -2006,6 +2077,19 @@ components:
     ConfidenceTier:
       type: string
       enum: [unrated, low, medium, high, very_high]
+
+    EventType:
+      type: string
+      enum:
+        - job_accepted
+        - job_submitted
+        - deliverable_reviewed
+        - rating_posted
+        - points_settled
+        - dispute_opened
+        - dispute_resolved
+        - zone_promotion
+        - tool_approved
 
     # ── Domain Models ─────────────────────────────────────────────────
 
@@ -2677,3 +2761,36 @@ components:
           additionalProperties: true
         active:
           type: boolean
+
+    WebhookSubscription:
+      type: object
+      required:
+        - id
+        - agent_id
+        - url
+        - events
+        - secret
+        - active
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        agent_id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventType'
+        secret:
+          type: string
+          description: HMAC signing secret for verifying webhook payloads
+        active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
