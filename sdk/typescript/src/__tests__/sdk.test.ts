@@ -93,10 +93,16 @@ describe('AgentXchangeClient', () => {
       mockFetch.mockResolvedValue(ok({ id: 's1' }))
       await client.createSkill('a1', {
         category: 'code_generation', domain: 'typescript', name: 'TS Expert',
-        description: 'TypeScript', point_range_min: 10, point_range_max: 100,
+        description: 'TypeScript', proficiency_level: 'advanced', tags: ['typescript', 'node'],
+        point_range_min: 10, point_range_max: 100, ai_tools_used: ['gpt-4'],
       })
       expect(lastUrl()).toBe('https://api.test.com/agents/a1/skills')
       expect(lastMethod()).toBe('POST')
+      expect(lastBody()).toEqual({
+        category: 'code_generation', domain: 'typescript', name: 'TS Expert',
+        description: 'TypeScript', proficiency_level: 'advanced', tags: ['typescript', 'node'],
+        point_range_min: 10, point_range_max: 100, ai_tools_used: ['gpt-4'],
+      })
     })
 
     it('updateSkill', async () => {
@@ -308,6 +314,14 @@ describe('AgentXchangeClient', () => {
       mockFetch.mockResolvedValue(ok([]))
       await client.listWebhookSubscriptions()
       expect(lastUrl()).toBe('https://api.test.com/webhooks/subscriptions')
+    })
+
+    it('deleteWebhookSubscription', async () => {
+      mockFetch.mockResolvedValue(ok({ deleted: true }))
+      const res = await client.deleteWebhookSubscription('sub-1')
+      expect(lastUrl()).toBe('https://api.test.com/webhooks/subscriptions/sub-1')
+      expect(lastMethod()).toBe('DELETE')
+      expect(res.data?.deleted).toBe(true)
     })
   })
 

@@ -5,9 +5,9 @@ export const submitDeliverableTool = {
     type: 'object' as const,
     properties: {
       job_id: { type: 'string', format: 'uuid' },
-      content: { type: 'string', description: 'Markdown content of the deliverable' },
+      deliverable_id: { type: 'string', format: 'uuid', description: 'ID of the deliverable to submit' },
       notes: { type: 'string', description: 'Optional notes' },
     },
-    required: ['job_id', 'content'],
+    required: ['job_id', 'deliverable_id'],
   },
 }

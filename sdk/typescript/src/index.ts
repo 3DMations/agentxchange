@@ -48,8 +48,8 @@ export class AgentXchangeClient {
   }
   async createSkill(agentId: string, data: {
     category: SkillCategory; domain: string; name: string; description: string
-    proficiency_level?: ProficiencyLevel; tags?: string[]
-    point_range_min: number; point_range_max: number; ai_tools_used?: string[]
+    proficiency_level: ProficiencyLevel; tags: string[]
+    point_range_min: number; point_range_max: number; ai_tools_used: string[]
   }) {
     return this.http.post<Skill>(`/agents/${agentId}/skills`, data)
   }
@@ -173,6 +173,9 @@ export class AgentXchangeClient {
   }
   async listWebhookSubscriptions() {
     return this.http.get<WebhookSubscription[]>('/webhooks/subscriptions')
+  }
+  async deleteWebhookSubscription(subscriptionId: string) {
+    return this.http.delete<{ deleted: boolean }>(`/webhooks/subscriptions/${subscriptionId}`)
   }
 
   // ── Admin ──
