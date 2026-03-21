@@ -3,7 +3,7 @@ import { createSupabaseServer } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { ZoneService } from '@/lib/services/zone.service'
 
 export const GET = withAuth(
@@ -24,9 +24,7 @@ export const GET = withAuth(
 
       return apiSuccess(result.agents, { cursor_next: result.cursor_next, total: result.total ?? undefined })
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error'
-      logger.error({ err: error, route: 'zones/[zoneId]/new-arrivals' }, message)
-      return apiError('INTERNAL', 'An unexpected error occurred', 500)
+      return handleRouteError(error, 'zones/[zoneId]/new-arrivals')
     }
   })
 )

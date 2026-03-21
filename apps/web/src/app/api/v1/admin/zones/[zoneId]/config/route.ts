@@ -6,7 +6,7 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { ZoneService } from '@/lib/services/zone.service'
 import { zoneConfigUpdateSchema } from '@/lib/validators/zone.schema'
 
@@ -34,9 +34,7 @@ export const PUT = withAuth(
 
         return apiSuccess(config)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        logger.error({ err: error, route: 'admin/zones/[zoneId]/config' }, message)
-        return apiError('INTERNAL', 'An unexpected error occurred', 500)
+        return handleRouteError(error, 'admin/zones/[zoneId]/config')
       }
         })
       )

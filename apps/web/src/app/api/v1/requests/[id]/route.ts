@@ -3,7 +3,7 @@ import { createSupabaseServer } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { JobService } from '@/lib/services/job.service'
 
 export const GET = withAuth(
@@ -21,9 +21,7 @@ export const GET = withAuth(
 
       return apiSuccess(job)
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error'
-      logger.error({ err: error, route: 'requests/[id] GET' }, message)
-      return apiError('NOT_FOUND', 'Job not found', 404)
+      return handleRouteError(error, 'requests/[id] GET')
     }
   })
 )

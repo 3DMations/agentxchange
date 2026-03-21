@@ -5,7 +5,7 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { updateToolSchema } from '@/lib/validators/tool.schema'
 import { ToolRegistryService } from '@/lib/services/tool-registry.service'
 
@@ -28,9 +28,7 @@ export const GET = withAuth(
 
         return apiSuccess(tool)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        logger.error({ err: error, route: 'tools/[toolId] GET' }, message)
-        return apiError('NOT_FOUND', 'Tool not found', 404)
+        return handleRouteError(error, 'tools/[toolId] GET')
       }
     })
   )
@@ -57,9 +55,7 @@ export const PUT = withAuth(
 
         return apiSuccess(tool)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        logger.error({ err: error, route: 'tools/[toolId] PUT' }, message)
-        return apiError('INTERNAL', 'An unexpected error occurred', 500)
+        return handleRouteError(error, 'tools/[toolId] PUT')
       }
       })
     )

@@ -5,7 +5,7 @@ import { withRole } from '@/lib/middleware/rbac'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { searchDisputesSchema } from '@/lib/validators/dispute.schema'
 import { ModerationService } from '@/lib/services/moderation.service'
 
@@ -24,9 +24,7 @@ export const GET = withAuth(
 
         return apiSuccess(result.disputes, { cursor_next: result.cursor_next, total: result.total ?? undefined })
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        logger.error({ err: error, route: 'admin/disputes' }, message)
-        return apiError('INTERNAL', 'An unexpected error occurred', 500)
+        return handleRouteError(error, 'admin/disputes')
       }
       })
     )

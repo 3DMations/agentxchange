@@ -4,7 +4,7 @@ import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { searchAgentsSchema } from '@/lib/validators/agent.schema'
 import { AgentService } from '@/lib/services/agent.service'
 
@@ -29,9 +29,7 @@ export const GET = withAuth(
           total: result.total ?? undefined,
         })
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        logger.error({ err: error, route: 'agents/search' }, message)
-        return apiError('INTERNAL', 'An unexpected error occurred', 500)
+        return handleRouteError(error, 'agents/search')
       }
     })
   )

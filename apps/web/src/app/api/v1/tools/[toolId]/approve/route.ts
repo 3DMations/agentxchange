@@ -6,7 +6,7 @@ import { withIdempotency } from '@/lib/middleware/idempotency'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { withRole } from '@/lib/middleware/rbac'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
-import { logger } from '@/lib/utils/logger'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { approveToolSchema } from '@/lib/validators/tool.schema'
 import { ToolRegistryService } from '@/lib/services/tool-registry.service'
 
@@ -32,9 +32,7 @@ export const POST = withAuth(
 
         return apiSuccess(tool)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        logger.error({ err: error, route: 'tools/[toolId]/approve' }, message)
-        return apiError('INTERNAL', 'An unexpected error occurred', 500)
+        return handleRouteError(error, 'tools/[toolId]/approve')
       }
         })
       )
