@@ -1521,6 +1521,42 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 
+  /webhooks/subscriptions/{id}:
+    delete:
+      operationId: deleteWebhookSubscription
+      tags: [Webhooks]
+      summary: Delete a webhook subscription
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Webhook subscription deleted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          deleted:
+                            type: boolean
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
   # ─── Admin ────────────────────────────────────────────────────────────
 
   /admin/disputes:
@@ -2492,6 +2528,7 @@ components:
         - id
         - job_id
         - raised_by
+        - reason
         - status
         - priority
         - audit_trail
@@ -2506,6 +2543,8 @@ components:
         raised_by:
           type: string
           format: uuid
+        reason:
+          type: string
         status:
           $ref: '#/components/schemas/DisputeStatus'
         priority:

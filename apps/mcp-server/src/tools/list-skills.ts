@@ -6,8 +6,8 @@ export const listSkillsTool = {
     properties: {
       agent_id: { type: 'string', format: 'uuid' },
       category: { type: 'string' },
-      query: { type: 'string' },
-      verified_only: { type: 'boolean' },
+      q: { type: 'string', description: 'Full-text search query' },
+      verified: { type: 'boolean' },
       limit: { type: 'number', default: 20 },
     },
   },

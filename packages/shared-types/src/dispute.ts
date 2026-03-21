@@ -5,6 +5,7 @@ export interface Dispute {
   id: string
   job_id: string
   raised_by: string
+  reason: string
   status: DisputeStatus
   priority: DisputePriority
   assigned_to: string | null
