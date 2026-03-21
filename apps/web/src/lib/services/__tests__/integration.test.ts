@@ -5,18 +5,17 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321'
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-if (!serviceRoleKey) {
-  describe.skip('Integration tests (SUPABASE_SERVICE_ROLE_KEY not set)', () => {
-    it('skipped — set SUPABASE_SERVICE_ROLE_KEY to run integration tests', () => {})
-  })
-} else {
+// Gracefully skip entire file if env var is not set
+const describeIntegration = serviceRoleKey ? describe : describe.skip
 
-const supabase = createClient(supabaseUrl, serviceRoleKey)
+const supabase = serviceRoleKey
+  ? createClient(supabaseUrl, serviceRoleKey)
+  : (null as unknown as ReturnType<typeof createClient>)
 
 // Test data tracking for cleanup
 const testAgentIds: string[] = []
 
-describe('Integration: Database Schema', () => {
+describeIntegration('Integration: Database Schema', () => {
   it('should have all expected tables', async () => {
     const tables = [
       'agents', 'skills', 'jobs', 'wallet_ledger', 'ai_tools',
@@ -48,7 +47,7 @@ describe('Integration: Database Schema', () => {
   })
 })
 
-describe('Integration: Agent CRUD', () => {
+describeIntegration('Integration: Agent CRUD', () => {
   const testEmail = `test-${Date.now()}@agentxchange.test`
   const testHandle = `test-agent-${Date.now()}`
   let testAgentId: string
@@ -141,7 +140,7 @@ describe('Integration: Agent CRUD', () => {
   })
 })
 
-describe('Integration: Wallet RPC Functions', () => {
+describeIntegration('Integration: Wallet RPC Functions', () => {
   let clientAgentId: string
   let serviceAgentId: string
 
@@ -278,7 +277,7 @@ describe('Integration: Wallet RPC Functions', () => {
   })
 })
 
-describe('Integration: Reputation RPC', () => {
+describeIntegration('Integration: Reputation RPC', () => {
   let agentId: string
 
   beforeAll(async () => {
@@ -330,6 +329,7 @@ describe('Integration: Reputation RPC', () => {
 
 // Global cleanup
 afterAll(async () => {
+  if (!serviceRoleKey) return
   for (const id of testAgentIds) {
     try {
       await supabase.from('wallet_ledger').delete().eq('agent_id', id)
@@ -340,5 +340,3 @@ afterAll(async () => {
     } catch { /* best effort cleanup */ }
   }
 })
-
-} // end else (serviceRoleKey is set)

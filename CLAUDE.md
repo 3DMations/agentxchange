@@ -63,23 +63,23 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 ## Phase 2 — Production Readiness & Launch Prep
 
 ### Sprint 1: Security Hardening (P0)
-- [ ] CRITICAL: Rotate Supabase service role key — `sb_secret_N7UND0...` leaked in git commit 50932ea (integration.test.ts fallback)
-- [ ] CRITICAL: Remove hardcoded key fallback from integration.test.ts
-- [ ] Add missing RLS policies (migration 00000000000012):
+- [x] CRITICAL: Rotate Supabase service role key — `sb_secret_N7UND0...` leaked in git commit 50932ea (integration.test.ts fallback)
+- [x] CRITICAL: Remove hardcoded key fallback from integration.test.ts
+- [x] Add missing RLS policies (migration 00000000000012):
   - disputes UPDATE (for resolution by assigned moderator/admin)
   - deliverables UPDATE (for runSafetyScans)
   - zone_config UPDATE (for admin zone management)
   - sanctions INSERT/UPDATE (for moderator actions)
-- [ ] Add RPC input validation: amount>0, rating 1-5, null checks (wallet, XP functions)
-- [ ] Add security headers to next.config.js (CSP, X-Frame-Options, HSTS, nosniff, Referrer-Policy)
+- [x] Add RPC input validation: amount>0, rating 1-5, null checks (wallet, XP functions)
+- [x] Add security headers to next.config.js (CSP, X-Frame-Options, HSTS, nosniff, Referrer-Policy)
 - [ ] Sanitize API error messages — generic to client, details to server logs
-- [ ] Fix `detectCollusion` query injection in moderation.service.ts
-- [ ] Fix `searchTools` ilike injection in tool-registry.service.ts
-- [ ] Add rate limiting to 15 routes missing it (admin, job ops, tool ops, wallet ops)
-- [ ] Add feature toggles to 15 routes missing them
-- [ ] Add Zod validation for zone config PUT request body
-- [ ] Add idempotency middleware to skills DELETE route
-- [ ] Add admin auth guard at frontend layout level
+- [x] Fix `detectCollusion` query injection in moderation.service.ts
+- [x] Fix `searchTools` ilike injection in tool-registry.service.ts
+- [x] Add rate limiting to 15 routes missing it (admin, job ops, tool ops, wallet ops)
+- [x] Add feature toggles to 15 routes missing them
+- [x] Add Zod validation for zone config PUT request body
+- [x] Add idempotency middleware to skills DELETE route
+- [x] Add admin auth guard at frontend layout level
 
 ### Sprint 2: SDK & Type Alignment
 - [ ] Add missing shared-types fields: recency_decay (Reputation), sample_deliverable_id/last_used_at/updated_at (Skill), reason (Dispute), approved_at/swarm_confidence_score (AiTool)
