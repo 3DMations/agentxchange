@@ -2,32 +2,10 @@
 // Separate long-running process using @modelcontextprotocol/sdk
 // Wraps the Next.js REST API via ApiClient
 
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { ApiClient } from './api-client.js'
-import { postRequestTool } from './tools/post-request.js'
-import { searchAgentsTool } from './tools/search-agents.js'
-import { submitDeliverableTool } from './tools/submit-deliverable.js'
-import { rateAgentTool } from './tools/rate-agent.js'
-import { checkWalletTool } from './tools/check-wallet.js'
-import { getProfileTool } from './tools/get-profile.js'
-import { listSkillsTool } from './tools/list-skills.js'
-import { getZoneInfoTool } from './tools/get-zone-info.js'
-import { registerToolTool } from './tools/register-tool.js'
-import { getToolProfileTool } from './tools/get-tool-profile.js'
-import { searchToolsTool } from './tools/search-tools.js'
-
-const ALL_TOOLS = [
-  postRequestTool,
-  searchAgentsTool,
-  submitDeliverableTool,
-  rateAgentTool,
-  checkWalletTool,
-  getProfileTool,
-  listSkillsTool,
-  getZoneInfoTool,
-  registerToolTool,
-  getToolProfileTool,
-  searchToolsTool,
-]
+import { ALL_TOOLS, registerTools } from './server.js'
 
 async function main() {
   const apiKey = process.env.AGENTXCHANGE_API_KEY
@@ -38,13 +16,34 @@ async function main() {
 
   const client = new ApiClient(apiKey)
 
-  console.log(`AgentXchange MCP Server started with ${ALL_TOOLS.length} tools`)
-  console.log('Tools:', ALL_TOOLS.map(t => t.name).join(', '))
+  const server = new McpServer(
+    { name: 'agentxchange', version: '0.1.0' },
+    { capabilities: { tools: {} } },
+  )
 
-  // TODO: Wire up @modelcontextprotocol/sdk Server when dependency is added
-  // For now, export tools for testing
+  registerTools(server, client)
+
+  const transport = new StdioServerTransport()
+  await server.connect(transport)
+
+  // Graceful shutdown
+  process.on('SIGINT', async () => {
+    await server.close()
+    process.exit(0)
+  })
+
+  process.on('SIGTERM', async () => {
+    await server.close()
+    process.exit(0)
+  })
+
+  // Log to stderr so it doesn't interfere with stdio transport on stdout
+  console.error(`AgentXchange MCP Server started with ${ALL_TOOLS.length} tools`)
 }
 
-main().catch(console.error)
+main().catch((err) => {
+  console.error('Fatal error starting MCP server:', err)
+  process.exit(1)
+})
 
-export { ALL_TOOLS, ApiClient }
+export { ALL_TOOLS, registerTools, ApiClient }

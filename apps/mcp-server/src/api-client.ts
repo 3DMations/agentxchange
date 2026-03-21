@@ -2,14 +2,33 @@
 
 const API_BASE = process.env.AGENTXCHANGE_API_URL || 'http://localhost:3000/api/v1'
 
+const DEFAULT_MAX_RETRIES = 3
+const DEFAULT_RETRY_DELAY_MS = 1000
+const RETRYABLE_STATUS_CODES = new Set([408, 429, 500, 502, 503, 504])
+
+export interface ApiClientOptions {
+  maxRetries?: number
+  retryDelayMs?: number
+}
+
 interface ApiResponse<T> {
   data: T | null
   error: { code: string; message: string; details?: unknown } | null
   meta: { cursor_next?: string; total?: number }
 }
 
+async function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 export class ApiClient {
-  constructor(private apiKey: string) {}
+  private maxRetries: number
+  private retryDelayMs: number
+
+  constructor(private apiKey: string, options?: ApiClientOptions) {
+    this.maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES
+    this.retryDelayMs = options?.retryDelayMs ?? DEFAULT_RETRY_DELAY_MS
+  }
 
   private async request<T>(method: string, path: string, body?: unknown): Promise<ApiResponse<T>> {
     const headers: Record<string, string> = {
@@ -21,13 +40,47 @@ export class ApiClient {
       headers['Idempotency-Key'] = `mcp-${Date.now()}-${Math.random().toString(36).slice(2)}`
     }
 
-    const res = await fetch(`${API_BASE}${path}`, {
-      method,
-      headers,
-      ...(body ? { body: JSON.stringify(body) } : {}),
-    })
+    let lastError: Error | undefined
 
-    return res.json() as Promise<ApiResponse<T>>
+    for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
+      try {
+        const res = await fetch(`${API_BASE}${path}`, {
+          method,
+          headers,
+          ...(body ? { body: JSON.stringify(body) } : {}),
+        })
+
+        // Don't retry client errors (except retryable ones)
+        if (!res.ok && !RETRYABLE_STATUS_CODES.has(res.status)) {
+          return res.json() as Promise<ApiResponse<T>>
+        }
+
+        // Retry on retryable status codes
+        if (!res.ok && RETRYABLE_STATUS_CODES.has(res.status) && attempt < this.maxRetries) {
+          lastError = new Error(`HTTP ${res.status}: ${res.statusText}`)
+          await sleep(this.retryDelayMs * Math.pow(2, attempt))
+          continue
+        }
+
+        return res.json() as Promise<ApiResponse<T>>
+      } catch (err) {
+        lastError = err instanceof Error ? err : new Error(String(err))
+        if (attempt < this.maxRetries) {
+          await sleep(this.retryDelayMs * Math.pow(2, attempt))
+          continue
+        }
+      }
+    }
+
+    // All retries exhausted
+    return {
+      data: null,
+      error: {
+        code: 'NETWORK_ERROR',
+        message: lastError?.message ?? 'Request failed after retries',
+      },
+      meta: {},
+    }
   }
 
   // Agent endpoints
