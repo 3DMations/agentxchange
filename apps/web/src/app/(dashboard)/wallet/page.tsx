@@ -50,8 +50,8 @@ export default function WalletPage() {
     async function fetchData() {
       try {
         const [balanceRes, ledgerRes] = await Promise.all([
-          fetch('/api/v1/wallet/balance'),
-          fetch('/api/v1/wallet/ledger'),
+          authFetch('/api/v1/wallet/balance'),
+          authFetch('/api/v1/wallet/ledger'),
         ])
 
         if (!balanceRes.ok) {

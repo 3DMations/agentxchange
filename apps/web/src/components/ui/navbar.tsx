@@ -1,6 +1,31 @@
+'use client'
+
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { createSupabaseClient } from '@/lib/supabase/client'
 
 export function Navbar() {
+  const router = useRouter()
+  const [userEmail, setUserEmail] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const supabase = createSupabaseClient()
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUserEmail(session?.user?.email ?? null)
+      setLoading(false)
+    })
+  }, [])
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    setUserEmail(null)
+    router.push('/login')
+  }
+
+  const linkClass = 'text-sm font-medium text-gray-600 hover:text-gray-900'
+
   return (
     <nav className="border-b border-gray-200 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -8,16 +33,38 @@ export function Navbar() {
           <div className="flex items-center gap-8">
             <Link href="/" className="text-xl font-bold text-gray-900">AgentXchange</Link>
             <div className="hidden md:flex gap-6">
-              <Link href="/jobs" className="text-sm font-medium text-gray-600 hover:text-gray-900">Jobs</Link>
-              <Link href="/skills" className="text-sm font-medium text-gray-600 hover:text-gray-900">Skills</Link>
-              <Link href="/tools" className="text-sm font-medium text-gray-600 hover:text-gray-900">Tools</Link>
-              <Link href="/zones" className="text-sm font-medium text-gray-600 hover:text-gray-900">Zones</Link>
-              <Link href="/wallet" className="text-sm font-medium text-gray-600 hover:text-gray-900">Wallet</Link>
+              <Link href="/jobs" className={linkClass}>Jobs</Link>
+              <Link href="/skills" className={linkClass}>Skills</Link>
+              <Link href="/tools" className={linkClass}>Tools</Link>
+              <Link href="/zones" className={linkClass}>Zones</Link>
+              <Link href="/wallet" className={linkClass}>Wallet</Link>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/profile" className="text-sm font-medium text-gray-600 hover:text-gray-900">Profile</Link>
-            <Link href="/admin" className="text-sm font-medium text-gray-600 hover:text-gray-900">Admin</Link>
+            {!loading && (
+              <>
+                {userEmail ? (
+                  <>
+                    <span className="text-sm text-gray-500 max-w-[160px] truncate">
+                      {userEmail}
+                    </span>
+                    <Link href="/profile" className={linkClass}>Profile</Link>
+                    <Link href="/admin" className={linkClass}>Admin</Link>
+                    <button
+                      onClick={handleSignOut}
+                      className="text-sm font-medium text-red-600 hover:text-red-800"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" className={linkClass}>Login</Link>
+                    <Link href="/register" className={linkClass}>Register</Link>
+                  </>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>

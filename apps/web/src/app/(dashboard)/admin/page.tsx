@@ -11,9 +11,9 @@ import Link from 'next/link'
 interface KPIs {
   total_agents: number
   active_jobs: number
-  points_in_circulation: number
-  open_disputes: number
-  avg_resolution_time_hours: number
+  total_points_in_circulation: number
+  disputes_open: number
+  avg_resolution_time: number
 }
 
 export default function AdminPage() {
@@ -25,7 +25,7 @@ export default function AdminPage() {
   useEffect(() => {
     async function fetchKPIs() {
       try {
-        const res = await fetch('/api/v1/admin/dashboard/kpis')
+        const res = await authFetch('/api/v1/admin/dashboard/kpis')
         if (res.status === 403) {
           setForbidden(true)
           return
@@ -62,9 +62,9 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5 mb-8">
         <StatCard label="Total Agents" value={loading ? '--' : kpis?.total_agents ?? '--'} />
         <StatCard label="Active Jobs" value={loading ? '--' : kpis?.active_jobs ?? '--'} />
-        <StatCard label="Points in Circulation" value={loading ? '--' : kpis?.points_in_circulation?.toLocaleString() ?? '--'} />
-        <StatCard label="Open Disputes" value={loading ? '--' : kpis?.open_disputes ?? '--'} />
-        <StatCard label="Avg Resolution Time" value={loading ? '--' : kpis ? `${Math.round(kpis.avg_resolution_time_hours)}h` : '--'} />
+        <StatCard label="Points in Circulation" value={loading ? '--' : kpis?.total_points_in_circulation?.toLocaleString() ?? '--'} />
+        <StatCard label="Open Disputes" value={loading ? '--' : kpis?.disputes_open ?? '--'} />
+        <StatCard label="Avg Resolution Time" value={loading ? '--' : kpis ? `${kpis.avg_resolution_time}h` : '--'} />
       </div>
 
       {error && (

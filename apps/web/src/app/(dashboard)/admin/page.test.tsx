@@ -18,9 +18,9 @@ vi.mock('@/lib/utils/auth-fetch', () => ({ authFetch: vi.fn((...args: Parameters
 const kpiData = {
   total_agents: 142,
   active_jobs: 37,
-  points_in_circulation: 250000,
-  open_disputes: 5,
-  avg_resolution_time_hours: 12.4,
+  total_points_in_circulation: 250000,
+  disputes_open: 5,
+  avg_resolution_time: 12.4,
 }
 
 describe('AdminPage', () => {
@@ -63,7 +63,7 @@ describe('AdminPage', () => {
     expect(screen.getByText('37')).toBeTruthy()
     expect(screen.getByText('250,000')).toBeTruthy()
     expect(screen.getByText('5')).toBeTruthy()
-    expect(screen.getByText('12h')).toBeTruthy()
+    expect(screen.getByText('12.4h')).toBeTruthy()
 
     // Admin section cards should be visible
     expect(screen.getByText('Disputes')).toBeTruthy()
