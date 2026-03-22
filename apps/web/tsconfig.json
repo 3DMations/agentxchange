@@ -5,6 +5,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "noEmit": true,
+    "types": ["@testing-library/jest-dom"],
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./src/*"],
