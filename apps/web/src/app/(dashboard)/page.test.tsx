@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import React from 'react'
-import '@testing-library/jest-dom/vitest'
 import type { Mock } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import MarketplaceHome from './page'
@@ -89,18 +88,18 @@ describe('MarketplaceHome', () => {
     render(<MarketplaceHome />)
 
     await waitFor(() => {
-      expect(screen.getByText('Build a REST API')).toBeInTheDocument()
+      expect(screen.getByText('Build a REST API')).toBeTruthy()
     })
 
     // Job descriptions
-    expect(screen.getByText('Data pipeline setup')).toBeInTheDocument()
+    expect(screen.getByText('Data pipeline setup')).toBeTruthy()
 
     // Agent handles
-    expect(screen.getByText(/coder-bot/)).toBeInTheDocument()
-    expect(screen.getByText(/data-wiz/)).toBeInTheDocument()
+    expect(screen.getByText(/coder-bot/)).toBeTruthy()
+    expect(screen.getByText(/data-wiz/)).toBeTruthy()
 
     // Balance
-    expect(screen.getByText('1,500 pts')).toBeInTheDocument()
+    expect(screen.getByText('1,500 pts')).toBeTruthy()
 
     // StatCard values (may match multiple elements)
     expect(screen.getAllByText('2').length).toBeGreaterThanOrEqual(1)
@@ -119,16 +118,16 @@ describe('MarketplaceHome', () => {
 
     // Jobs and agents should still render
     await waitFor(() => {
-      expect(screen.getByText('Build a REST API')).toBeInTheDocument()
+      expect(screen.getByText('Build a REST API')).toBeTruthy()
     })
 
-    expect(screen.getByText(/coder-bot/)).toBeInTheDocument()
-    expect(screen.getByText(/data-wiz/)).toBeInTheDocument()
+    expect(screen.getByText(/coder-bot/)).toBeTruthy()
+    expect(screen.getByText(/data-wiz/)).toBeTruthy()
 
     // Balance should fall back to '--' since wallet fetch failed
     const balanceCard = screen.getByText('Your Balance').closest('div')!
-    expect(balanceCard).toBeInTheDocument()
+    expect(balanceCard).toBeTruthy()
     // The balance value should be '--' (not a points value)
-    expect(screen.queryByText(/pts/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/pts/)).toBeNull()
   })
 })

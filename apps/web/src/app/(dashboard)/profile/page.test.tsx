@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import React from 'react'
-import '@testing-library/jest-dom/vitest'
 import type { Mock } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import ProfilePage from './page'
@@ -68,7 +67,7 @@ describe('ProfilePage', () => {
     render(<ProfilePage />)
 
     await waitFor(() => {
-      expect(screen.getByText('Sign in to view your profile')).toBeInTheDocument()
+      expect(screen.getByText('Sign in to view your profile')).toBeTruthy()
     })
   })
 
@@ -79,7 +78,7 @@ describe('ProfilePage', () => {
 
     render(<ProfilePage />)
 
-    expect(screen.getByText('Loading profile...')).toBeInTheDocument()
+    expect(screen.getByText('Loading profile...')).toBeTruthy()
   })
 
   it('renders profile data after successful fetch', async () => {
@@ -102,13 +101,13 @@ describe('ProfilePage', () => {
     render(<ProfilePage />)
 
     await waitFor(() => {
-      expect(screen.getByText('4.8')).toBeInTheDocument()
+      expect(screen.getByText('4.8')).toBeTruthy()
     })
 
-    expect(screen.getByText('5')).toBeInTheDocument()
-    expect(screen.getByText('12,500')).toBeInTheDocument()
-    expect(screen.getByText('42')).toBeInTheDocument()
-    expect(screen.getByText('Build a REST API')).toBeInTheDocument()
+    expect(screen.getByText('5')).toBeTruthy()
+    expect(screen.getByText('12,500')).toBeTruthy()
+    expect(screen.getByText('42')).toBeTruthy()
+    expect(screen.getByText('Build a REST API')).toBeTruthy()
   })
 
   it('shows skills in the My Skills card', async () => {
@@ -131,15 +130,15 @@ describe('ProfilePage', () => {
     render(<ProfilePage />)
 
     await waitFor(() => {
-      expect(screen.getByText('My Skills')).toBeInTheDocument()
+      expect(screen.getByText('My Skills')).toBeTruthy()
     })
 
-    expect(screen.getByText('TypeScript')).toBeInTheDocument()
-    expect(screen.getByText('expert')).toBeInTheDocument()
-    expect(screen.getByText('code_generation')).toBeInTheDocument()
-    expect(screen.getByText('Data Analysis')).toBeInTheDocument()
-    expect(screen.getByText('intermediate')).toBeInTheDocument()
-    expect(screen.getByText('data_analysis')).toBeInTheDocument()
+    expect(screen.getByText('TypeScript')).toBeTruthy()
+    expect(screen.getByText('expert')).toBeTruthy()
+    expect(screen.getByText('code_generation')).toBeTruthy()
+    expect(screen.getByText('Data Analysis')).toBeTruthy()
+    expect(screen.getByText('intermediate')).toBeTruthy()
+    expect(screen.getByText('data_analysis')).toBeTruthy()
   })
 
   it('shows error on fetch failure', async () => {
@@ -151,7 +150,7 @@ describe('ProfilePage', () => {
     render(<ProfilePage />)
 
     await waitFor(() => {
-      expect(screen.getByText('Failed to load profile (500)')).toBeInTheDocument()
+      expect(screen.getByText('Failed to load profile (500)')).toBeTruthy()
     })
   })
 })

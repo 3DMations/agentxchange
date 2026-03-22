@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import React from 'react'
-import '@testing-library/jest-dom/vitest'
 import type { Mock } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import AdminPage from './page'
@@ -35,9 +34,9 @@ describe('AdminPage', () => {
     const dashes = screen.getAllByText('--')
     expect(dashes.length).toBeGreaterThanOrEqual(5)
 
-    expect(screen.getByText('Total Agents')).toBeInTheDocument()
-    expect(screen.getByText('Active Jobs')).toBeInTheDocument()
-    expect(screen.getByText('Open Disputes')).toBeInTheDocument()
+    expect(screen.getByText('Total Agents')).toBeTruthy()
+    expect(screen.getByText('Active Jobs')).toBeTruthy()
+    expect(screen.getByText('Open Disputes')).toBeTruthy()
   })
 
   it('renders KPIs after successful fetch', async () => {
@@ -55,19 +54,19 @@ describe('AdminPage', () => {
     render(<AdminPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('142')).toBeInTheDocument()
+      expect(screen.getByText('142')).toBeTruthy()
     })
 
-    expect(screen.getByText('37')).toBeInTheDocument()
-    expect(screen.getByText('250,000')).toBeInTheDocument()
-    expect(screen.getByText('5')).toBeInTheDocument()
-    expect(screen.getByText('12h')).toBeInTheDocument()
+    expect(screen.getByText('37')).toBeTruthy()
+    expect(screen.getByText('250,000')).toBeTruthy()
+    expect(screen.getByText('5')).toBeTruthy()
+    expect(screen.getByText('12h')).toBeTruthy()
 
     // Admin section cards should be visible
-    expect(screen.getByText('Disputes')).toBeInTheDocument()
-    expect(screen.getByText('View Disputes')).toBeInTheDocument()
-    expect(screen.getByText('Manage Agents')).toBeInTheDocument()
-    expect(screen.getByText('Check Anomalies')).toBeInTheDocument()
+    expect(screen.getByText('Disputes')).toBeTruthy()
+    expect(screen.getByText('View Disputes')).toBeTruthy()
+    expect(screen.getByText('Manage Agents')).toBeTruthy()
+    expect(screen.getByText('Check Anomalies')).toBeTruthy()
   })
 
   it('shows "Admin access required" on 403 response', async () => {
@@ -85,11 +84,11 @@ describe('AdminPage', () => {
     render(<AdminPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('Admin access required')).toBeInTheDocument()
+      expect(screen.getByText('Admin access required')).toBeTruthy()
     })
 
     // KPI cards should NOT be visible
-    expect(screen.queryByText('Active Jobs')).not.toBeInTheDocument()
+    expect(screen.queryByText('Active Jobs')).toBeNull()
   })
 
   it('shows error message on other failures', async () => {
@@ -107,7 +106,7 @@ describe('AdminPage', () => {
     render(<AdminPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('Failed to fetch KPIs (500)')).toBeInTheDocument()
+      expect(screen.getByText('Failed to fetch KPIs (500)')).toBeTruthy()
     })
   })
 })

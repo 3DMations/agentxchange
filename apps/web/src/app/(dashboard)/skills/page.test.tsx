@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import React from 'react'
-import '@testing-library/jest-dom/vitest'
 import type { Mock } from 'vitest'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import SkillsPage from './page'
@@ -68,7 +67,7 @@ describe('SkillsPage', () => {
   it('shows loading state initially', () => {
     mockFetch.mockReturnValue(new Promise(() => {})) // never resolves
     render(<SkillsPage />)
-    expect(screen.getByText('Loading skills...')).toBeInTheDocument()
+    expect(screen.getByText('Loading skills...')).toBeTruthy()
   })
 
   it('renders skills after successful fetch', async () => {
@@ -79,43 +78,43 @@ describe('SkillsPage', () => {
     render(<SkillsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('React Development')).toBeInTheDocument()
+      expect(screen.getByText('React Development')).toBeTruthy()
     })
 
     // Verify skill card details
-    expect(screen.getByText('Data Wrangling')).toBeInTheDocument()
+    expect(screen.getByText('Data Wrangling')).toBeTruthy()
     expect(screen.getAllByText('Code Generation').length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByText('Data Analysis').length).toBeGreaterThanOrEqual(1)
 
     // Proficiency and domain
-    expect(screen.getByText(/Frontend/)).toBeInTheDocument()
-    expect(screen.getByText(/advanced/)).toBeInTheDocument()
-    expect(screen.getByText(/Analytics/)).toBeInTheDocument()
-    expect(screen.getByText(/intermediate/)).toBeInTheDocument()
+    expect(screen.getByText(/Frontend/)).toBeTruthy()
+    expect(screen.getByText(/advanced/)).toBeTruthy()
+    expect(screen.getByText(/Analytics/)).toBeTruthy()
+    expect(screen.getByText(/intermediate/)).toBeTruthy()
 
     // Descriptions
     expect(
       screen.getByText('Build modern React applications with hooks and TypeScript')
-    ).toBeInTheDocument()
+    ).toBeTruthy()
     expect(
       screen.getByText('Clean and transform datasets for analysis')
-    ).toBeInTheDocument()
+    ).toBeTruthy()
 
     // Point ranges
-    expect(screen.getByText('100-500 pts')).toBeInTheDocument()
-    expect(screen.getByText('50-300 pts')).toBeInTheDocument()
+    expect(screen.getByText('100-500 pts')).toBeTruthy()
+    expect(screen.getByText('50-300 pts')).toBeTruthy()
 
     // Tags
-    expect(screen.getByText('react')).toBeInTheDocument()
-    expect(screen.getByText('typescript')).toBeInTheDocument()
-    expect(screen.getByText('python')).toBeInTheDocument()
+    expect(screen.getByText('react')).toBeTruthy()
+    expect(screen.getByText('typescript')).toBeTruthy()
+    expect(screen.getByText('python')).toBeTruthy()
 
     // Verified checkmark — only the verified skill should have the SVG
     const svgs = document.querySelectorAll('svg')
     expect(svgs.length).toBe(1) // only mockSkill is verified
 
     // Loading should be gone
-    expect(screen.queryByText('Loading skills...')).not.toBeInTheDocument()
+    expect(screen.queryByText('Loading skills...')).toBeNull()
   })
 
   it('shows error on fetch failure', async () => {
@@ -128,10 +127,10 @@ describe('SkillsPage', () => {
     await waitFor(() => {
       expect(
         screen.getByText('Failed to fetch skills (500)')
-      ).toBeInTheDocument()
+      ).toBeTruthy()
     })
 
-    expect(screen.queryByText('Loading skills...')).not.toBeInTheDocument()
+    expect(screen.queryByText('Loading skills...')).toBeNull()
   })
 
   it('shows "No skills found" when empty', async () => {
@@ -142,10 +141,10 @@ describe('SkillsPage', () => {
     render(<SkillsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('No skills found')).toBeInTheDocument()
+      expect(screen.getByText('No skills found')).toBeTruthy()
     })
 
-    expect(screen.queryByText('Loading skills...')).not.toBeInTheDocument()
+    expect(screen.queryByText('Loading skills...')).toBeNull()
   })
 
   it('verified checkbox filter works', async () => {
@@ -157,7 +156,7 @@ describe('SkillsPage', () => {
     render(<SkillsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('React Development')).toBeInTheDocument()
+      expect(screen.getByText('React Development')).toBeTruthy()
     })
 
     // Reset mock for the next fetch triggered by checkbox

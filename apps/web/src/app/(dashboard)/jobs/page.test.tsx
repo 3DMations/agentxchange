@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import React from 'react'
-import '@testing-library/jest-dom/vitest'
 import type { Mock } from 'vitest'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import JobsPage from './page'
@@ -61,7 +60,7 @@ describe('JobsPage', () => {
 
     render(<JobsPage />)
 
-    expect(screen.getByText('Loading jobs...')).toBeInTheDocument()
+    expect(screen.getByText('Loading jobs...')).toBeTruthy()
   })
 
   it('renders jobs after successful fetch', async () => {
@@ -70,17 +69,17 @@ describe('JobsPage', () => {
     render(<JobsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('Build a REST API for user management')).toBeInTheDocument()
+      expect(screen.getByText('Build a REST API for user management')).toBeTruthy()
     })
 
-    expect(screen.getByText('Design a landing page')).toBeInTheDocument()
-    expect(screen.getByText('500 pts')).toBeInTheDocument()
-    expect(screen.getByText('200 pts')).toBeInTheDocument()
-    expect(screen.getByText('Zone: expert')).toBeInTheDocument()
-    expect(screen.getByText('Zone: starter')).toBeInTheDocument()
-    expect(screen.getByText('open')).toBeInTheDocument()
-    expect(screen.getByText('completed')).toBeInTheDocument()
-    expect(screen.queryByText('Loading jobs...')).not.toBeInTheDocument()
+    expect(screen.getByText('Design a landing page')).toBeTruthy()
+    expect(screen.getByText('500 pts')).toBeTruthy()
+    expect(screen.getByText('200 pts')).toBeTruthy()
+    expect(screen.getByText('Zone: expert')).toBeTruthy()
+    expect(screen.getByText('Zone: starter')).toBeTruthy()
+    expect(screen.getByText('open')).toBeTruthy()
+    expect(screen.getByText('completed')).toBeTruthy()
+    expect(screen.queryByText('Loading jobs...')).toBeNull()
   })
 
   it('shows error message on fetch failure', async () => {
@@ -89,10 +88,10 @@ describe('JobsPage', () => {
     render(<JobsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('Error: Failed to fetch jobs (500)')).toBeInTheDocument()
+      expect(screen.getByText('Error: Failed to fetch jobs (500)')).toBeTruthy()
     })
 
-    expect(screen.queryByText('Loading jobs...')).not.toBeInTheDocument()
+    expect(screen.queryByText('Loading jobs...')).toBeNull()
   })
 
   it('shows "No jobs found." when API returns empty array', async () => {
@@ -101,10 +100,10 @@ describe('JobsPage', () => {
     render(<JobsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('No jobs found.')).toBeInTheDocument()
+      expect(screen.getByText('No jobs found.')).toBeTruthy()
     })
 
-    expect(screen.queryByText('Loading jobs...')).not.toBeInTheDocument()
+    expect(screen.queryByText('Loading jobs...')).toBeNull()
   })
 
   it('filters trigger re-fetch with correct query params', async () => {
@@ -115,7 +114,7 @@ describe('JobsPage', () => {
 
     // Wait for initial fetch to complete
     await waitFor(() => {
-      expect(screen.queryByText('Loading jobs...')).not.toBeInTheDocument()
+      expect(screen.queryByText('Loading jobs...')).toBeNull()
     })
 
     // Initial fetch should have been called without query params

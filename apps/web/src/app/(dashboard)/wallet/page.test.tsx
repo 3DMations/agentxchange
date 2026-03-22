@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import React from 'react'
-import '@testing-library/jest-dom/vitest'
 import type { Mock } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import WalletPage from './page'
@@ -103,7 +102,7 @@ describe('WalletPage', () => {
 
     render(<WalletPage />)
 
-    expect(screen.getByText('Loading wallet data...')).toBeInTheDocument()
+    expect(screen.getByText('Loading wallet data...')).toBeTruthy()
   })
 
   it('renders balance and transactions after successful fetch', async () => {
@@ -112,26 +111,26 @@ describe('WalletPage', () => {
     render(<WalletPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading wallet data...')).not.toBeInTheDocument()
+      expect(screen.queryByText('Loading wallet data...')).toBeNull()
     })
 
     // Balance stat cards (may appear in both StatCard and ledger)
     expect(screen.getAllByText('500').length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByText('100').length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByText('600').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByText('Available')).toBeInTheDocument()
-    expect(screen.getByText('In Escrow')).toBeInTheDocument()
-    expect(screen.getByText('Total')).toBeInTheDocument()
+    expect(screen.getByText('Available')).toBeTruthy()
+    expect(screen.getByText('In Escrow')).toBeTruthy()
+    expect(screen.getByText('Total')).toBeTruthy()
 
     // Transaction rows
-    expect(screen.getByText('credit')).toBeInTheDocument()
-    expect(screen.getByText('debit')).toBeInTheDocument()
-    expect(screen.getByText('escrow lock')).toBeInTheDocument()
-    expect(screen.getByText('starter bonus')).toBeInTheDocument()
+    expect(screen.getByText('credit')).toBeTruthy()
+    expect(screen.getByText('debit')).toBeTruthy()
+    expect(screen.getByText('escrow lock')).toBeTruthy()
+    expect(screen.getByText('starter bonus')).toBeTruthy()
 
     // Job IDs (truncated)
-    expect(screen.getByText('job-abc1...')).toBeInTheDocument()
-    expect(screen.getByText('job-def9...')).toBeInTheDocument()
+    expect(screen.getByText('job-abc1...')).toBeTruthy()
+    expect(screen.getByText('job-def9...')).toBeTruthy()
 
     // Null job_id renders --
     const dashes = screen.getAllByText('--')
@@ -147,10 +146,10 @@ describe('WalletPage', () => {
     render(<WalletPage />)
 
     await waitFor(() => {
-      expect(screen.getByText(/Error:/)).toBeInTheDocument()
+      expect(screen.getByText(/Error:/)).toBeTruthy()
     })
 
-    expect(screen.getByText(/Failed to fetch balance: 500/)).toBeInTheDocument()
+    expect(screen.getByText(/Failed to fetch balance: 500/)).toBeTruthy()
   })
 
   it('shows error when API returns error in response body', async () => {
@@ -161,7 +160,7 @@ describe('WalletPage', () => {
     render(<WalletPage />)
 
     await waitFor(() => {
-      expect(screen.getByText(/Error:.*Unauthorized/)).toBeInTheDocument()
+      expect(screen.getByText(/Error:.*Unauthorized/)).toBeTruthy()
     })
   })
 
@@ -173,10 +172,10 @@ describe('WalletPage', () => {
     render(<WalletPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading wallet data...')).not.toBeInTheDocument()
+      expect(screen.queryByText('Loading wallet data...')).toBeNull()
     })
 
-    expect(screen.getByText('No transactions yet')).toBeInTheDocument()
+    expect(screen.getByText('No transactions yet')).toBeTruthy()
   })
 
   it('formats amounts correctly with +/- prefix based on type', async () => {
@@ -185,16 +184,16 @@ describe('WalletPage', () => {
     render(<WalletPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading wallet data...')).not.toBeInTheDocument()
+      expect(screen.queryByText('Loading wallet data...')).toBeNull()
     })
 
     // credit (500) -> +500
-    expect(screen.getByText('+500')).toBeInTheDocument()
+    expect(screen.getByText('+500')).toBeTruthy()
     // debit (50) -> -50
-    expect(screen.getByText('-50')).toBeInTheDocument()
+    expect(screen.getByText('-50')).toBeTruthy()
     // escrow_lock (100) -> -100
-    expect(screen.getByText('-100')).toBeInTheDocument()
+    expect(screen.getByText('-100')).toBeTruthy()
     // starter_bonus (250) -> +250
-    expect(screen.getByText('+250')).toBeInTheDocument()
+    expect(screen.getByText('+250')).toBeTruthy()
   })
 })

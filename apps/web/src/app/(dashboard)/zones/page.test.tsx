@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import React from 'react'
-import '@testing-library/jest-dom/vitest'
 import type { Mock } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import ZonesPage from './page'
@@ -78,7 +77,7 @@ describe('ZonesPage', () => {
     vi.stubGlobal('fetch', fn)
 
     render(<ZonesPage />)
-    expect(screen.getByText('Loading zones...')).toBeInTheDocument()
+    expect(screen.getByText('Loading zones...')).toBeTruthy()
   })
 
   it('renders zones after successful fetch', async () => {
@@ -87,19 +86,19 @@ describe('ZonesPage', () => {
     render(<ZonesPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading zones...')).not.toBeInTheDocument()
+      expect(screen.queryByText('Loading zones...')).toBeNull()
     })
 
-    expect(screen.getByText('Starter')).toBeInTheDocument()
-    expect(screen.getByText('Apprentice')).toBeInTheDocument()
-    expect(screen.getByText('Expert')).toBeInTheDocument()
-    expect(screen.getByText('Master')).toBeInTheDocument()
+    expect(screen.getByText('Starter')).toBeTruthy()
+    expect(screen.getByText('Apprentice')).toBeTruthy()
+    expect(screen.getByText('Expert')).toBeTruthy()
+    expect(screen.getByText('Master')).toBeTruthy()
 
     // Check level formatting
-    expect(screen.getByText('1-10')).toBeInTheDocument()
-    expect(screen.getByText('11-25')).toBeInTheDocument()
-    expect(screen.getByText('51-100')).toBeInTheDocument()
-    expect(screen.getByText('101+')).toBeInTheDocument()
+    expect(screen.getByText('1-10')).toBeTruthy()
+    expect(screen.getByText('11-25')).toBeTruthy()
+    expect(screen.getByText('51-100')).toBeTruthy()
+    expect(screen.getByText('101+')).toBeTruthy()
   })
 
   it('falls back to static data on fetch failure', async () => {
@@ -108,19 +107,19 @@ describe('ZonesPage', () => {
     render(<ZonesPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading zones...')).not.toBeInTheDocument()
+      expect(screen.queryByText('Loading zones...')).toBeNull()
     })
 
     // Fallback zone names
-    expect(screen.getByText('Starter')).toBeInTheDocument()
-    expect(screen.getByText('Apprentice')).toBeInTheDocument()
-    expect(screen.getByText('Journeyman')).toBeInTheDocument()
-    expect(screen.getByText('Expert')).toBeInTheDocument()
-    expect(screen.getByText('Master')).toBeInTheDocument()
+    expect(screen.getByText('Starter')).toBeTruthy()
+    expect(screen.getByText('Apprentice')).toBeTruthy()
+    expect(screen.getByText('Journeyman')).toBeTruthy()
+    expect(screen.getByText('Expert')).toBeTruthy()
+    expect(screen.getByText('Master')).toBeTruthy()
 
     // Fallback caps
-    expect(screen.getByText('50')).toBeInTheDocument()
-    expect(screen.getByText('Unlimited')).toBeInTheDocument()
+    expect(screen.getByText('50')).toBeTruthy()
+    expect(screen.getByText('Unlimited')).toBeTruthy()
   })
 
   it('formats caps correctly (toLocaleString, Unlimited for large values)', async () => {
@@ -129,17 +128,17 @@ describe('ZonesPage', () => {
     render(<ZonesPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading zones...')).not.toBeInTheDocument()
+      expect(screen.queryByText('Loading zones...')).toBeNull()
     })
 
     // Small caps rendered with toLocaleString (50, 200 stay the same)
-    expect(screen.getByText('50')).toBeInTheDocument()
-    expect(screen.getByText('200')).toBeInTheDocument()
+    expect(screen.getByText('50')).toBeTruthy()
+    expect(screen.getByText('200')).toBeTruthy()
 
     // 5000 formatted with toLocaleString => "5,000"
-    expect(screen.getByText((5000).toLocaleString())).toBeInTheDocument()
+    expect(screen.getByText((5000).toLocaleString())).toBeTruthy()
 
     // 999999 should display as "Unlimited"
-    expect(screen.getByText('Unlimited')).toBeInTheDocument()
+    expect(screen.getByText('Unlimited')).toBeTruthy()
   })
 })

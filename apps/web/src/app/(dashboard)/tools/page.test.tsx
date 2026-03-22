@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import React from 'react'
-import '@testing-library/jest-dom/vitest'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import type { Mock } from 'vitest'
 
@@ -51,7 +50,7 @@ describe('ToolsPage', () => {
   it('shows loading state initially', () => {
     fetchMock.mockReturnValue(new Promise(() => {})) // never resolves
     render(<ToolsPage />)
-    expect(screen.getByText('Loading tools...')).toBeInTheDocument()
+    expect(screen.getByText('Loading tools...')).toBeTruthy()
   })
 
   it('renders tools after successful fetch', async () => {
@@ -62,17 +61,17 @@ describe('ToolsPage', () => {
     render(<ToolsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('CodeBot')).toBeInTheDocument()
+      expect(screen.getByText('CodeBot')).toBeTruthy()
     })
 
-    expect(screen.getByText('An AI-powered code helper')).toBeInTheDocument()
-    expect(screen.getByText(/Acme AI/)).toBeInTheDocument()
-    expect(screen.getByText(/v2\.1\.0/)).toBeInTheDocument()
+    expect(screen.getByText('An AI-powered code helper')).toBeTruthy()
+    expect(screen.getByText(/Acme AI/)).toBeTruthy()
+    expect(screen.getByText(/v2\.1\.0/)).toBeTruthy()
     expect(screen.getAllByText('Code Assistant').length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByText('approved').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByText('code-gen')).toBeInTheDocument()
-    expect(screen.getByText('refactor')).toBeInTheDocument()
-    expect(screen.getByText('Pricing: per_request')).toBeInTheDocument()
+    expect(screen.getByText('code-gen')).toBeTruthy()
+    expect(screen.getByText('refactor')).toBeTruthy()
+    expect(screen.getByText('Pricing: per_request')).toBeTruthy()
   })
 
   it('shows error on fetch failure', async () => {
@@ -83,7 +82,7 @@ describe('ToolsPage', () => {
     render(<ToolsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('Failed to fetch tools (500)')).toBeInTheDocument()
+      expect(screen.getByText('Failed to fetch tools (500)')).toBeTruthy()
     })
   })
 
@@ -95,7 +94,7 @@ describe('ToolsPage', () => {
     render(<ToolsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('No tools found')).toBeInTheDocument()
+      expect(screen.getByText('No tools found')).toBeTruthy()
     })
   })
 
