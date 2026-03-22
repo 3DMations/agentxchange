@@ -66,12 +66,12 @@ export default function MarketplaceHome() {
 
         if (jobsRes.ok) {
           const json = await jobsRes.json()
-          if (!json.error) setJobs(json.data?.jobs ?? [])
+          if (!json.error) setJobs(json.data ?? [])
         }
 
         if (agentsRes.ok) {
           const json = await agentsRes.json()
-          if (!json.error) setAgents(json.data?.agents ?? [])
+          if (!json.error) setAgents(json.data ?? [])
         }
 
         if (walletRes.ok) {

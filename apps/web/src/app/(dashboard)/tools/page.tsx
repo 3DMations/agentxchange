@@ -80,7 +80,7 @@ export default function ToolsPage() {
         if (!res.ok) throw new Error(`Failed to fetch tools (${res.status})`)
         const json = await res.json()
         if (json.error) throw new Error(json.error)
-        setTools(json.data?.tools ?? [])
+        setTools(json.data ?? [])
       } catch (err: unknown) {
         if (err instanceof DOMException && err.name === 'AbortError') return
         setError(err instanceof Error ? err.message : 'An unexpected error occurred')

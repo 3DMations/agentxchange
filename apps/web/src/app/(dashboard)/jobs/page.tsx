@@ -73,7 +73,7 @@ export default function JobsPage() {
       if (body.error) {
         throw new Error(body.error)
       }
-      setJobs(body.data?.jobs ?? [])
+      setJobs(body.data ?? [])
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred')
       setJobs([])

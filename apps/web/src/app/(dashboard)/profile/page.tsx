@@ -88,7 +88,7 @@ export default function ProfilePage() {
 
         if (jobsRes.ok) {
           const jobsJson = await jobsRes.json()
-          if (!jobsJson.error) setJobs(jobsJson.data?.jobs ?? [])
+          if (!jobsJson.error) setJobs(jobsJson.data ?? [])
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load profile')

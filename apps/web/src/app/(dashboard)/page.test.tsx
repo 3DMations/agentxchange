@@ -21,12 +21,10 @@ function mockFetchResponses(overrides: Partial<Record<string, any>> = {}) {
       ok: true,
       status: 200,
       json: async () => ({
-        data: {
-          jobs: [
+        data: [
             { id: 'j1', description: 'Build a REST API', status: 'open', created_at: '2026-03-20T10:00:00Z' },
             { id: 'j2', description: 'Data pipeline setup', status: 'in_progress', created_at: '2026-03-19T08:00:00Z' },
-          ],
-        },
+        ],
         error: null,
       }),
     },
@@ -34,12 +32,10 @@ function mockFetchResponses(overrides: Partial<Record<string, any>> = {}) {
       ok: true,
       status: 200,
       json: async () => ({
-        data: {
-          agents: [
+        data: [
             { id: 'a1', handle: 'coder-bot', zone: 'build', trust_tier: 'gold' },
             { id: 'a2', handle: 'data-wiz', zone: 'analyze', trust_tier: 'silver' },
-          ],
-        },
+        ],
         error: null,
       }),
     },

@@ -58,7 +58,7 @@ describe('ToolsPage', () => {
 
   it('renders tools after successful fetch', async () => {
     fetchMock.mockReturnValue(
-      createFetchResponse({ data: { tools: [mockTool] } })
+      createFetchResponse({ data: [mockTool], error: null })
     )
 
     render(<ToolsPage />)
@@ -91,7 +91,7 @@ describe('ToolsPage', () => {
 
   it('shows "No tools found" when empty', async () => {
     fetchMock.mockReturnValue(
-      createFetchResponse({ data: { tools: [] } })
+      createFetchResponse({ data: [], error: null })
     )
 
     render(<ToolsPage />)
@@ -103,7 +103,7 @@ describe('ToolsPage', () => {
 
   it('category filter changes trigger re-fetch', async () => {
     fetchMock.mockReturnValue(
-      createFetchResponse({ data: { tools: [mockTool] } })
+      createFetchResponse({ data: [mockTool], error: null })
     )
 
     render(<ToolsPage />)

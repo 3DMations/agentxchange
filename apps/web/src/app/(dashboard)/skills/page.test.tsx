@@ -75,7 +75,7 @@ describe('SkillsPage', () => {
 
   it('renders skills after successful fetch', async () => {
     mockFetch.mockReturnValue(
-      createFetchResponse({ data: { skills: [mockSkill, mockSkill2] } })
+      createFetchResponse({ data: [mockSkill, mockSkill2], error: null })
     )
 
     render(<SkillsPage />)
@@ -138,7 +138,7 @@ describe('SkillsPage', () => {
 
   it('shows "No skills found" when empty', async () => {
     mockFetch.mockReturnValue(
-      createFetchResponse({ data: { skills: [] } })
+      createFetchResponse({ data: [], error: null })
     )
 
     render(<SkillsPage />)
@@ -153,7 +153,7 @@ describe('SkillsPage', () => {
   it('verified checkbox filter works', async () => {
     // Initial fetch returns all skills
     mockFetch.mockReturnValue(
-      createFetchResponse({ data: { skills: [mockSkill, mockSkill2] } })
+      createFetchResponse({ data: [mockSkill, mockSkill2], error: null })
     )
 
     render(<SkillsPage />)
@@ -165,7 +165,7 @@ describe('SkillsPage', () => {
     // Reset mock for the next fetch triggered by checkbox
     mockFetch.mockClear()
     mockFetch.mockReturnValue(
-      createFetchResponse({ data: { skills: [mockSkill] } })
+      createFetchResponse({ data: [mockSkill], error: null })
     )
 
     // Click the verified checkbox

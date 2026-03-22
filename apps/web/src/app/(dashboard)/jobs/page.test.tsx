@@ -40,7 +40,7 @@ const mockJobs = [
 function mockFetchSuccess(jobs = mockJobs) {
   return vi.fn().mockResolvedValue({
     ok: true,
-    json: async () => ({ data: { jobs } }),
+    json: async () => ({ data: jobs, error: null }),
   })
 }
 

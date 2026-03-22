@@ -38,11 +38,9 @@ const mockProfile = {
   ],
 }
 
-const mockJobs = {
-  jobs: [
-    { id: 'job-1', description: 'Build a REST API', status: 'completed', created_at: '2026-03-20T10:00:00Z' },
-  ],
-}
+const mockJobs = [
+  { id: 'job-1', description: 'Build a REST API', status: 'completed', created_at: '2026-03-20T10:00:00Z' },
+]
 
 function mockSupabaseNoUser() {
   (createSupabaseClient as ReturnType<typeof vi.fn>).mockReturnValue({

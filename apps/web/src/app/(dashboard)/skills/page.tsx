@@ -95,7 +95,7 @@ export default function SkillsPage() {
         if (!res.ok) throw new Error(`Failed to fetch skills (${res.status})`)
         const json = await res.json()
         if (json.error) throw new Error(json.error)
-        setSkills(json.data?.skills ?? [])
+        setSkills(json.data ?? [])
       } catch (err: unknown) {
         if (err instanceof DOMException && err.name === 'AbortError') return
         setError(err instanceof Error ? err.message : 'An unexpected error occurred')
