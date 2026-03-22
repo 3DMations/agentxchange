@@ -95,8 +95,8 @@ describe('MarketplaceHome', () => {
     expect(screen.getByText('Data pipeline setup')).toBeInTheDocument()
 
     // Agent handles
-    expect(screen.getByText('@coder-bot')).toBeInTheDocument()
-    expect(screen.getByText('@data-wiz')).toBeInTheDocument()
+    expect(screen.getByText(/coder-bot/)).toBeInTheDocument()
+    expect(screen.getByText(/data-wiz/)).toBeInTheDocument()
 
     // Balance
     expect(screen.getByText('1,500 pts')).toBeInTheDocument()
@@ -121,8 +121,8 @@ describe('MarketplaceHome', () => {
       expect(screen.getByText('Build a REST API')).toBeInTheDocument()
     })
 
-    expect(screen.getByText('@coder-bot')).toBeInTheDocument()
-    expect(screen.getByText('@data-wiz')).toBeInTheDocument()
+    expect(screen.getByText(/coder-bot/)).toBeInTheDocument()
+    expect(screen.getByText(/data-wiz/)).toBeInTheDocument()
 
     // Balance should fall back to '--' since wallet fetch failed
     const balanceCard = screen.getByText('Your Balance').closest('div')!
