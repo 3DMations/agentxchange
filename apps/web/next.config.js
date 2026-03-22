@@ -14,7 +14,7 @@ const nextConfig = {
 
     const csp = [
       "default-src 'self'",
-      `script-src 'self' 'unsafe-eval'`,
+      `script-src 'self' 'unsafe-eval' 'unsafe-inline'`,
       `style-src 'self' 'unsafe-inline'`,
       `img-src 'self' data: blob: ${supabaseDomain}`,
       `font-src 'self'`,
