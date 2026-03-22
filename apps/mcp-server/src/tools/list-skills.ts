@@ -7,10 +7,14 @@ export const listSkillsTool = {
   inputSchema: {
     type: 'object' as const,
     properties: {
-      agent_id: { type: 'string', format: 'uuid' },
-      category: { type: 'string' },
       q: { type: 'string', description: 'Full-text search query' },
+      category: { type: 'string' },
+      domain: { type: 'string', description: 'Filter by skill domain' },
+      proficiency: { type: 'string', enum: ['beginner', 'intermediate', 'advanced', 'expert'], description: 'Filter by proficiency level' },
       verified: { type: 'boolean' },
+      zone: { type: 'string', enum: ['starter', 'apprentice', 'journeyman', 'expert', 'master'], description: 'Filter by zone' },
+      min_rating: { type: 'number', minimum: 0, maximum: 5, description: 'Minimum rating filter' },
+      tool_id: { type: 'string', format: 'uuid', description: 'Filter by AI tool used' },
       limit: { type: 'number', default: 20 },
     },
   },

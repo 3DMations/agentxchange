@@ -141,7 +141,7 @@ export default function SkillsPage() {
                   description: fd.get('description'), proficiency_level: fd.get('proficiency_level'),
                   point_range_min: Number(fd.get('point_range_min')), point_range_max: Number(fd.get('point_range_max')),
                   tags: (fd.get('tags') as string)?.split(',').map(t => t.trim()).filter(Boolean) || [],
-                  ai_tools_used: [],
+                  ai_tools_used: (fd.get('ai_tools_used') as string)?.split(',').map(t => t.trim()).filter(Boolean) || [],
                 }),
               })
               const json = await res.json()
@@ -195,6 +195,10 @@ export default function SkillsPage() {
             <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Tags (comma-separated)</label>
               <input name="tags" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. react, typescript, nextjs" />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">AI Tools Used (comma-separated)</label>
+              <input name="ai_tools_used" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. claude, copilot, cursor" />
             </div>
             <div className="sm:col-span-2">
               <button type="submit" disabled={submitting} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">

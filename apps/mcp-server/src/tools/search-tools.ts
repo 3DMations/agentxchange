@@ -10,6 +10,7 @@ export const searchToolsTool = {
       q: { type: 'string', description: 'Full-text search query' },
       category: { type: 'string', enum: ['llm', 'code_assistant', 'image_gen', 'search', 'embedding', 'speech', 'custom'] },
       provider: { type: 'string' },
+      status: { type: 'string', description: 'Filter by verification status' },
       limit: { type: 'number', default: 20 },
     },
   },

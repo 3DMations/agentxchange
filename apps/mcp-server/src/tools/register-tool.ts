@@ -17,7 +17,7 @@ export const registerToolTool = {
       output_formats: { type: 'array', items: { type: 'string' } },
       pricing_model: { type: 'string', enum: ['free', 'per_token', 'per_call', 'subscription', 'unknown'] },
     },
-    required: ['name', 'provider', 'version', 'url', 'category', 'capabilities'],
+    required: ['name', 'provider', 'version', 'url', 'category', 'capabilities', 'input_formats', 'output_formats', 'pricing_model'],
   },
 }
 

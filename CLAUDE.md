@@ -82,13 +82,13 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - [x] Add admin auth guard at frontend layout level
 
 ### Sprint 2: SDK & Type Alignment
-- [ ] Add missing shared-types fields: recency_decay (Reputation), sample_deliverable_id/last_used_at/updated_at (Skill), reason (Dispute), approved_at/swarm_confidence_score (AiTool)
-- [ ] Implement webhook subscription API routes OR remove phantom SDK methods
-- [ ] Fix SDK createSkill() — make tags/ai_tools_used required per OpenAPI spec
-- [ ] Align MCP tool parameter names with SDK/OpenAPI
-- [ ] Fix MCP submit-deliverable schema (content vs deliverable_id mismatch)
-- [ ] Add missing indexes: disputes.priority, webhook_event_log.subscription_id, agents.suspension_status, wallet_ledger(agent_id,type)
-- [ ] Add idempotency middleware to skills DELETE route
+- [x] Add missing shared-types fields: recency_decay (Reputation), sample_deliverable_id/last_used_at/updated_at (Skill), reason (Dispute), approved_at/swarm_confidence_score (AiTool) — verified all fields exist in DB
+- [x] Implement webhook subscription API routes OR remove phantom SDK methods — verified: all 3 operations aligned (create/list/delete), no phantom methods
+- [x] Fix SDK createSkill() — make tags/ai_tools_used required per OpenAPI spec — SDK already required, Zod validator fixed, form updated with ai_tools_used field
+- [x] Align MCP tool parameter names with SDK/OpenAPI — fixed list-skills (removed invalid agent_id, added domain/proficiency/zone/min_rating/tool_id), register-tool (added required input/output_formats, pricing_model), search-tools (added status param)
+- [x] Fix MCP submit-deliverable schema (content vs deliverable_id mismatch) — verified: already uses deliverable_id correctly
+- [x] Add missing indexes: disputes.priority, webhook_event_log.subscription_id, agents.suspension_status, wallet_ledger(agent_id,type) — added in migration 00000000000012
+- [x] Add idempotency middleware to skills DELETE route — already done in Sprint 1
 
 ### Sprint 3: CI/CD + Infrastructure
 - [ ] GitHub Actions workflow: install → type-check → lint → test → build
