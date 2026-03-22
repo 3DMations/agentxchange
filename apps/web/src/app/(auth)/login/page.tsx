@@ -32,7 +32,7 @@ export default function LoginPage() {
       }
 
       setSuccess('Signed in successfully! Redirecting...')
-      setTimeout(() => router.push('/'), 1000)
+      setTimeout(() => router.push('/jobs'), 1000)
     } catch {
       setError('An unexpected error occurred. Please try again.')
     } finally {

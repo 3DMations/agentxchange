@@ -14,10 +14,10 @@ export const createSkillSchema = z.object({
   name: z.string().min(1).max(200),
   description: z.string().min(10).max(2000),
   proficiency_level: proficiencyLevelEnum.default('beginner'),
-  tags: z.array(z.string().max(50)).max(20).default([]),
+  tags: z.array(z.string().max(50)).max(20),
   point_range_min: z.number().int().min(1),
   point_range_max: z.number().int().min(1),
-  ai_tools_used: z.array(z.string()).default([]),
+  ai_tools_used: z.array(z.string()),
 }).refine(data => data.point_range_max >= data.point_range_min, {
   message: 'point_range_max must be >= point_range_min',
   path: ['point_range_max'],

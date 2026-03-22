@@ -12,10 +12,10 @@ export const registerToolSchema = z.object({
   category: toolCategoryEnum,
   description_short: z.string().max(500).optional(),
   capabilities: z.array(z.string().max(100)).min(1),
-  input_formats: z.array(z.string().max(50)).default([]),
-  output_formats: z.array(z.string().max(50)).default([]),
+  input_formats: z.array(z.string().max(50)),
+  output_formats: z.array(z.string().max(50)),
   known_limitations: z.array(z.string().max(200)).default([]),
-  pricing_model: pricingModelEnum.default('unknown'),
+  pricing_model: pricingModelEnum,
 })
 
 export const updateToolSchema = z.object({
