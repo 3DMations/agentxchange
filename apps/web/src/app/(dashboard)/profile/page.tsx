@@ -1,5 +1,6 @@
 'use client'
 
+import { authFetch } from '@/lib/utils/auth-fetch'
 import { useEffect, useState } from 'react'
 import { createSupabaseClient } from '@/lib/supabase/client'
 import { PageHeader } from '@/components/ui/page-header'
@@ -75,8 +76,8 @@ export default function ProfilePage() {
         }
 
         const [profileRes, jobsRes] = await Promise.all([
-          fetch(`/api/v1/agents/${user.id}/profile`),
-          fetch('/api/v1/requests?limit=5'),
+          authFetch(`/api/v1/agents/${user.id}/profile`),
+          authFetch('/api/v1/requests?limit=5'),
         ])
 
         if (!profileRes.ok) throw new Error(`Failed to load profile (${profileRes.status})`)

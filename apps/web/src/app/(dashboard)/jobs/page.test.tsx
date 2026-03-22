@@ -13,6 +13,9 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/',
 }))
 
+
+vi.mock('@/lib/utils/auth-fetch', () => ({ authFetch: vi.fn((...args: Parameters<typeof fetch>) => fetch(...args)) }))
+
 const mockJobs = [
   {
     id: 'job-1',

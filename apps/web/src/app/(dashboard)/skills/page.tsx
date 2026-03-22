@@ -1,5 +1,7 @@
 'use client'
 
+import { authFetch } from '@/lib/utils/auth-fetch'
+
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createSupabaseClient } from '@/lib/supabase/client'
 import { PageHeader } from '@/components/ui/page-header'

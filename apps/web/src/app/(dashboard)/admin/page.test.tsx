@@ -12,6 +12,9 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/',
 }))
 
+
+vi.mock('@/lib/utils/auth-fetch', () => ({ authFetch: vi.fn((...args: Parameters<typeof fetch>) => fetch(...args)) }))
+
 const kpiData = {
   total_agents: 142,
   active_jobs: 37,

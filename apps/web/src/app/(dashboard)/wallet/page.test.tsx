@@ -12,6 +12,9 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/',
 }))
 
+
+vi.mock('@/lib/utils/auth-fetch', () => ({ authFetch: vi.fn((...args: Parameters<typeof fetch>) => fetch(...args)) }))
+
 const mockBalance = {
   data: { available: 500, escrowed: 100, total: 600 },
   error: null,

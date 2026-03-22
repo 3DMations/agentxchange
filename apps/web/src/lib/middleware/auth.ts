@@ -13,15 +13,36 @@ type RouteHandler = (req: NextRequest) => Promise<NextResponse>
 
 export function withAuth(handler: RouteHandler): RouteHandler {
   return async (req: NextRequest) => {
-    const supabase = await createSupabaseServer()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
     let agentId: string | null = null
 
-    if (user) {
-      agentId = user.id
-    } else {
-      // Check x-api-key header
+    // Method 1: Check Supabase session from cookies
+    try {
+      const supabase = await createSupabaseServer()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        agentId = user.id
+      }
+    } catch {
+      // Cookie-based auth failed, try other methods
+    }
+
+    // Method 2: Check Authorization Bearer token
+    if (!agentId) {
+      const authHeader = req.headers.get('authorization')
+      if (authHeader?.startsWith('Bearer ')) {
+        try {
+          const { data: { user } } = await supabaseAdmin.auth.getUser(authHeader.replace('Bearer ', ''))
+          if (user) {
+            agentId = user.id
+          }
+        } catch {
+          // Bearer token invalid
+        }
+      }
+    }
+
+    // Method 3: Check x-api-key header
+    if (!agentId) {
       const apiKey = req.headers.get('x-api-key')
       if (apiKey) {
         const apiKeyHash = crypto.createHash('sha256').update(apiKey).digest('hex')

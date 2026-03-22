@@ -1,5 +1,7 @@
 'use client'
 
+import { authFetch } from '@/lib/utils/auth-fetch'
+
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'

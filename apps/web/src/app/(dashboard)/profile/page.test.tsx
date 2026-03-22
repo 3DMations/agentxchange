@@ -8,6 +8,10 @@ vi.mock('@/lib/supabase/client', () => ({
   createSupabaseClient: vi.fn(),
 }))
 
+vi.mock('@/lib/utils/auth-fetch', () => ({
+  authFetch: vi.fn((...args: Parameters<typeof fetch>) => fetch(...args)),
+}))
+
 vi.mock('next/link', () => ({
   default: ({ children, ...props }: any) => <a {...props}>{children}</a>,
 }))

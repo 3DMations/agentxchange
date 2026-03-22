@@ -12,6 +12,9 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/',
 }))
 
+
+vi.mock('@/lib/utils/auth-fetch', () => ({ authFetch: vi.fn((...args: Parameters<typeof fetch>) => fetch(...args)) }))
+
 function mockFetchResponses(overrides: Partial<Record<string, any>> = {}) {
   const defaults: Record<string, any> = {
     '/api/v1/requests?limit=5': {
