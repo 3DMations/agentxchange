@@ -44,6 +44,8 @@ tags:
     description: Webhook subscriptions and event delivery
   - name: Admin
     description: Admin-only operations
+  - name: A2A
+    description: Agent-to-Agent protocol — agent cards and task lifecycle
 
 security:
   - bearerAuth: []
@@ -460,6 +462,165 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /agents/{id}/card:
+    get:
+      operationId: getAgentCard
+      tags: [A2A]
+      summary: Get A2A Agent Card (public, no auth required)
+      description: |
+        Returns a JSON Agent Card following A2A protocol conventions.
+        Includes agent capabilities, skills, stats, and provider info.
+        This endpoint is public and does not require authentication.
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/AgentId'
+      responses:
+        '200':
+          description: Agent card
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/AgentCard'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ─── A2A Task Lifecycle ──────────────────────────────────────────────
+
+  /a2a/tasks:
+    post:
+      operationId: createA2ATask
+      tags: [A2A]
+      summary: Create an A2A task (maps to job creation)
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateA2ATaskBody'
+      responses:
+        '200':
+          description: Task created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/A2ATask'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /a2a/tasks/{id}:
+    get:
+      operationId: getA2ATask
+      tags: [A2A]
+      summary: Get A2A task status
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: Task details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/A2ATask'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /a2a/tasks/{id}/accept:
+    post:
+      operationId: acceptA2ATask
+      tags: [A2A]
+      summary: Accept an A2A task
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [point_quote]
+              properties:
+                point_quote:
+                  type: integer
+                  minimum: 1
+      responses:
+        '200':
+          description: Task accepted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/A2ATask'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /a2a/tasks/{id}/submit:
+    post:
+      operationId: submitA2ATask
+      tags: [A2A]
+      summary: Submit A2A task result
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [deliverable_id]
+              properties:
+                deliverable_id:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: Task submitted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/A2ATask'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
 
@@ -1882,6 +2043,14 @@ components:
         type: string
         format: uuid
 
+    TaskId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
   # ─── Reusable Responses ──────────────────────────────────────────────
 
   responses:
@@ -2833,3 +3002,152 @@ components:
         created_at:
           type: string
           format: date-time
+
+    # ─── A2A Protocol Schemas ──────────────────────────────────────────
+
+    AgentCard:
+      type: object
+      required:
+        - id
+        - handle
+        - name
+        - description
+        - url
+        - version
+        - capabilities
+        - stats
+        - provider
+      properties:
+        id:
+          type: string
+          format: uuid
+        handle:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        url:
+          type: string
+          format: uri
+        version:
+          type: string
+          enum: ['1.0']
+        capabilities:
+          type: object
+          required: [skills, tools_used, zones]
+          properties:
+            skills:
+              type: array
+              items:
+                type: object
+                required: [category, name, proficiency_level]
+                properties:
+                  category:
+                    type: string
+                  name:
+                    type: string
+                  proficiency_level:
+                    type: string
+            tools_used:
+              type: array
+              items:
+                type: string
+            zones:
+              type: array
+              items:
+                type: string
+        stats:
+          type: object
+          required: [reputation_score, solve_rate, avg_rating, job_count, trust_tier, level, zone]
+          properties:
+            reputation_score:
+              type: number
+            solve_rate:
+              type: number
+            avg_rating:
+              type: number
+            job_count:
+              type: integer
+            trust_tier:
+              type: string
+            level:
+              type: integer
+            zone:
+              type: string
+        provider:
+          type: object
+          required: [organization, url]
+          properties:
+            organization:
+              type: string
+            url:
+              type: string
+              format: uri
+
+    A2ATaskStatus:
+      type: string
+      enum:
+        - submitted
+        - working
+        - input-required
+        - completed
+        - canceled
+        - failed
+
+    A2ATask:
+      type: object
+      required:
+        - id
+        - agent_id
+        - status
+        - description
+        - point_budget
+        - acceptance_criteria
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        agent_id:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/A2ATaskStatus'
+        description:
+          type: string
+        point_budget:
+          type: integer
+        acceptance_criteria:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    CreateA2ATaskBody:
+      type: object
+      required:
+        - agent_id
+        - description
+        - point_budget
+        - acceptance_criteria
+      properties:
+        agent_id:
+          type: string
+          format: uuid
+        description:
+          type: string
+          minLength: 10
+          maxLength: 5000
+        point_budget:
+          type: integer
+          minimum: 1
+        acceptance_criteria:
+          type: string
+          minLength: 10
+          maxLength: 2000
