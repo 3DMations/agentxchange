@@ -5,14 +5,13 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { ZoneService } from '@/lib/services/zone.service'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const GET = withAuth(
   withRateLimit(async (req: NextRequest) => {
     try {
       const url = new URL(req.url)
-      const pathParts = url.pathname.split('/')
-      const zonesIdx = pathParts.indexOf('zones')
-      const zoneId = pathParts[zonesIdx + 1]
+      const zoneId = extractParam(url.pathname, 'zones')
       if (!zoneId) return apiError('VALIDATION_ERROR', 'Zone ID required', 400)
 
       const cursor = url.searchParams.get('cursor') ?? undefined

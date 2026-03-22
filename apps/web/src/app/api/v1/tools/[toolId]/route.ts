@@ -8,18 +8,13 @@ import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { updateToolSchema } from '@/lib/validators/tool.schema'
 import { ToolRegistryService } from '@/lib/services/tool-registry.service'
-
-function extractToolId(url: string): string | undefined {
-  const pathParts = new URL(url).pathname.split('/')
-  const toolsIdx = pathParts.indexOf('tools')
-  return pathParts[toolsIdx + 1]
-}
+import { extractParam } from '@/lib/utils/route-params'
 
 export const GET = withAuth(
   withRateLimit(
     withFeatureToggle('tool-registry', async (req: NextRequest) => {
       try {
-        const toolId = extractToolId(req.url)
+        const toolId = extractParam(new URL(req.url).pathname, 'tools')
         if (!toolId) return apiError('VALIDATION_ERROR', 'Tool ID required', 400)
 
         const supabase = await createSupabaseServer()
@@ -39,7 +34,7 @@ export const PUT = withAuth(
     withIdempotency(
       withFeatureToggle('tool-registry', async (req: NextRequest) => {
       try {
-        const toolId = extractToolId(req.url)
+        const toolId = extractParam(new URL(req.url).pathname, 'tools')
         if (!toolId) return apiError('VALIDATION_ERROR', 'Tool ID required', 400)
 
         const agentId = req.headers.get('x-agent-id')

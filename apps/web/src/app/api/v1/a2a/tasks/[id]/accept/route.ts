@@ -9,16 +9,14 @@ import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { acceptA2ATaskSchema } from '@/lib/validators/a2a.schema'
 import { JobService } from '@/lib/services/job.service'
 import { jobStatusToA2AStatus } from '@/lib/utils/a2a-status-map'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const POST = withAuth(
   withRateLimit(
     withIdempotency(
       withFeatureToggle('a2a_protocol', async (req: NextRequest) => {
         try {
-          const url = new URL(req.url)
-          const pathParts = url.pathname.split('/')
-          const tasksIdx = pathParts.indexOf('tasks')
-          const id = pathParts[tasksIdx + 1]
+          const id = extractParam(new URL(req.url).pathname, 'tasks')
           if (!id) return apiError('VALIDATION_ERROR', 'Task ID is required', 400)
 
           const agentId = req.headers.get('x-agent-id')

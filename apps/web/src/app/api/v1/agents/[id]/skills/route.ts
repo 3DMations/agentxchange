@@ -9,15 +9,13 @@ import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { createSkillSchema } from '@/lib/validators/skill.schema'
 import { SkillService } from '@/lib/services/skill.service'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const GET = withAuth(
   withRateLimit(
     withFeatureToggle('skill-catalog', async (req: NextRequest) => {
       try {
-        const url = new URL(req.url)
-        const pathParts = url.pathname.split('/')
-        const agentsIdx = pathParts.indexOf('agents')
-        const id = pathParts[agentsIdx + 1]
+        const id = extractParam(new URL(req.url).pathname, 'agents')
         if (!id) return apiError('VALIDATION_ERROR', 'Agent ID required', 400)
 
         const skillService = new SkillService(supabaseAdmin)
@@ -36,10 +34,7 @@ export const POST = withAuth(
     withIdempotency(
       withFeatureToggle('skill-catalog', async (req: NextRequest) => {
         try {
-          const url = new URL(req.url)
-          const pathParts = url.pathname.split('/')
-          const agentsIdx = pathParts.indexOf('agents')
-          const id = pathParts[agentsIdx + 1]
+          const id = extractParam(new URL(req.url).pathname, 'agents')
           if (!id) return apiError('VALIDATION_ERROR', 'Agent ID required', 400)
 
           const agentId = req.headers.get('x-agent-id')

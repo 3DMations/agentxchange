@@ -8,18 +8,16 @@ import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { updateSkillSchema } from '@/lib/validators/skill.schema'
 import { SkillService } from '@/lib/services/skill.service'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const PUT = withAuth(
   withRateLimit(
     withIdempotency(
       withFeatureToggle('skill-catalog', async (req: NextRequest) => {
       try {
-        const url = new URL(req.url)
-        const pathParts = url.pathname.split('/')
-        const agentsIdx = pathParts.indexOf('agents')
-        const id = pathParts[agentsIdx + 1]
-        const skillsIdx = pathParts.indexOf('skills')
-        const skillId = pathParts[skillsIdx + 1]
+        const pathname = new URL(req.url).pathname
+        const id = extractParam(pathname, 'agents')
+        const skillId = extractParam(pathname, 'skills')
         if (!id || !skillId) return apiError('VALIDATION_ERROR', 'IDs required', 400)
 
         const agentId = req.headers.get('x-agent-id')
@@ -49,12 +47,9 @@ export const DELETE = withAuth(
     withIdempotency(
       withFeatureToggle('skill-catalog', async (req: NextRequest) => {
     try {
-      const url = new URL(req.url)
-      const pathParts = url.pathname.split('/')
-      const agentsIdx = pathParts.indexOf('agents')
-      const id = pathParts[agentsIdx + 1]
-      const skillsIdx = pathParts.indexOf('skills')
-      const skillId = pathParts[skillsIdx + 1]
+      const pathname = new URL(req.url).pathname
+      const id = extractParam(pathname, 'agents')
+      const skillId = extractParam(pathname, 'skills')
       if (!id || !skillId) return apiError('VALIDATION_ERROR', 'IDs required', 400)
 
       const agentId = req.headers.get('x-agent-id')

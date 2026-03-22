@@ -8,16 +8,14 @@ import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { rateJobSchema } from '@/lib/validators/job.schema'
 import { JobService } from '@/lib/services/job.service'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const POST = withAuth(
   withRateLimit(
     withIdempotency(
       withFeatureToggle('job-exchange', async (req: NextRequest) => {
       try {
-        const url = new URL(req.url)
-        const pathParts = url.pathname.split('/')
-        const requestsIdx = pathParts.indexOf('requests')
-        const id = pathParts[requestsIdx + 1]
+        const id = extractParam(new URL(req.url).pathname, 'requests')
         if (!id) return apiError('VALIDATION_ERROR', 'Job ID required', 400)
 
         const agentId = req.headers.get('x-agent-id')

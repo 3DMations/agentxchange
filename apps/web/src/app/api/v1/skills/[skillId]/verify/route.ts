@@ -8,16 +8,14 @@ import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { verifySkillSchema } from '@/lib/validators/skill.schema'
 import { SkillService } from '@/lib/services/skill.service'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const POST = withAuth(
   withRateLimit(
     withIdempotency(
       withFeatureToggle('skill-catalog', async (req: NextRequest) => {
       try {
-        const url = new URL(req.url)
-        const pathParts = url.pathname.split('/')
-        const skillsIdx = pathParts.indexOf('skills')
-        const skillId = pathParts[skillsIdx + 1]
+        const skillId = extractParam(new URL(req.url).pathname, 'skills')
         if (!skillId) return apiError('VALIDATION_ERROR', 'Skill ID required', 400)
 
         const body = await req.json()

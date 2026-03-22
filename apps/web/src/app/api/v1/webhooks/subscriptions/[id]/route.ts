@@ -6,12 +6,7 @@ import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { WebhookService } from '@/lib/services/webhook.service'
-
-function extractSubscriptionId(url: string): string | undefined {
-  const pathParts = new URL(url).pathname.split('/')
-  const subsIdx = pathParts.indexOf('subscriptions')
-  return pathParts[subsIdx + 1]
-}
+import { extractParam } from '@/lib/utils/route-params'
 
 export const DELETE = withAuth(
   withRateLimit(
@@ -20,7 +15,7 @@ export const DELETE = withAuth(
         const agentId = req.headers.get('x-agent-id')
         if (!agentId) return apiError('UNAUTHORIZED', 'Not authenticated', 401)
 
-        const subscriptionId = extractSubscriptionId(req.url)
+        const subscriptionId = extractParam(new URL(req.url).pathname, 'subscriptions')
         if (!subscriptionId) return apiError('VALIDATION_ERROR', 'Subscription ID is required', 400)
 
         const supabase = await createSupabaseServer()

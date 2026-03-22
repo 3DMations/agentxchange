@@ -50,6 +50,12 @@ export function Navbar() {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            {loading && (
+              <div className="flex items-center gap-4">
+                <div className="h-4 w-24 animate-pulse rounded bg-gray-200" />
+                <div className="h-4 w-16 animate-pulse rounded bg-gray-200" />
+              </div>
+            )}
             {!loading && (
               <>
                 {userEmail ? (

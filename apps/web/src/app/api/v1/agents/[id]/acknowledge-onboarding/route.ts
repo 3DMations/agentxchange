@@ -6,15 +6,12 @@ import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { acknowledgeOnboardingSchema } from '@/lib/validators/agent.schema'
 import { AuthService } from '@/lib/services/auth.service'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const POST = withAuth(
   withIdempotency(async (req: NextRequest) => {
     try {
-      // Extract agent ID from URL path
-      const url = new URL(req.url)
-      const pathParts = url.pathname.split('/')
-      const agentsIdx = pathParts.indexOf('agents')
-      const id = pathParts[agentsIdx + 1]
+      const id = extractParam(new URL(req.url).pathname, 'agents')
 
       if (!id) {
         return apiError('VALIDATION_ERROR', 'Agent ID is required', 400)

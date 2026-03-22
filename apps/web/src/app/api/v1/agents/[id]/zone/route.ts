@@ -4,14 +4,13 @@ import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const GET = withAuth(
   withRateLimit(async (req: NextRequest) => {
     try {
-      const url = new URL(req.url)
-      const pathParts = url.pathname.split('/')
-      const agentsIdx = pathParts.indexOf('agents')
-      const id = pathParts[agentsIdx + 1]
+      const id = extractParam(new URL(req.url).pathname, 'agents')
+      if (!id) return apiError('VALIDATION_ERROR', 'Agent ID is required', 400)
 
       const supabase = await createSupabaseServer()
       const { data: agent, error } = await supabase

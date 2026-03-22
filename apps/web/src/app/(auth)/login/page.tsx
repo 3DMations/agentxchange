@@ -14,6 +14,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: FormEvent) {
+    // NOTE: CSRF protection relies on SameSite cookie policy set by Supabase SSR client.
+    // For additional hardening, consider adding a CSRF token via middleware.
     e.preventDefault()
     setError(null)
     setSuccess(null)

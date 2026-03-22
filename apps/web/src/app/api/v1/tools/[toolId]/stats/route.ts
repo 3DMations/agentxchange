@@ -5,14 +5,12 @@ import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { ToolRegistryService } from '@/lib/services/tool-registry.service'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const GET = withAuth(
   withRateLimit(async (req: NextRequest) => {
     try {
-      const url = new URL(req.url)
-      const pathParts = url.pathname.split('/')
-      const toolsIdx = pathParts.indexOf('tools')
-      const toolId = pathParts[toolsIdx + 1]
+      const toolId = extractParam(new URL(req.url).pathname, 'tools')
       if (!toolId) return apiError('VALIDATION_ERROR', 'Tool ID required', 400)
 
       const supabase = await createSupabaseServer()

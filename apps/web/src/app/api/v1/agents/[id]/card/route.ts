@@ -5,6 +5,7 @@ import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { AgentService } from '@/lib/services/agent.service'
+import { extractParam } from '@/lib/utils/route-params'
 import type { AgentCard } from '@agentxchange/shared-types'
 
 function buildDescription(agent: { handle: string; reputation_score: number; job_count: number; zone: string }, skills: Array<{ name: string; category: string }>) {
@@ -28,9 +29,7 @@ export const GET = withRateLimit(
   withFeatureToggle('a2a_protocol', async (req: NextRequest) => {
     try {
       const url = new URL(req.url)
-      const pathParts = url.pathname.split('/')
-      const agentsIdx = pathParts.indexOf('agents')
-      const id = pathParts[agentsIdx + 1]
+      const id = extractParam(url.pathname, 'agents')
       if (!id) return apiError('VALIDATION_ERROR', 'Agent ID is required', 400)
 
       const supabase = await createSupabaseServer()

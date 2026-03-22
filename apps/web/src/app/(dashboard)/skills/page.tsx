@@ -53,6 +53,7 @@ export default function SkillsPage() {
   const [formError, setFormError] = useState<string | null>(null)
   const [formSuccess, setFormSuccess] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
   const [q, setQ] = useState('')
   const [category, setCategory] = useState('')
   const [proficiency, setProficiency] = useState('')
@@ -106,7 +107,7 @@ export default function SkillsPage() {
 
     fetchSkills()
     return () => controller.abort()
-  }, [debouncedQ, category, proficiency, verified])
+  }, [debouncedQ, category, proficiency, verified, refreshKey])
 
   return (
     <>
@@ -145,7 +146,7 @@ export default function SkillsPage() {
               })
               const json = await res.json()
               if (!res.ok || json.error) throw new Error(json.error?.message || 'Failed to add skill')
-              setFormSuccess('Skill added!'); setShowForm(false); window.location.reload()
+              setFormSuccess('Skill added!'); setShowForm(false); setRefreshKey(k => k + 1)
             } catch (err: unknown) { setFormError(err instanceof Error ? err.message : 'Failed') }
             finally { setSubmitting(false) }
           }} className="grid grid-cols-1 gap-3 sm:grid-cols-2">

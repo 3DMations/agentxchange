@@ -9,13 +9,11 @@ import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { updateProfileSchema } from '@/lib/validators/agent.schema'
 import { AgentService } from '@/lib/services/agent.service'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const GET = withRateLimit(async (req: NextRequest) => {
   try {
-    const url = new URL(req.url)
-    const pathParts = url.pathname.split('/')
-    const agentsIdx = pathParts.indexOf('agents')
-    const id = pathParts[agentsIdx + 1]
+    const id = extractParam(new URL(req.url).pathname, 'agents')
     if (!id) return apiError('VALIDATION_ERROR', 'Agent ID is required', 400)
 
     const agentService = new AgentService(supabaseAdmin)
@@ -32,10 +30,8 @@ export const PUT = withAuth(
     withIdempotency(
       withFeatureToggle('agent-profiles', async (req: NextRequest) => {
         try {
-          const url = new URL(req.url)
-          const pathParts = url.pathname.split('/')
-          const agentsIdx = pathParts.indexOf('agents')
-          const id = pathParts[agentsIdx + 1]
+          const id = extractParam(new URL(req.url).pathname, 'agents')
+          if (!id) return apiError('VALIDATION_ERROR', 'Agent ID is required', 400)
 
           const agentId = req.headers.get('x-agent-id')
           if (agentId !== id) {

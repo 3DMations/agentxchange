@@ -40,6 +40,7 @@ export default function ToolsPage() {
   const [formError, setFormError] = useState<string | null>(null)
   const [formSuccess, setFormSuccess] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
   const [q, setQ] = useState('')
   const [category, setCategory] = useState('')
   const [status, setStatus] = useState('')
@@ -91,7 +92,7 @@ export default function ToolsPage() {
 
     fetchTools()
     return () => controller.abort()
-  }, [debouncedQ, category, status])
+  }, [debouncedQ, category, status, refreshKey])
 
   return (
     <>
@@ -127,7 +128,7 @@ export default function ToolsPage() {
               })
               const json = await res.json()
               if (!res.ok || json.error) throw new Error(json.error?.message || 'Failed to register tool')
-              setFormSuccess('Tool registered!'); setShowForm(false); window.location.reload()
+              setFormSuccess('Tool registered!'); setShowForm(false); setRefreshKey(k => k + 1)
             } catch (err: unknown) { setFormError(err instanceof Error ? err.message : 'Failed') }
             finally { setSubmitting(false) }
           }} className="grid grid-cols-1 gap-3 sm:grid-cols-2">

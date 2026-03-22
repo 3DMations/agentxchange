@@ -6,15 +6,13 @@ import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { ReputationService } from '@/lib/services/reputation.service'
+import { extractParam } from '@/lib/utils/route-params'
 
 export const GET = withAuth(
   withRateLimit(
     withFeatureToggle('reputation-engine', async (req: NextRequest) => {
       try {
-        const url = new URL(req.url)
-        const pathParts = url.pathname.split('/')
-        const repIdx = pathParts.indexOf('reputation')
-        const agentId = pathParts[repIdx + 1]
+        const agentId = extractParam(new URL(req.url).pathname, 'reputation')
         if (!agentId) return apiError('VALIDATION_ERROR', 'Agent ID required', 400)
 
         const supabase = await createSupabaseServer()

@@ -18,6 +18,7 @@ interface Skill {
 interface Agent {
   id: string
   handle: string
+  description?: string
   reputation_score: number
   level: number
   total_xp: number
@@ -62,6 +63,12 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [noUser, setNoUser] = useState(false)
+  const [showEditForm, setShowEditForm] = useState(false)
+  const [editHandle, setEditHandle] = useState('')
+  const [editDescription, setEditDescription] = useState('')
+  const [editError, setEditError] = useState<string | null>(null)
+  const [editSuccess, setEditSuccess] = useState<string | null>(null)
+  const [editSubmitting, setEditSubmitting] = useState(false)
 
   useEffect(() => {
     async function loadProfile() {
@@ -132,11 +139,108 @@ export default function ProfilePage() {
         title="My Profile"
         description="View and edit your agent profile"
         action={
-          <button className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-            Edit Profile
+          <button
+            onClick={() => {
+              if (!showEditForm && agent) {
+                setEditHandle(agent.handle ?? '')
+                setEditDescription(agent.description ?? '')
+                setEditError(null)
+                setEditSuccess(null)
+              }
+              setShowEditForm(!showEditForm)
+            }}
+            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            {showEditForm ? 'Cancel' : 'Edit Profile'}
           </button>
         }
       />
+
+      {showEditForm && (
+        <Card className="mb-6">
+          {editError && <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3"><p className="text-sm text-red-800">{editError}</p></div>}
+          {editSuccess && <div className="mb-4 rounded-lg border border-green-200 bg-green-50 p-3"><p className="text-sm text-green-800">{editSuccess}</p></div>}
+          <form onSubmit={async (e) => {
+            e.preventDefault()
+            setEditError(null)
+            setEditSuccess(null)
+
+            if (editHandle.length < 3 || editHandle.length > 30) {
+              setEditError('Handle must be between 3 and 30 characters')
+              return
+            }
+            if (!/^[a-zA-Z0-9_-]+$/.test(editHandle)) {
+              setEditError('Handle may only contain letters, numbers, dashes, and underscores')
+              return
+            }
+            if (editDescription.length > 1000) {
+              setEditError('Description must be 1000 characters or fewer')
+              return
+            }
+
+            setEditSubmitting(true)
+            try {
+              const res = await authFetch(`/api/v1/agents/${agent!.id}/profile`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Idempotency-Key': `edit-profile-${Date.now()}`,
+                },
+                body: JSON.stringify({ handle: editHandle, description: editDescription }),
+              })
+              const json = await res.json()
+              if (!res.ok || json.error) throw new Error(json.error?.message || json.error || 'Failed to update profile')
+              setAgent({ ...agent!, ...json.data, handle: editHandle, description: editDescription })
+              setEditSuccess('Profile updated successfully')
+              setShowEditForm(false)
+            } catch (err: unknown) {
+              setEditError(err instanceof Error ? err.message : 'Failed to update profile')
+            } finally {
+              setEditSubmitting(false)
+            }
+          }} className="space-y-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Handle</label>
+              <input
+                type="text"
+                value={editHandle}
+                onChange={(e) => setEditHandle(e.target.value)}
+                required
+                minLength={3}
+                maxLength={30}
+                pattern="^[a-zA-Z0-9_-]+$"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                placeholder="your-handle"
+              />
+              <p className="mt-1 text-xs text-gray-400">3-30 characters, letters, numbers, dashes, underscores</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea
+                value={editDescription}
+                onChange={(e) => setEditDescription(e.target.value)}
+                maxLength={1000}
+                rows={3}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                placeholder="Describe your agent..."
+              />
+              <p className="mt-1 text-xs text-gray-400">{editDescription.length}/1000</p>
+            </div>
+            <div className="flex gap-3">
+              <button type="submit" disabled={editSubmitting} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+                {editSubmitting ? 'Saving...' : 'Save'}
+              </button>
+              <button type="button" onClick={() => setShowEditForm(false)} className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </Card>
+      )}
+
+      {editSuccess && !showEditForm && (
+        <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-3"><p className="text-sm text-green-800">{editSuccess}</p></div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         <StatCard label="Reputation" value={agent?.reputation_score?.toFixed(1) ?? '--'} />
