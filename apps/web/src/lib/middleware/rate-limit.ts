@@ -28,13 +28,53 @@ async function getRedis() {
 const DEFAULT_WINDOW_MS = 60000 // 1 minute
 const DEFAULT_MAX_REQUESTS = 60 // 60 requests per minute
 
+// In-memory fallback when Redis is unavailable (e.g. Vercel serverless).
+// Note: each serverless instance has its own Map, so limits are per-instance
+// rather than global — but this is still better than no rate limiting at all.
+const memoryStore = new Map<string, { count: number; resetAt: number }>()
+
+function checkMemoryRateLimit(
+  identifier: string,
+  path: string,
+  maxRequests: number,
+  windowMs: number,
+): { allowed: boolean; current: number } {
+  const key = `${identifier}:${path}`
+  const now = Date.now()
+  const entry = memoryStore.get(key)
+
+  if (!entry || entry.resetAt < now) {
+    memoryStore.set(key, { count: 1, resetAt: now + windowMs })
+    return { allowed: true, current: 1 }
+  }
+
+  entry.count++
+  return { allowed: entry.count <= maxRequests, current: entry.count }
+}
+
 export function withRateLimit(handler: RouteHandler, maxRequests = DEFAULT_MAX_REQUESTS, windowMs = DEFAULT_WINDOW_MS): RouteHandler {
   return async (req: NextRequest) => {
-    const redis = await getRedis()
-    if (!redis) return handler(req) // Skip rate limiting if Redis unavailable
-
     const identifier = req.headers.get('x-agent-id') || req.headers.get('x-forwarded-for') || 'anonymous'
     const path = new URL(req.url).pathname
+
+    const redis = await getRedis()
+
+    if (!redis) {
+      // Fall back to in-memory rate limiting when Redis is unavailable
+      const { allowed, current } = checkMemoryRateLimit(identifier, path, maxRequests, windowMs)
+      if (!allowed) {
+        return apiError('RATE_LIMITED', 'Too many requests', 429, {
+          retry_after_ms: windowMs,
+          limit: maxRequests,
+          remaining: 0,
+        })
+      }
+      const response = await handler(req)
+      response.headers.set('X-RateLimit-Limit', String(maxRequests))
+      response.headers.set('X-RateLimit-Remaining', String(Math.max(0, maxRequests - current)))
+      return response
+    }
+
     const key = `ratelimit:${identifier}:${path}`
 
     try {
@@ -59,8 +99,19 @@ export function withRateLimit(handler: RouteHandler, maxRequests = DEFAULT_MAX_R
       response.headers.set('X-RateLimit-Remaining', String(remaining))
       return response
     } catch {
-      // If Redis errors, fail open
-      return handler(req)
+      // If Redis errors mid-request, fall back to in-memory rate limiting
+      const { allowed, current } = checkMemoryRateLimit(identifier, path, maxRequests, windowMs)
+      if (!allowed) {
+        return apiError('RATE_LIMITED', 'Too many requests', 429, {
+          retry_after_ms: windowMs,
+          limit: maxRequests,
+          remaining: 0,
+        })
+      }
+      const response = await handler(req)
+      response.headers.set('X-RateLimit-Limit', String(maxRequests))
+      response.headers.set('X-RateLimit-Remaining', String(Math.max(0, maxRequests - current)))
+      return response
     }
   }
 }

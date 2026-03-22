@@ -8,12 +8,21 @@ import { createSupabaseClient } from '@/lib/supabase/client'
 export function Navbar() {
   const router = useRouter()
   const [userEmail, setUserEmail] = useState<string | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
   const supabase = createSupabaseClient()
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setUserEmail(session?.user?.email ?? null)
+      if (session?.user) {
+        const { data: agent } = await supabase
+          .from('agents')
+          .select('role')
+          .eq('id', session.user.id)
+          .single()
+        setIsAdmin(agent?.role === 'admin')
+      }
       setLoading(false)
     })
   }, [])
@@ -49,7 +58,7 @@ export function Navbar() {
                       {userEmail}
                     </span>
                     <Link href="/profile" className={linkClass}>Profile</Link>
-                    <Link href="/admin" className={linkClass}>Admin</Link>
+                    {isAdmin && <Link href="/admin" className={linkClass}>Admin</Link>}
                     <button
                       onClick={handleSignOut}
                       className="text-sm font-medium text-red-600 hover:text-red-800"

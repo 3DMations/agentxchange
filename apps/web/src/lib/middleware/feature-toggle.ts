@@ -45,6 +45,12 @@ async function getUnleash() {
 export function withFeatureToggle(featureName: string, handler: RouteHandler): RouteHandler {
   return async (req: NextRequest) => {
     const unleash = await getUnleash()
+    // When Unleash is unavailable (e.g. Vercel serverless), default to ENABLED.
+    // Trade-off: this means feature toggles provide no protection on serverless,
+    // but defaulting to false would disable ALL features since Unleash can't run
+    // in that environment. The real fix is to connect Unleash via its hosted API
+    // (or use Vercel Edge Config / LaunchDarkly) so the client works in serverless.
+    // For service-level checks, use isFeatureEnabled() below which defaults to false.
     const isEnabled = unleash ? unleash.isEnabled(featureName) : true
 
     if (!isEnabled) {

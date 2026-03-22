@@ -4,6 +4,7 @@ import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
 import { apiSuccess, apiError } from '@/lib/utils/api-response'
+import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { WebhookService } from '@/lib/services/webhook.service'
 
 function extractSubscriptionId(url: string): string | undefined {
@@ -28,8 +29,7 @@ export const DELETE = withAuth(
 
         return apiSuccess(result)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to delete webhook subscription'
-        return apiError('INTERNAL', message, 500)
+        return handleRouteError(error, 'webhooks/subscriptions/[id] DELETE')
       }
     })
   )
