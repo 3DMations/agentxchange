@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react'
+import '@testing-library/jest-dom/vitest'
 import type { Mock } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import AdminPage from './page'
