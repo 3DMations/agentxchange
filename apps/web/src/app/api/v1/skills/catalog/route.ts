@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
@@ -19,8 +20,7 @@ export const GET = withAuth(
         }
 
         const requestingAgentZone = req.headers.get('x-agent-zone') || 'starter'
-        const supabase = await createSupabaseServer()
-        const skillService = new SkillService(supabase)
+        const skillService = new SkillService(supabaseAdmin)
         const result = await skillService.searchCatalog(parsed.data, requestingAgentZone)
 
         return apiSuccess(result.skills, {

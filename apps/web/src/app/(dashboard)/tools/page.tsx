@@ -35,6 +35,10 @@ export default function ToolsPage() {
   const [tools, setTools] = useState<AiTool[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showForm, setShowForm] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [formSuccess, setFormSuccess] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
   const [q, setQ] = useState('')
   const [category, setCategory] = useState('')
   const [status, setStatus] = useState('')
@@ -94,11 +98,91 @@ export default function ToolsPage() {
         title="AI Tool Registry"
         description="Browse and register AI tools"
         action={
-          <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-            Register Tool
+          <button onClick={() => setShowForm(!showForm)} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+            {showForm ? 'Cancel' : 'Register Tool'}
           </button>
         }
       />
+
+      {showForm && (
+        <Card className="mb-6">
+          {formError && <div className="mb-3 rounded-lg border border-red-200 bg-red-50 p-3"><p className="text-sm text-red-800">{formError}</p></div>}
+          {formSuccess && <div className="mb-3 rounded-lg border border-green-200 bg-green-50 p-3"><p className="text-sm text-green-800">{formSuccess}</p></div>}
+          <form onSubmit={async (e) => {
+            e.preventDefault()
+            setFormError(null); setFormSuccess(null); setSubmitting(true)
+            const fd = new FormData(e.currentTarget)
+            try {
+              const res = await fetch('/api/v1/tools/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Idempotency-Key': `tool-${Date.now()}` },
+                body: JSON.stringify({
+                  name: fd.get('name'), provider: fd.get('provider'), version: fd.get('version'),
+                  url: fd.get('url'), category: fd.get('tool_category'),
+                  description_short: fd.get('description_short'),
+                  capabilities: (fd.get('capabilities') as string)?.split(',').map(c => c.trim()).filter(Boolean) || [],
+                  input_formats: ['text'], output_formats: ['text'], pricing_model: fd.get('pricing_model'),
+                }),
+              })
+              const json = await res.json()
+              if (!res.ok || json.error) throw new Error(json.error?.message || 'Failed to register tool')
+              setFormSuccess('Tool registered!'); setShowForm(false); window.location.reload()
+            } catch (err: unknown) { setFormError(err instanceof Error ? err.message : 'Failed') }
+            finally { setSubmitting(false) }
+          }} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <input name="name" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. GPT-4" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Provider</label>
+              <input name="provider" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. OpenAI" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Version</label>
+              <input name="version" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 4.0" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">URL</label>
+              <input name="url" type="url" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="https://..." />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <select name="tool_category" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                <option value="llm">LLM</option>
+                <option value="code_assistant">Code Assistant</option>
+                <option value="image_gen">Image Gen</option>
+                <option value="search">Search</option>
+                <option value="embedding">Embedding</option>
+                <option value="speech">Speech</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Pricing</label>
+              <select name="pricing_model" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                <option value="free">Free</option>
+                <option value="per_token">Per Token</option>
+                <option value="per_call">Per Call</option>
+                <option value="subscription">Subscription</option>
+              </select>
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Short Description</label>
+              <input name="description_short" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Brief description..." />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Capabilities (comma-separated)</label>
+              <input name="capabilities" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. code-gen, analysis, chat" />
+            </div>
+            <div className="sm:col-span-2">
+              <button type="submit" disabled={submitting} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+                {submitting ? 'Registering...' : 'Register Tool'}
+              </button>
+            </div>
+          </form>
+        </Card>
+      )}
 
       <div className="mb-6 flex gap-4">
         <input

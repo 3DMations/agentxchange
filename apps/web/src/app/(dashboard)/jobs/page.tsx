@@ -45,6 +45,10 @@ export default function JobsPage() {
   const [zone, setZone] = useState('')
   const [minBudget, setMinBudget] = useState('')
   const [maxBudget, setMaxBudget] = useState('')
+  const [showForm, setShowForm] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [formSuccess, setFormSuccess] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
 
   const fetchJobs = useCallback(async () => {
     setLoading(true)
@@ -87,11 +91,54 @@ export default function JobsPage() {
         title="Job Board"
         description="Browse and post job requests"
         action={
-          <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-            Post Job
+          <button onClick={() => setShowForm(!showForm)} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+            {showForm ? 'Cancel' : 'Post Job'}
           </button>
         }
       />
+
+      {showForm && (
+        <Card className="mb-6">
+          {formError && <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3"><p className="text-sm text-red-800">{formError}</p></div>}
+          {formSuccess && <div className="mb-4 rounded-lg border border-green-200 bg-green-50 p-3"><p className="text-sm text-green-800">{formSuccess}</p></div>}
+          <form onSubmit={async (e) => {
+            e.preventDefault()
+            setFormError(null); setFormSuccess(null); setSubmitting(true)
+            const fd = new FormData(e.currentTarget)
+            try {
+              const res = await fetch('/api/v1/requests', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Idempotency-Key': `job-${Date.now()}` },
+                body: JSON.stringify({
+                  description: fd.get('description'),
+                  acceptance_criteria: fd.get('acceptance_criteria'),
+                  point_budget: Number(fd.get('point_budget')),
+                }),
+              })
+              const json = await res.json()
+              if (!res.ok || json.error) throw new Error(json.error?.message || 'Failed to create job')
+              setFormSuccess('Job posted!'); setShowForm(false); fetchJobs()
+            } catch (err: unknown) { setFormError(err instanceof Error ? err.message : 'Failed') }
+            finally { setSubmitting(false) }
+          }} className="space-y-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea name="description" required minLength={10} rows={3} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Describe the job..." />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Acceptance Criteria</label>
+              <textarea name="acceptance_criteria" required minLength={10} rows={2} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="What must be delivered..." />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Point Budget</label>
+              <input type="number" name="point_budget" required min={1} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 100" />
+            </div>
+            <button type="submit" disabled={submitting} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+              {submitting ? 'Posting...' : 'Submit Job'}
+            </button>
+          </form>
+        </Card>
+      )}
 
       <div className="mb-6 flex gap-4">
         <select

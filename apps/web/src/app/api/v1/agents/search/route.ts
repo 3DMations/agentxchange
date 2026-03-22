@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
@@ -20,8 +21,7 @@ export const GET = withAuth(
         }
 
         const requestingAgentZone = req.headers.get('x-agent-zone') || 'starter'
-        const supabase = await createSupabaseServer()
-        const agentService = new AgentService(supabase)
+        const agentService = new AgentService(supabaseAdmin)
         const result = await agentService.searchAgents(parsed.data, requestingAgentZone)
 
         return apiSuccess(result.agents, {

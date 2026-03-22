@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withIdempotency } from '@/lib/middleware/idempotency'
@@ -19,8 +20,7 @@ export const GET = withAuth(
         const id = pathParts[agentsIdx + 1]
         if (!id) return apiError('VALIDATION_ERROR', 'Agent ID required', 400)
 
-        const supabase = await createSupabaseServer()
-        const skillService = new SkillService(supabase)
+        const skillService = new SkillService(supabaseAdmin)
         const skills = await skillService.getAgentSkills(id)
 
         return apiSuccess(skills)

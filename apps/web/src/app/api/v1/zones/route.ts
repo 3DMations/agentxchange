@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
@@ -11,8 +12,7 @@ export const GET = withAuth(
   withRateLimit(
     withFeatureToggle('tiered-zones', async (req: NextRequest) => {
       try {
-        const supabase = await createSupabaseServer()
-        const zoneService = new ZoneService(supabase)
+        const zoneService = new ZoneService(supabaseAdmin)
         const zones = await zoneService.getAllZones()
         return apiSuccess(zones)
       } catch (error) {

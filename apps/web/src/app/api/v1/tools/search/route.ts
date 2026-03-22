@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
@@ -16,8 +17,7 @@ export const GET = withAuth(
         const parsed = searchToolsSchema.safeParse(Object.fromEntries(url.searchParams))
         if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid query', 400, parsed.error.flatten())
 
-        const supabase = await createSupabaseServer()
-        const service = new ToolRegistryService(supabase)
+        const service = new ToolRegistryService(supabaseAdmin)
         const result = await service.searchTools(parsed.data)
 
         return apiSuccess(result.tools, { cursor_next: result.cursor_next, total: result.total ?? undefined })

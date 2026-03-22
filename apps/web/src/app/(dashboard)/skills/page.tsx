@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createSupabaseClient } from '@/lib/supabase/client'
 import { PageHeader } from '@/components/ui/page-header'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -47,6 +48,10 @@ export default function SkillsPage() {
   const [skills, setSkills] = useState<Skill[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showForm, setShowForm] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [formSuccess, setFormSuccess] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
   const [q, setQ] = useState('')
   const [category, setCategory] = useState('')
   const [proficiency, setProficiency] = useState('')
@@ -108,11 +113,95 @@ export default function SkillsPage() {
         title="Skill Catalog"
         description="Browse, search, and manage skills"
         action={
-          <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-            Add Skill
+          <button onClick={() => setShowForm(!showForm)} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+            {showForm ? 'Cancel' : 'Add Skill'}
           </button>
         }
       />
+
+      {showForm && (
+        <Card className="mb-6">
+          {formError && <div className="mb-3 rounded-lg border border-red-200 bg-red-50 p-3"><p className="text-sm text-red-800">{formError}</p></div>}
+          {formSuccess && <div className="mb-3 rounded-lg border border-green-200 bg-green-50 p-3"><p className="text-sm text-green-800">{formSuccess}</p></div>}
+          <form onSubmit={async (e) => {
+            e.preventDefault()
+            setFormError(null); setFormSuccess(null); setSubmitting(true)
+            const fd = new FormData(e.currentTarget)
+            try {
+              const supabase = createSupabaseClient()
+              const { data: { user } } = await supabase.auth.getUser()
+              if (!user) { setFormError('Sign in to add skills'); return }
+              const res = await fetch(`/api/v1/agents/${user.id}/skills`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Idempotency-Key': `skill-${Date.now()}` },
+                body: JSON.stringify({
+                  name: fd.get('name'), category: fd.get('category'), domain: fd.get('domain'),
+                  description: fd.get('description'), proficiency_level: fd.get('proficiency_level'),
+                  point_range_min: Number(fd.get('point_range_min')), point_range_max: Number(fd.get('point_range_max')),
+                  tags: (fd.get('tags') as string)?.split(',').map(t => t.trim()).filter(Boolean) || [],
+                  ai_tools_used: [],
+                }),
+              })
+              const json = await res.json()
+              if (!res.ok || json.error) throw new Error(json.error?.message || 'Failed to add skill')
+              setFormSuccess('Skill added!'); setShowForm(false); window.location.reload()
+            } catch (err: unknown) { setFormError(err instanceof Error ? err.message : 'Failed') }
+            finally { setSubmitting(false) }
+          }} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <input name="name" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. React Development" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <select name="category" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                <option value="code_generation">Code Generation</option>
+                <option value="data_analysis">Data Analysis</option>
+                <option value="content_creation">Content Creation</option>
+                <option value="research">Research</option>
+                <option value="translation">Translation</option>
+                <option value="devops">DevOps</option>
+                <option value="security_audit">Security Audit</option>
+                <option value="design">Design</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Domain</label>
+              <input name="domain" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. Frontend" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Proficiency</label>
+              <select name="proficiency_level" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+                <option value="expert">Expert</option>
+              </select>
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea name="description" required minLength={10} rows={2} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Describe this skill..." />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Min Points</label>
+              <input type="number" name="point_range_min" required min={1} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 20" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Max Points</label>
+              <input type="number" name="point_range_max" required min={1} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 100" />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Tags (comma-separated)</label>
+              <input name="tags" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. react, typescript, nextjs" />
+            </div>
+            <div className="sm:col-span-2">
+              <button type="submit" disabled={submitting} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+                {submitting ? 'Adding...' : 'Add Skill'}
+              </button>
+            </div>
+          </form>
+        </Card>
+      )}
 
       <div className="mb-6 flex gap-4 flex-wrap">
         <input

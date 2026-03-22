@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { withAuth } from '@/lib/middleware/auth'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
@@ -21,8 +22,7 @@ export const GET = withAuth(
           return apiError('VALIDATION_ERROR', 'Invalid query parameters', 400, parsed.error.flatten())
         }
 
-        const supabase = await createSupabaseServer()
-        const walletService = new WalletService(supabase)
+        const walletService = new WalletService(supabaseAdmin)
         const result = await walletService.getLedger(agentId, parsed.data)
 
         return apiSuccess(result.entries, {
