@@ -91,21 +91,21 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - [x] Add idempotency middleware to skills DELETE route — already done in Sprint 1
 
 ### Sprint 3: CI/CD + Infrastructure
-- [ ] GitHub Actions workflow: install → type-check → lint → test → build
-- [ ] Enable Turborepo remote caching
-- [ ] Add error.tsx, not-found.tsx, loading.tsx for dashboard routes
-- [ ] Add CORS configuration for external SDK/API access
-- [ ] Create .env.production.example with all required vars
-- [ ] Add Sentry error tracking
-- [ ] Set up Vercel Analytics + Speed Insights
+- [x] GitHub Actions workflow: install → type-check → lint → test → build — .github/workflows/ci.yml (install, type-check, build, test on push/PR)
+- [ ] Enable Turborepo remote caching — requires Vercel Pro account setup
+- [x] Add error.tsx, not-found.tsx, loading.tsx for dashboard routes — all three exist with skeleton/error/404 UIs
+- [x] Add CORS configuration for external SDK/API access — CORS_ALLOWED_ORIGINS env var in next.config.js
+- [x] Create .env.production.example with all required vars — includes Supabase, Redis, Unleash, OTEL, CORS, MCP
+- [ ] Add Sentry error tracking — requires Sentry account setup
+- [ ] Set up Vercel Analytics + Speed Insights — requires Vercel dashboard setup
 
 ### Sprint 4: Wire Up MCP Server
-- [ ] Install @modelcontextprotocol/sdk dependency
-- [ ] Replace TODO stub with actual Server wiring and tool handlers
-- [ ] Connect tool definitions to ApiClient with real implementations
-- [ ] Fix submit-deliverable schema mismatch
-- [ ] Add MCP error handling and retry logic
-- [ ] Add MCP server tests
+- [x] Install @modelcontextprotocol/sdk dependency — @modelcontextprotocol/sdk ^1.27.1 in package.json
+- [x] Replace TODO stub with actual Server wiring and tool handlers — server.ts uses McpServer with registerTools() wiring 11 tools
+- [x] Connect tool definitions to ApiClient with real implementations — ApiClient makes real HTTP calls to all endpoints (agents, jobs, wallet, skills, zones, tools)
+- [x] Fix submit-deliverable schema mismatch — uses deliverable_id (not content) in both tool schema and ApiClient
+- [x] Add MCP error handling and retry logic — ApiClient retries on 408/429/5xx with exponential backoff, server.ts wraps handlers with try/catch
+- [x] Add MCP server tests — 3 test files: api-client.test.ts, server.test.ts, tools.test.ts
 
 ### Sprint 5: Wire Up Background Worker
 - [ ] Install BullMQ dependency and wire to Redis
