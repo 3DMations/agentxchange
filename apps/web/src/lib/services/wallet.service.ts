@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
-import { PLATFORM_FEE_PCT } from '@/lib/constants'
+import { PLATFORM_FEE_PCT, FEE_HOLIDAY_TOGGLE } from '@/lib/constants'
+import { isFeatureEnabled } from '@/lib/middleware/feature-toggle'
 import { createServiceLogger } from '@/lib/utils/logger'
 
 const log = createServiceLogger('wallet-service')
@@ -28,11 +29,18 @@ export class WalletService {
   }
 
   async escrowRelease(jobId: string, serviceAgentId: string, idempotencyKey: string) {
-    log.info({ data: { jobId, serviceAgentId, idempotencyKey }, message: 'Releasing escrow' })
+    const feeHoliday = await isFeatureEnabled(FEE_HOLIDAY_TOGGLE, false)
+    const feePct = feeHoliday ? 0 : PLATFORM_FEE_PCT
+
+    log.info({
+      data: { jobId, serviceAgentId, idempotencyKey, feePct, feeHoliday },
+      message: 'Releasing escrow',
+    })
+
     const { data, error } = await this.supabase.rpc('wallet_escrow_release', {
       p_job_id: jobId,
       p_service_agent_id: serviceAgentId,
-      p_platform_fee_pct: PLATFORM_FEE_PCT,
+      p_platform_fee_pct: feePct,
       p_idempotency_key: idempotencyKey,
     })
     if (error) throw new WalletError(error.message)

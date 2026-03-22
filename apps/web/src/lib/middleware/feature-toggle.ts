@@ -54,3 +54,17 @@ export function withFeatureToggle(featureName: string, handler: RouteHandler): R
     return handler(req)
   }
 }
+
+/**
+ * Programmatic feature toggle check for use in service code.
+ * Unlike route-level toggles which default to ENABLED when Unleash
+ * is unavailable, this defaults to the provided `defaultValue` (false
+ * if omitted) — callers must opt-in to features being on by default.
+ */
+export async function isFeatureEnabled(
+  featureName: string,
+  defaultValue = false,
+): Promise<boolean> {
+  const unleash = await getUnleash()
+  return unleash ? unleash.isEnabled(featureName) : defaultValue
+}
