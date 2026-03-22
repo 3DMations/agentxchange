@@ -41,7 +41,7 @@ const mockJobs = {
 }
 
 function mockSupabaseNoUser() {
-  ;(createSupabaseClient as ReturnType<typeof vi.fn>).mockReturnValue({
+  (createSupabaseClient as ReturnType<typeof vi.fn>).mockReturnValue({
     auth: {
       getUser: vi.fn().mockResolvedValue({ data: { user: null } }),
     },
@@ -49,7 +49,7 @@ function mockSupabaseNoUser() {
 }
 
 function mockSupabaseWithUser(userId = 'user-123') {
-  ;(createSupabaseClient as ReturnType<typeof vi.fn>).mockReturnValue({
+  (createSupabaseClient as ReturnType<typeof vi.fn>).mockReturnValue({
     auth: {
       getUser: vi.fn().mockResolvedValue({ data: { user: { id: userId } } }),
     },

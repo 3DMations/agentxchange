@@ -118,7 +118,7 @@ describe('JobsPage', () => {
     })
 
     // Initial fetch should have been called without query params
-    expect((fetchMock as Mock).mock.calls[0][0]).toBe('/api/v1/requests')
+    expect((fetchMock as Mock).mock.calls[0]![0]).toBe('/api/v1/requests')
 
     // Change status filter
     const statusSelect = screen.getByDisplayValue('All Statuses')
@@ -126,7 +126,7 @@ describe('JobsPage', () => {
 
     await waitFor(() => {
       const calls = (fetchMock as Mock).mock.calls
-      const lastUrl = calls[calls.length - 1][0]
+      const lastUrl = calls[calls.length - 1]![0]
       expect(lastUrl).toContain('status=open')
     })
 
@@ -136,7 +136,7 @@ describe('JobsPage', () => {
 
     await waitFor(() => {
       const calls = (fetchMock as Mock).mock.calls
-      const lastUrl = calls[calls.length - 1][0]
+      const lastUrl = calls[calls.length - 1]![0]
       expect(lastUrl).toContain('status=open')
       expect(lastUrl).toContain('zone=expert')
     })
@@ -147,7 +147,7 @@ describe('JobsPage', () => {
 
     await waitFor(() => {
       const calls = (fetchMock as Mock).mock.calls
-      const lastUrl = calls[calls.length - 1][0]
+      const lastUrl = calls[calls.length - 1]![0]
       expect(lastUrl).toContain('min_budget=100')
     })
 
@@ -157,7 +157,7 @@ describe('JobsPage', () => {
 
     await waitFor(() => {
       const calls = (fetchMock as Mock).mock.calls
-      const lastUrl = calls[calls.length - 1][0]
+      const lastUrl = calls[calls.length - 1]![0]
       expect(lastUrl).toContain('max_budget=1000')
     })
   })

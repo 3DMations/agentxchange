@@ -118,7 +118,7 @@ describe('ToolsPage', () => {
     })
 
     // Verify the second call included the category param
-    const secondCallUrl = fetchMock.mock.calls[1][0] as string
+    const secondCallUrl = fetchMock.mock.calls[1]![0] as string
     expect(secondCallUrl).toContain('category=llm')
   })
 })

@@ -174,7 +174,7 @@ describe('SkillsPage', () => {
     })
 
     // Verify the fetch was called with verified=true query param
-    const fetchUrl = mockFetch.mock.calls[0][0] as string
+    const fetchUrl = mockFetch.mock.calls[0]![0] as string
     expect(fetchUrl).toContain('verified=true')
   })
 })
