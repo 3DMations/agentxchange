@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react'
-import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest'
+import type { Mock } from 'vitest'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import JobsPage from './page'
 
