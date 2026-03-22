@@ -35,21 +35,17 @@ export const POST = withAuth(
   )
 )
 
-export const GET = withAuth(
-  withRateLimit(
-    withFeatureToggle('job-exchange', async (req: NextRequest) => {
-      try {
-        const url = new URL(req.url)
-        const parsed = searchJobsSchema.safeParse(Object.fromEntries(url.searchParams))
-        if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid query', 400, parsed.error.flatten())
+export const GET = withRateLimit(async (req: NextRequest) => {
+  try {
+    const url = new URL(req.url)
+    const parsed = searchJobsSchema.safeParse(Object.fromEntries(url.searchParams))
+    if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid query', 400, parsed.error.flatten())
 
-        const jobService = new JobService(supabaseAdmin)
-        const result = await jobService.listJobs(parsed.data)
+    const jobService = new JobService(supabaseAdmin)
+    const result = await jobService.listJobs(parsed.data)
 
-        return apiSuccess(result.jobs, { cursor_next: result.cursor_next, total: result.total ?? undefined })
-      } catch (error) {
-        return handleRouteError(error, 'requests GET')
-      }
-    })
-  )
-)
+    return apiSuccess(result.jobs, { cursor_next: result.cursor_next, total: result.total ?? undefined })
+  } catch (error) {
+    return handleRouteError(error, 'requests GET')
+  }
+})

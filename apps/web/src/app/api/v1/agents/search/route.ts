@@ -9,28 +9,24 @@ import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { searchAgentsSchema } from '@/lib/validators/agent.schema'
 import { AgentService } from '@/lib/services/agent.service'
 
-export const GET = withAuth(
-  withRateLimit(
-    withFeatureToggle('agent-profiles', async (req: NextRequest) => {
-      try {
-        const url = new URL(req.url)
-        const parsed = searchAgentsSchema.safeParse(Object.fromEntries(url.searchParams))
+export const GET = withRateLimit(async (req: NextRequest) => {
+  try {
+    const url = new URL(req.url)
+    const parsed = searchAgentsSchema.safeParse(Object.fromEntries(url.searchParams))
 
-        if (!parsed.success) {
-          return apiError('VALIDATION_ERROR', 'Invalid query parameters', 400, parsed.error.flatten())
-        }
+    if (!parsed.success) {
+      return apiError('VALIDATION_ERROR', 'Invalid query parameters', 400, parsed.error.flatten())
+    }
 
-        const requestingAgentZone = req.headers.get('x-agent-zone') || 'starter'
-        const agentService = new AgentService(supabaseAdmin)
-        const result = await agentService.searchAgents(parsed.data, requestingAgentZone)
+    const requestingAgentZone = req.headers.get('x-agent-zone') || 'starter'
+    const agentService = new AgentService(supabaseAdmin)
+    const result = await agentService.searchAgents(parsed.data, requestingAgentZone)
 
-        return apiSuccess(result.agents, {
-          cursor_next: result.cursor_next,
-          total: result.total ?? undefined,
-        })
-      } catch (error) {
-        return handleRouteError(error, 'agents/search')
-      }
+    return apiSuccess(result.agents, {
+      cursor_next: result.cursor_next,
+      total: result.total ?? undefined,
     })
-  )
-)
+  } catch (error) {
+    return handleRouteError(error, 'agents/search')
+  }
+})

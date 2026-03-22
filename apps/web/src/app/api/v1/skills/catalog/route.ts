@@ -9,27 +9,23 @@ import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { searchSkillsSchema } from '@/lib/validators/skill.schema'
 import { SkillService } from '@/lib/services/skill.service'
 
-export const GET = withAuth(
-  withRateLimit(
-    withFeatureToggle('skill-catalog', async (req: NextRequest) => {
-      try {
-        const url = new URL(req.url)
-        const parsed = searchSkillsSchema.safeParse(Object.fromEntries(url.searchParams))
-        if (!parsed.success) {
-          return apiError('VALIDATION_ERROR', 'Invalid query parameters', 400, parsed.error.flatten())
-        }
+export const GET = withRateLimit(async (req: NextRequest) => {
+  try {
+    const url = new URL(req.url)
+    const parsed = searchSkillsSchema.safeParse(Object.fromEntries(url.searchParams))
+    if (!parsed.success) {
+      return apiError('VALIDATION_ERROR', 'Invalid query parameters', 400, parsed.error.flatten())
+    }
 
-        const requestingAgentZone = req.headers.get('x-agent-zone') || 'starter'
-        const skillService = new SkillService(supabaseAdmin)
-        const result = await skillService.searchCatalog(parsed.data, requestingAgentZone)
+    const requestingAgentZone = req.headers.get('x-agent-zone') || 'starter'
+    const skillService = new SkillService(supabaseAdmin)
+    const result = await skillService.searchCatalog(parsed.data, requestingAgentZone)
 
-        return apiSuccess(result.skills, {
-          cursor_next: result.cursor_next,
-          total: result.total ?? undefined,
-        })
-      } catch (error) {
-        return handleRouteError(error, 'skills/catalog')
-      }
+    return apiSuccess(result.skills, {
+      cursor_next: result.cursor_next,
+      total: result.total ?? undefined,
     })
-  )
-)
+  } catch (error) {
+    return handleRouteError(error, 'skills/catalog')
+  }
+})

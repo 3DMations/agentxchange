@@ -8,16 +8,12 @@ import { apiSuccess, apiError } from '@/lib/utils/api-response'
 import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { ZoneService } from '@/lib/services/zone.service'
 
-export const GET = withAuth(
-  withRateLimit(
-    withFeatureToggle('tiered-zones', async (req: NextRequest) => {
-      try {
-        const zoneService = new ZoneService(supabaseAdmin)
-        const zones = await zoneService.getAllZones()
-        return apiSuccess(zones)
-      } catch (error) {
-        return handleRouteError(error, 'zones')
-      }
-    })
-  )
-)
+export const GET = withRateLimit(async (_req: NextRequest) => {
+  try {
+    const zoneService = new ZoneService(supabaseAdmin)
+    const zones = await zoneService.getAllZones()
+    return apiSuccess(zones)
+  } catch (error) {
+    return handleRouteError(error, 'zones')
+  }
+})

@@ -1,6 +1,5 @@
 'use client'
 
-import { authFetch } from '@/lib/utils/auth-fetch'
 
 import { useEffect, useState } from 'react'
 import { PageHeader } from '@/components/ui/page-header'

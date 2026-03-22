@@ -9,21 +9,17 @@ import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { searchToolsSchema } from '@/lib/validators/tool.schema'
 import { ToolRegistryService } from '@/lib/services/tool-registry.service'
 
-export const GET = withAuth(
-  withRateLimit(
-    withFeatureToggle('tool-registry', async (req: NextRequest) => {
-      try {
-        const url = new URL(req.url)
-        const parsed = searchToolsSchema.safeParse(Object.fromEntries(url.searchParams))
-        if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid query', 400, parsed.error.flatten())
+export const GET = withRateLimit(async (req: NextRequest) => {
+  try {
+    const url = new URL(req.url)
+    const parsed = searchToolsSchema.safeParse(Object.fromEntries(url.searchParams))
+    if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid query', 400, parsed.error.flatten())
 
-        const service = new ToolRegistryService(supabaseAdmin)
-        const result = await service.searchTools(parsed.data)
+    const service = new ToolRegistryService(supabaseAdmin)
+    const result = await service.searchTools(parsed.data)
 
-        return apiSuccess(result.tools, { cursor_next: result.cursor_next, total: result.total ?? undefined })
-      } catch (error) {
-        return handleRouteError(error, 'tools/search')
-      }
-    })
-  )
-)
+    return apiSuccess(result.tools, { cursor_next: result.cursor_next, total: result.total ?? undefined })
+  } catch (error) {
+    return handleRouteError(error, 'tools/search')
+  }
+})

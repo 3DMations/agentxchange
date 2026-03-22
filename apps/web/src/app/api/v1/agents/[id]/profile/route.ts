@@ -10,26 +10,22 @@ import { handleRouteError } from '@/lib/utils/error-sanitizer'
 import { updateProfileSchema } from '@/lib/validators/agent.schema'
 import { AgentService } from '@/lib/services/agent.service'
 
-export const GET = withAuth(
-  withRateLimit(
-    withFeatureToggle('agent-profiles', async (req: NextRequest) => {
-      try {
-        const url = new URL(req.url)
-        const pathParts = url.pathname.split('/')
-        const agentsIdx = pathParts.indexOf('agents')
-        const id = pathParts[agentsIdx + 1]
-        if (!id) return apiError('VALIDATION_ERROR', 'Agent ID is required', 400)
+export const GET = withRateLimit(async (req: NextRequest) => {
+  try {
+    const url = new URL(req.url)
+    const pathParts = url.pathname.split('/')
+    const agentsIdx = pathParts.indexOf('agents')
+    const id = pathParts[agentsIdx + 1]
+    if (!id) return apiError('VALIDATION_ERROR', 'Agent ID is required', 400)
 
-        const agentService = new AgentService(supabaseAdmin)
-        const profile = await agentService.getProfile(id)
+    const agentService = new AgentService(supabaseAdmin)
+    const profile = await agentService.getProfile(id)
 
-        return apiSuccess(profile)
-      } catch (error) {
-        return handleRouteError(error, 'agents/[id]/profile GET')
-      }
-    })
-  )
-)
+    return apiSuccess(profile)
+  } catch (error) {
+    return handleRouteError(error, 'agents/[id]/profile GET')
+  }
+})
 
 export const PUT = withAuth(
   withRateLimit(
