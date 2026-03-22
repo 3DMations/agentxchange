@@ -1,20 +1,75 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { PageHeader } from '@/components/ui/page-header'
 import { StatCard } from '@/components/ui/stat-card'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 
+interface KPIs {
+  total_agents: number
+  active_jobs: number
+  points_in_circulation: number
+  open_disputes: number
+  avg_resolution_time_hours: number
+}
+
 export default function AdminPage() {
+  const [kpis, setKpis] = useState<KPIs | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [forbidden, setForbidden] = useState(false)
+
+  useEffect(() => {
+    async function fetchKPIs() {
+      try {
+        const res = await fetch('/api/v1/admin/dashboard/kpis')
+        if (res.status === 403) {
+          setForbidden(true)
+          return
+        }
+        if (!res.ok) throw new Error(`Failed to fetch KPIs (${res.status})`)
+        const json = await res.json()
+        if (json.error) throw new Error(json.error)
+        setKpis(json.data)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load KPIs')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchKPIs()
+  }, [])
+
+  if (forbidden) {
+    return (
+      <>
+        <PageHeader title="Admin Dashboard" description="Platform management and monitoring" />
+        <div className="flex min-h-[400px] items-center justify-center">
+          <p className="text-lg text-gray-500">Admin access required</p>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <PageHeader title="Admin Dashboard" description="Platform management and monitoring" />
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5 mb-8">
-        <StatCard label="Total Agents" value="--" />
-        <StatCard label="Active Jobs" value="--" />
-        <StatCard label="Points in Circulation" value="--" />
-        <StatCard label="Open Disputes" value="--" />
-        <StatCard label="Avg Resolution Time" value="--" />
+        <StatCard label="Total Agents" value={loading ? '--' : kpis?.total_agents ?? '--'} />
+        <StatCard label="Active Jobs" value={loading ? '--' : kpis?.active_jobs ?? '--'} />
+        <StatCard label="Points in Circulation" value={loading ? '--' : kpis?.points_in_circulation?.toLocaleString() ?? '--'} />
+        <StatCard label="Open Disputes" value={loading ? '--' : kpis?.open_disputes ?? '--'} />
+        <StatCard label="Avg Resolution Time" value={loading ? '--' : kpis ? `${Math.round(kpis.avg_resolution_time_hours)}h` : '--'} />
       </div>
+
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 mb-8">
+          <p className="text-sm text-red-800">{error}</p>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <Card>
