@@ -1,3 +1,5 @@
+const { withSentryConfig } = require('@sentry/nextjs')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ['@agentxchange/shared-types'],
@@ -18,7 +20,7 @@ const nextConfig = {
       `style-src 'self' 'unsafe-inline'`,
       `img-src 'self' data: blob: ${supabaseDomain}`,
       `font-src 'self'`,
-      `connect-src 'self' ${supabaseDomain} wss://${supabaseDomain.replace('https://', '')}`,
+      `connect-src 'self' ${supabaseDomain} wss://${supabaseDomain.replace('https://', '')} https://*.ingest.us.sentry.io`,
       `frame-ancestors 'none'`,
       "base-uri 'self'",
       "form-action 'self'",
@@ -59,4 +61,12 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG || '3dmations-llc',
+  project: process.env.SENTRY_PROJECT || 'agentxchange-web',
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  widenClientFileUpload: true,
+  tunnelRoute: '/monitoring',
+  silent: !process.env.CI,
+  disableLogger: true,
+})
