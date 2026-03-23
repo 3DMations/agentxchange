@@ -92,12 +92,12 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 
 ### Sprint 3: CI/CD + Infrastructure
 - [x] GitHub Actions workflow: install → type-check → lint → test → build — .github/workflows/ci.yml (install, type-check, build, test on push/PR)
-- [ ] Enable Turborepo remote caching — requires Vercel Pro account setup
+- [x] Enable Turborepo remote caching — turbo login/link done, TURBO_TOKEN + TURBO_TEAM in GitHub Actions CI
 - [x] Add error.tsx, not-found.tsx, loading.tsx for dashboard routes — all three exist with skeleton/error/404 UIs
 - [x] Add CORS configuration for external SDK/API access — CORS_ALLOWED_ORIGINS env var in next.config.js
 - [x] Create .env.production.example with all required vars — includes Supabase, Redis, Unleash, OTEL, CORS, MCP
-- [ ] Add Sentry error tracking — requires Sentry account setup
-- [ ] Set up Vercel Analytics + Speed Insights — requires Vercel dashboard setup
+- [x] Add Sentry error tracking — @sentry/nextjs wired with instrumentation files, DSN on Vercel, org: 3dmations-llc
+- [x] Set up Vercel Analytics + Speed Insights — @vercel/analytics + @vercel/speed-insights in root layout, enabled in dashboard
 
 ### Sprint 4: Wire Up MCP Server
 - [x] Install @modelcontextprotocol/sdk dependency — @modelcontextprotocol/sdk ^1.27.1 in package.json
