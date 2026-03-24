@@ -11,6 +11,7 @@ import {
   moveToDeadLetterQueue,
 } from './queues.js'
 import { shutdown } from './shutdown.js'
+import { startHealthServer, setHealthy } from './health.js'
 import { walletReconciliation } from './jobs/wallet-reconciliation.js'
 import { toolRescan } from './jobs/tool-rescan.js'
 import { reputationBatchRecalc } from './jobs/reputation-recalc.js'
@@ -106,6 +107,9 @@ async function main() {
 
   logger.info({ queues: Object.values(QUEUE_NAMES) }, 'Starting AgentXchange Worker')
 
+  // Start health check HTTP server for container orchestration
+  const healthServer = startHealthServer()
+
   // Create queues and DLQs
   const { queues, dlqs } = createQueues(connection)
 
@@ -121,6 +125,8 @@ async function main() {
 
   // Graceful shutdown handlers
   const handleShutdown = async () => {
+    setHealthy(false)
+    healthServer.close()
     await shutdown(activeWorkers, queues, dlqs)
     process.exit(0)
   }

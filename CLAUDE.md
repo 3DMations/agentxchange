@@ -72,7 +72,7 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
   - sanctions INSERT/UPDATE (for moderator actions)
 - [x] Add RPC input validation: amount>0, rating 1-5, null checks (wallet, XP functions)
 - [x] Add security headers to next.config.js (CSP, X-Frame-Options, HSTS, nosniff, Referrer-Policy)
-- [ ] Sanitize API error messages — generic to client, details to server logs
+- [x] Sanitize API error messages — apiError() strips details for 5xx, handleRouteError() defense-in-depth, tests added
 - [x] Fix `detectCollusion` query injection in moderation.service.ts
 - [x] Fix `searchTools` ilike injection in tool-registry.service.ts
 - [x] Add rate limiting to 15 routes missing it (admin, job ops, tool ops, wallet ops)
@@ -91,7 +91,7 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - [x] Add idempotency middleware to skills DELETE route — already done in Sprint 1
 
 ### Sprint 3: CI/CD + Infrastructure
-- [x] GitHub Actions workflow: install → type-check → lint → test → build — .github/workflows/ci.yml (install, type-check, build, test on push/PR)
+- [x] GitHub Actions workflow: install → type-check → test → build — .github/workflows/ci.yml (install, type-check, build, test on push/PR; lint step not yet added)
 - [x] Enable Turborepo remote caching — turbo login/link done, TURBO_TOKEN + TURBO_TEAM in GitHub Actions CI
 - [x] Add error.tsx, not-found.tsx, loading.tsx for dashboard routes — all three exist with skeleton/error/404 UIs
 - [x] Add CORS configuration for external SDK/API access — CORS_ALLOWED_ORIGINS env var in next.config.js
@@ -113,27 +113,40 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - [x] Add graceful shutdown handling — verified: SIGTERM/SIGINT in index.ts, shutdown.ts closes workers then queues with Promise.allSettled
 - [x] Add dead letter queue for failed jobs — verified: DLQ created per queue in createQueues(), moveToDeadLetterQueue() called on exhausted retries
 - [x] Add batch size limits to reputation-recalc — verified: DEFAULT_BATCH_SIZE=50, configurable via data.batchSize or REPUTATION_BATCH_SIZE env var, paginated processing
-- [~] Replace swarm-description stub with real implementation — partially complete: fetches tool metadata and generates template description, but uses string concatenation instead of LLM/swarm service (comment: "In production this would call an LLM or swarm intelligence service")
+- [x] Replace swarm-description stub with real implementation — uses @anthropic-ai/sdk Claude API for LLM-generated descriptions, fetches rich metadata (15 fields), graceful fallback to template, configurable via ANTHROPIC_API_KEY/SWARM_DESCRIPTION_MODEL/SWARM_DESCRIPTION_LLM_ENABLED env vars, sets swarm_confidence_score (0.85 LLM / 0.3 fallback)
 
 ### Sprint 6: A2A Protocol + Launch Prep
 - [x] Implement A2A Agent Cards from agent profiles (JSON capability descriptions) — GET /agents/[id]/card returns AgentCard JSON matching shared-types interface (with tests)
-- [x] Add A2A task lifecycle endpoints mapped to job system — POST create, GET [id] detail, POST [id]/accept, POST [id]/submit all exist with auth/rate-limit/idempotency/feature-toggle middleware; NOTE: GET list endpoint not yet implemented
+- [x] Add A2A task lifecycle endpoints mapped to job system — POST create, GET list, GET [id] detail, POST [id]/accept, POST [id]/submit all exist with auth/rate-limit/idempotency/feature-toggle middleware
 - [x] Seed 20-30 reference agents across code_generation, data_analysis, content_creation — 3 demo agents (alice/bob/carol) seeded in migrations 16+18 with skills across code_generation, data_analysis, content_creation, research, translation; original 25 cleaned up in migration 17 due to auth issues; 3 agents sufficient for demo
 - [x] Configure initial take rate (10-15%) via wallet platform_fee — PLATFORM_FEE_PCT = 10 in constants.ts, used in wallet.service.ts escrowRelease
 - [x] Add fee holiday feature toggle — FEE_HOLIDAY_TOGGLE = 'fee_holiday' in constants.ts, wallet.service.ts sets feePct to 0 when toggle enabled
 - [ ] Production deployment: Vercel Pro + Supabase Pro + Upstash Redis + Railway (worker/MCP) — deferred, requires infrastructure account setup
 
+### Sprint 7: End-to-End Wiring & Audit Fixes
+- [x] Create deliverable API routes — POST /deliverables (submit with Zod validation, safety scan), GET /deliverables/[id] (with auth, access logging)
+- [x] Wire webhook dispatch end-to-end — JobService now calls WebhookService.dispatchEvent() on create/accept/submit/complete, enqueues BullMQ webhook-dispatch jobs via queue client
+- [x] Wire reputation recalc after job rating — rateJob() enqueues reputation-batch-recalc worker job with agent/rating data instead of returning stub
+- [x] Fix MCP get_profile non-existent path — removed /agents/me/profile fallback, agent_id now required (matches actual API route /agents/[id]/profile)
+- [x] Add feature toggles to zone routes — zones GET, leaderboard, new-arrivals all wrapped with withFeatureToggle('zones')
+- [x] Fix zone visibility duplication — requests GET now uses authenticated createSupabaseServer() for RLS enforcement, removed redundant .filter in zones page
+- [x] Add queue client for web app — lib/queue/client.ts provides enqueueJob() utility using BullMQ, used by JobService for async webhook dispatch and reputation recalc
+- [x] Fix rate limit fail-open — in-memory fallback now uses 50% of Redis limits (conservative), periodic cleanup, structured Pino logging
+- [x] Fix feature toggle fail-open — now fail-closed with configurable essential allowlist (FEATURE_TOGGLE_ESSENTIAL_ALLOWLIST env var), non-essential features disabled when Unleash unavailable
+- [x] Architecture audit — docs/architecture-traceability.md: C4 diagrams (3 levels), traceability matrix, data flow diagrams, connection inventory, gap analysis
+
 ### Known Audit Findings (from 2026-03-20 ten-agent audit)
-- CRITICAL: Supabase service_role key leaked in git history (commit 50932ea, integration.test.ts)
-- CRITICAL: 4 tables missing RLS policies that will cause production failures (disputes, deliverables, zone_config, sanctions)
-- Worker (apps/worker/) is stubs only — no BullMQ integration, no job dispatch
-- MCP Server (apps/mcp-server/) is stubs only — no tool handler implementations
-- 15 routes missing rate limiting, 15 missing feature toggles
-- No security headers on any response (CSP, HSTS, X-Frame-Options)
-- Zone visibility logic duplicated between app code and RLS policies
-- Rate limit middleware fails open when Redis unavailable
-- Feature toggles default enabled when Unleash unavailable (Vercel)
-- URL param extraction uses unsafe indexOf pattern across 23 routes
-- No error boundaries, loading states, or 404 pages in frontend
-- No CI/CD pipeline
-- OpenAPI ↔ route alignment: EXCELLENT (100% match on all 38 endpoints)
+- ~~CRITICAL: Supabase service_role key leaked in git history (commit 50932ea, integration.test.ts)~~ RESOLVED Sprint 1
+- ~~CRITICAL: 4 tables missing RLS policies (disputes, deliverables, zone_config, sanctions)~~ RESOLVED Sprint 1
+- ~~Worker (apps/worker/) is stubs only — no BullMQ integration, no job dispatch~~ RESOLVED Sprint 5
+- ~~MCP Server (apps/mcp-server/) is stubs only — no tool handler implementations~~ RESOLVED Sprint 4
+- ~~15 routes missing rate limiting, 15 missing feature toggles~~ RESOLVED Sprint 1
+- ~~No security headers on any response (CSP, HSTS, X-Frame-Options)~~ RESOLVED Sprint 1
+- ~~Zone visibility logic duplicated between app code and RLS policies~~ RESOLVED Sprint 7
+- ~~Rate limit middleware fails open when Redis unavailable~~ RESOLVED Sprint 7 (conservative in-memory fallback at 50% limits)
+- ~~Feature toggles default enabled when Unleash unavailable~~ RESOLVED Sprint 7 (fail-closed with essential allowlist)
+- ~~URL param extraction uses unsafe indexOf pattern across 23 routes~~ RESOLVED (all routes use safe extractParam utility)
+- ~~No error boundaries, loading states, or 404 pages in frontend~~ RESOLVED Sprint 3
+- ~~No CI/CD pipeline~~ RESOLVED Sprint 3
+- OpenAPI ↔ route alignment: EXCELLENT (100% match on all 38+ endpoints)
+- [ ] Production deployment: Vercel Pro + Supabase Pro + Upstash Redis + Railway (worker/MCP) — deferred, requires infrastructure account setup

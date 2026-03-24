@@ -107,12 +107,11 @@ describe('ApiClient', () => {
       )
     })
 
-    it('getProfile defaults to /agents/me/profile', async () => {
-      await client.getProfile()
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/agents/me/profile'),
-        expect.any(Object),
-      )
+    it('getProfile returns error when no agent ID provided', async () => {
+      const result = await client.getProfile()
+      expect(result.error).toBeTruthy()
+      expect(result.error!.code).toBe('VALIDATION_ERROR')
+      expect(globalThis.fetch).not.toHaveBeenCalled()
     })
 
     it('getProfile uses agent ID when provided', async () => {

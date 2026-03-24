@@ -1,15 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { apiError } from '@/lib/utils/api-response'
+import { createServiceLogger } from '@/lib/utils/logger'
 
 type RouteHandler = (req: NextRequest) => Promise<NextResponse>
 
+const log = createServiceLogger('feature-toggle')
+
 // Unleash is a Node.js-only package that can't be bundled by webpack.
-// For production on Vercel (serverless), we skip Unleash entirely and
-// default all features to enabled. Unleash runs in local dev only.
-// To use Unleash in production, deploy on a Node.js server (not serverless).
+// For production on Vercel (serverless), we skip Unleash entirely.
+// To use Unleash in production, deploy on a Node.js server (not serverless)
+// or connect via Unleash's hosted API / Vercel Edge Config / LaunchDarkly.
 
 let unleashClient: any = null
 let initAttempted = false
+
+/**
+ * Essential features that remain ENABLED when Unleash is unavailable.
+ * All other features default to DISABLED (fail-closed) for security.
+ * Configure via FEATURE_TOGGLE_ESSENTIAL_ALLOWLIST env var (comma-separated).
+ */
+function getEssentialAllowlist(): Set<string> {
+  const envList = process.env.FEATURE_TOGGLE_ESSENTIAL_ALLOWLIST
+  if (envList) {
+    return new Set(envList.split(',').map((s) => s.trim()).filter(Boolean))
+  }
+  // Default essential features that must work without Unleash
+  return new Set([
+    'agent-profiles',
+    'agent-search',
+    'job-exchange',
+    'skill-catalog',
+    'wallet',
+    'zones',
+  ])
+}
 
 async function getUnleash() {
   if (unleashClient) return unleashClient
@@ -37,7 +61,7 @@ async function getUnleash() {
 
     return unleashClient
   } catch {
-    console.warn('Unleash not available — all features enabled by default')
+    log.warn({ message: 'Unleash not available — non-essential features disabled (fail-closed)' })
     return null
   }
 }
@@ -45,13 +69,23 @@ async function getUnleash() {
 export function withFeatureToggle(featureName: string, handler: RouteHandler): RouteHandler {
   return async (req: NextRequest) => {
     const unleash = await getUnleash()
-    // When Unleash is unavailable (e.g. Vercel serverless), default to ENABLED.
-    // Trade-off: this means feature toggles provide no protection on serverless,
-    // but defaulting to false would disable ALL features since Unleash can't run
-    // in that environment. The real fix is to connect Unleash via its hosted API
-    // (or use Vercel Edge Config / LaunchDarkly) so the client works in serverless.
-    // For service-level checks, use isFeatureEnabled() below which defaults to false.
-    const isEnabled = unleash ? unleash.isEnabled(featureName) : true
+
+    let isEnabled: boolean
+    if (unleash) {
+      isEnabled = unleash.isEnabled(featureName)
+    } else {
+      // Fail-closed: only essential features are enabled when Unleash is unavailable.
+      // This prevents admin/moderation/sensitive routes from being accessible without
+      // proper toggle evaluation.
+      const allowlist = getEssentialAllowlist()
+      isEnabled = allowlist.has(featureName)
+      if (!isEnabled) {
+        log.warn({
+          data: { featureName },
+          message: `Feature '${featureName}' disabled — Unleash unavailable and not in essential allowlist`,
+        })
+      }
+    }
 
     if (!isEnabled) {
       return apiError('FEATURE_DISABLED', `Feature '${featureName}' is not enabled`, 404)
@@ -63,9 +97,8 @@ export function withFeatureToggle(featureName: string, handler: RouteHandler): R
 
 /**
  * Programmatic feature toggle check for use in service code.
- * Unlike route-level toggles which default to ENABLED when Unleash
- * is unavailable, this defaults to the provided `defaultValue` (false
- * if omitted) — callers must opt-in to features being on by default.
+ * Defaults to the provided `defaultValue` (false if omitted) when
+ * Unleash is unavailable — callers must opt-in to features being on by default.
  */
 export async function isFeatureEnabled(
   featureName: string,

@@ -39,28 +39,6 @@ describe('AgentService', () => {
     expect(typeof service.searchAgents).toBe('function')
   })
 
-  it('getZoneVisibility returns correct zones for starter', () => {
-    const service = new AgentService(mockSupabase)
-    // Access private method via any cast for testing
-    const visibility = (service as any).getZoneVisibility('starter')
-    expect(visibility).toEqual(['starter'])
-  })
-
-  it('getZoneVisibility returns correct zones for expert', () => {
-    const service = new AgentService(mockSupabase)
-    const visibility = (service as any).getZoneVisibility('expert')
-    expect(visibility).toEqual(['starter', 'apprentice', 'journeyman', 'expert'])
-  })
-
-  it('getZoneVisibility returns correct zones for master', () => {
-    const service = new AgentService(mockSupabase)
-    const visibility = (service as any).getZoneVisibility('master')
-    expect(visibility).toEqual(['starter', 'apprentice', 'journeyman', 'expert', 'master'])
-  })
-
-  it('getZoneVisibility returns starter for unknown zone', () => {
-    const service = new AgentService(mockSupabase)
-    const visibility = (service as any).getZoneVisibility('unknown')
-    expect(visibility).toEqual(['starter'])
-  })
+  // Zone visibility logic moved to shared utility: lib/utils/zone-visibility.ts
+  // See zone-visibility.test.ts for comprehensive tests
 })

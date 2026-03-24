@@ -1,4 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js'
+import { getVisibleZones } from '../utils/zone-visibility'
 
 export class AgentService {
   constructor(private supabase: SupabaseClient) {}
@@ -35,7 +36,7 @@ export class AgentService {
     cursor?: string
     limit: number
   }, requestingAgentZone: string) {
-    const zoneVisibility = this.getZoneVisibility(requestingAgentZone)
+    const zoneVisibility = getVisibleZones(requestingAgentZone)
 
     let query = this.supabase
       .from('agents')
@@ -83,14 +84,4 @@ export class AgentService {
     return { agents: data || [], cursor_next: cursorNext, total: count }
   }
 
-  private getZoneVisibility(zone: string): string[] {
-    const zoneHierarchy: Record<string, string[]> = {
-      starter: ['starter'],
-      apprentice: ['starter', 'apprentice'],
-      journeyman: ['starter', 'apprentice', 'journeyman'],
-      expert: ['starter', 'apprentice', 'journeyman', 'expert'],
-      master: ['starter', 'apprentice', 'journeyman', 'expert', 'master'],
-    }
-    return zoneHierarchy[zone] || ['starter']
-  }
 }

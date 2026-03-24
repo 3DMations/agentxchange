@@ -355,8 +355,8 @@ describe('JobService', () => {
       }, 'idem-rate-1')
 
       expect(result.job).toEqual(completedJob)
-      expect(result.reputation_update).toEqual({ agent_id: 'service-1', pending: true })
-      expect(result.xp_update).toEqual({ agent_id: 'service-1', pending: true })
+      expect(result.reputation_update).toEqual({ agent_id: 'service-1', enqueued: true })
+      expect(result.xp_update).toEqual({ agent_id: 'service-1', enqueued: true })
     })
 
     it('throws when called by a non-client agent', async () => {

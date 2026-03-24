@@ -1,6 +1,8 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { WalletService } from './wallet.service'
+import { WebhookService } from './webhook.service'
 import { createServiceLogger } from '@/lib/utils/logger'
+import { enqueueJob, QUEUE_NAMES } from '@/lib/queue/client'
 
 const log = createServiceLogger('job-service')
 
@@ -18,9 +20,11 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
 
 export class JobService {
   private walletService: WalletService
+  private webhookService: WebhookService
 
   constructor(private supabase: SupabaseClient) {
     this.walletService = new WalletService(supabase)
+    this.webhookService = new WebhookService(supabase)
   }
 
   async createJob(clientAgentId: string, data: {
@@ -54,6 +58,10 @@ export class JobService {
       .single()
 
     if (error) throw new Error(error.message)
+
+    // Dispatch webhook event for job creation
+    this.dispatchWebhookAndEnqueue('job.created', job.client_agent_id, { job_id: job.id, status: 'open' })
+
     return job
   }
 
@@ -129,6 +137,12 @@ export class JobService {
       .single()
 
     if (error) throw new Error(error.message)
+
+    // Dispatch webhook event for job acceptance
+    this.dispatchWebhookAndEnqueue('job.accepted', data.client_agent_id, {
+      job_id: data.id, status: 'accepted', service_agent_id: serviceAgentId,
+    })
+
     return data
   }
 
@@ -149,6 +163,12 @@ export class JobService {
       .single()
 
     if (error) throw new Error(error.message)
+
+    // Dispatch webhook event for job submission
+    this.dispatchWebhookAndEnqueue('job.submitted', job.client_agent_id, {
+      job_id: data.id, status: 'submitted', service_agent_id: serviceAgentId,
+    })
+
     return data
   }
 
@@ -181,11 +201,56 @@ export class JobService {
 
     if (error) throw new Error(error.message)
 
+    // Enqueue reputation recalculation for the service agent
+    if (job.service_agent_id) {
+      enqueueJob(QUEUE_NAMES.REPUTATION_BATCH_RECALC, 'recalc-after-rating', {
+        agentId: job.service_agent_id,
+        jobId,
+        rating: rating.helpfulness_score,
+        solved: rating.solved,
+      }).catch((err) => log.error({ data: { jobId, error: String(err) }, message: 'Failed to enqueue reputation recalc' }))
+    }
+
+    // Dispatch webhook event for job completion
+    this.dispatchWebhookAndEnqueue('job.completed', clientAgentId, {
+      job_id: data.id, status: 'completed', service_agent_id: job.service_agent_id,
+      helpfulness_score: rating.helpfulness_score, solved: rating.solved,
+    })
+
     return {
       job: data,
-      reputation_update: { agent_id: job.service_agent_id, pending: true },
-      xp_update: { agent_id: job.service_agent_id, pending: true },
+      reputation_update: { agent_id: job.service_agent_id, enqueued: true },
+      xp_update: { agent_id: job.service_agent_id, enqueued: true },
     }
+  }
+
+  /**
+   * Dispatch a webhook event and enqueue for async delivery.
+   * Runs asynchronously — failures are logged but don't block the request.
+   */
+  private dispatchWebhookAndEnqueue(
+    eventType: string,
+    agentId: string,
+    payload: Record<string, unknown>,
+  ) {
+    // Insert webhook event log entries, then enqueue one job per event for delivery
+    this.webhookService.dispatchEvent(eventType, agentId, payload)
+      .then((result) => {
+        if (result.dispatched > 0 && result.eventIds) {
+          // Enqueue one worker job per event — handler expects { eventId }
+          for (const eventId of result.eventIds) {
+            enqueueJob(QUEUE_NAMES.WEBHOOK_DISPATCH, 'dispatch', { eventId })
+              .catch((err) => log.error({
+                data: { eventType, eventId, error: String(err) },
+                message: 'Failed to enqueue webhook dispatch',
+              }))
+          }
+        }
+      })
+      .catch((err) => log.error({
+        data: { eventType, error: String(err) },
+        message: 'Failed to dispatch webhook event',
+      }))
   }
 
   private validateTransition(currentStatus: string, targetStatus: string) {

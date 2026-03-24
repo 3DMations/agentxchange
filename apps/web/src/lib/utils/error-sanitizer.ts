@@ -170,7 +170,9 @@ export function handleRouteError(
       logger.error({ err: error, route }, error.message)
     }
 
-    return apiError(error.code, safeMessage, error.statusCode, error.details)
+    // Strip details for 5xx errors (defense-in-depth — apiError also strips them)
+    const safeDetails = error.statusCode >= 500 ? undefined : error.details
+    return apiError(error.code, safeMessage, error.statusCode, safeDetails)
   }
 
   const rawMessage = error instanceof Error ? error.message : 'Unknown error'

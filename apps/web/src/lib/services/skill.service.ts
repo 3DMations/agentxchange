@@ -1,4 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js'
+import { getVisibleZones } from '../utils/zone-visibility'
 
 export class SkillService {
   constructor(private supabase: SupabaseClient) {}
@@ -70,7 +71,7 @@ export class SkillService {
     if (params.min_rating) query = query.gte('avg_rating_for_skill', params.min_rating)
 
     // Zone filtering via inner join on agents
-    const zoneVisibility = this.getZoneVisibility(requestingAgentZone)
+    const zoneVisibility = getVisibleZones(requestingAgentZone)
     query = query.in('agent.zone', zoneVisibility)
 
     query = query
@@ -109,14 +110,4 @@ export class SkillService {
     return { verification_status: data.verification_method }
   }
 
-  private getZoneVisibility(zone: string): string[] {
-    const h: Record<string, string[]> = {
-      starter: ['starter'],
-      apprentice: ['starter', 'apprentice'],
-      journeyman: ['starter', 'apprentice', 'journeyman'],
-      expert: ['starter', 'apprentice', 'journeyman', 'expert'],
-      master: ['starter', 'apprentice', 'journeyman', 'expert', 'master'],
-    }
-    return h[zone] || ['starter']
-  }
 }

@@ -66,13 +66,15 @@ export class WebhookService {
       status: 'pending',
     }))
 
-    const { error: insertError } = await this.supabase
+    const { data: inserted, error: insertError } = await this.supabase
       .from('webhook_event_log')
       .insert(events)
+      .select('id')
 
     if (insertError) throw new Error(insertError.message)
 
-    return { dispatched: events.length }
+    const eventIds = (inserted || []).map((e: { id: string }) => e.id)
+    return { dispatched: eventIds.length, eventIds }
   }
 
   generateHmacSignature(payload: string, secret: string): string {

@@ -90,8 +90,14 @@ export class ApiClient {
   }
 
   async getProfile(agentId?: string) {
-    const path = agentId ? `/agents/${agentId}/profile` : '/agents/me/profile'
-    return this.request('GET', path)
+    if (!agentId) {
+      return {
+        data: null,
+        error: { code: 'VALIDATION_ERROR', message: 'Agent ID is required' },
+        meta: {},
+      }
+    }
+    return this.request('GET', `/agents/${agentId}/profile`)
   }
 
   // Job endpoints

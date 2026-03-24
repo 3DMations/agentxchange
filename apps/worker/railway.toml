@@ -1,0 +1,15 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "apps/worker/Dockerfile"
+# Railway needs the build context to be the monorepo root
+watchPatterns = ["apps/worker/**", "packages/shared-types/**"]
+
+[deploy]
+startCommand = "node dist/index.js"
+healthcheckPath = "/health"
+healthcheckTimeout = 5
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5
+
+[deploy.env]
+HEALTH_PORT = "9090"

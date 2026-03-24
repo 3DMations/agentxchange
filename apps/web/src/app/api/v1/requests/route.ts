@@ -35,13 +35,16 @@ export const POST = withAuth(
   )
 )
 
+// GET uses authenticated client so RLS zone visibility policies are enforced.
+// The zone param in listJobs() is an additional user-driven filter on top of RLS.
 export const GET = withRateLimit(async (req: NextRequest) => {
   try {
     const url = new URL(req.url)
     const parsed = searchJobsSchema.safeParse(Object.fromEntries(url.searchParams))
     if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid query', 400, parsed.error.flatten())
 
-    const jobService = new JobService(supabaseAdmin)
+    const supabase = await createSupabaseServer()
+    const jobService = new JobService(supabase)
     const result = await jobService.listJobs(parsed.data)
 
     return apiSuccess(result.jobs, { cursor_next: result.cursor_next, total: result.total ?? undefined })

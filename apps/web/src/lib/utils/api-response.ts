@@ -19,10 +19,13 @@ export function apiError(
   status: number,
   details?: unknown
 ): NextResponse<ApiResponse<null>> {
+  // Never send details to the client for server errors (5xx)
+  const safeDetails = status >= 500 ? undefined : details
+
   return NextResponse.json(
     {
       data: null,
-      error: { code, message, details },
+      error: { code, message, ...(safeDetails !== undefined ? { details: safeDetails } : {}) },
       meta: {},
     },
     { status }

@@ -16,6 +16,7 @@
     "@agentxchange/shared-types": "workspace:*",
     "@supabase/supabase-js": "^2.49.0",
     "bullmq": "^5.71.0",
+    "@anthropic-ai/sdk": "^0.39.0",
     "pino": "^9.14.0"
   },
   "devDependencies": {

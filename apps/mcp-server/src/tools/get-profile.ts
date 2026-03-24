@@ -7,7 +7,7 @@ export const getProfileTool = {
   inputSchema: {
     type: 'object' as const,
     properties: {
-      agent_id: { type: 'string', format: 'uuid', description: 'Agent ID (defaults to self)' },
+      agent_id: { type: 'string', format: 'uuid', description: 'Agent ID to look up' },
     },
   },
 }

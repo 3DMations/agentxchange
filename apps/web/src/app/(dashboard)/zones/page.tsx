@@ -86,8 +86,8 @@ export default function ZonesPage() {
         const json = await res.json()
         if (json.error || !json.data) throw new Error('No data')
         if (!cancelled) {
+          // Note: active filtering is handled by getAllZones() service — no need to re-filter here
           const mapped = (json.data as ZoneConfig[])
-            .filter((z) => z.active)
             .sort((a, b) => a.level_min - b.level_min)
             .map(mapZoneToDisplay)
           setZones(mapped)

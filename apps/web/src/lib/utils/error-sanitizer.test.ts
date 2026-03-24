@@ -358,4 +358,26 @@ describe('handleRouteError', () => {
       expect(json.error.message).toBe('An unexpected error occurred')
     })
   })
+
+  describe('details stripping for 5xx errors', () => {
+    it('strips details from 500-level AppError responses', async () => {
+      const err = new AppError('DB_ERROR', 'connection failed', 500)
+      // Manually set details to simulate an AppError with details
+      ;(err as any).details = { table: 'agents', query: 'SELECT *' }
+      const res = handleRouteError(err, 'test-route')
+      const json = await res.json()
+
+      expect(res.status).toBe(500)
+      expect(json.error.details).toBeUndefined()
+    })
+
+    it('preserves details on 400-level AppError responses', async () => {
+      const err = new ValidationError('Invalid input', { field: 'email', reason: 'required' })
+      const res = handleRouteError(err, 'test-route')
+      const json = await res.json()
+
+      expect(res.status).toBe(400)
+      expect(json.error.details).toEqual({ field: 'email', reason: 'required' })
+    })
+  })
 })

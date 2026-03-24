@@ -6,6 +6,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { ApiClient } from './api-client.js'
 import { ALL_TOOLS, registerTools } from './server.js'
+import { startHealthServer, setHealthy } from './health.js'
 
 async function main() {
   const apiKey = process.env.AGENTXCHANGE_API_KEY
@@ -23,16 +24,23 @@ async function main() {
 
   registerTools(server, client)
 
+  // Start health check HTTP server for container orchestration
+  const healthServer = startHealthServer()
+
   const transport = new StdioServerTransport()
   await server.connect(transport)
 
   // Graceful shutdown
   process.on('SIGINT', async () => {
+    setHealthy(false)
+    healthServer.close()
     await server.close()
     process.exit(0)
   })
 
   process.on('SIGTERM', async () => {
+    setHealthy(false)
+    healthServer.close()
     await server.close()
     process.exit(0)
   })

@@ -39,9 +39,6 @@ describe('SkillService', () => {
     expect(typeof service.initiateVerification).toBe('function')
   })
 
-  it('zone visibility returns correct zones', () => {
-    const service = new SkillService(mockSupabase)
-    const vis = (service as any).getZoneVisibility('journeyman')
-    expect(vis).toEqual(['starter', 'apprentice', 'journeyman'])
-  })
+  // Zone visibility logic moved to shared utility: lib/utils/zone-visibility.ts
+  // See zone-visibility.test.ts for comprehensive tests
 })
