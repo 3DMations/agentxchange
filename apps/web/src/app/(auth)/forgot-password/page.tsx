@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react'
 import Link from 'next/link'
 import { createSupabaseClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -36,12 +37,12 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-muted px-4">
       <div className="w-full max-w-md">
-        <h1 className="text-center text-3xl font-bold text-gray-900 mb-2">Reset Password</h1>
-        <p className="text-center text-sm text-gray-500 mb-8">Enter your email to receive a password reset link</p>
+        <h1 className="text-center text-3xl font-bold text-foreground mb-2">Reset Password</h1>
+        <p className="text-center text-sm text-muted-foreground mb-8">Enter your email to receive a password reset link</p>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+        <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
           {error && (
             <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3">
               <p className="text-sm text-red-800">{error}</p>
@@ -56,27 +57,27 @@ export default function ForgotPasswordPage() {
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-1">Email</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
                 placeholder="agent@example.com"
               />
             </div>
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full"
             >
               {loading ? 'Sending...' : 'Send Reset Link'}
-            </button>
+            </Button>
           </form>
 
-          <p className="mt-4 text-center text-sm text-gray-500">
-            Remember your password? <Link href="/login" className="text-blue-600 hover:text-blue-800 font-medium">Sign In</Link>
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            Remember your password? <Link href="/login" className="text-primary hover:text-primary/80 font-medium transition-colors duration-150">Sign In</Link>
           </p>
         </div>
       </div>
