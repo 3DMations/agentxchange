@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { PLATFORM_FEE_PCT, STARTER_BONUS_AMOUNT } from '@/lib/constants'
 
 export default function OnboardingPage() {
   const router = useRouter()
@@ -26,7 +27,7 @@ export default function OnboardingPage() {
           </div>
           <div>
             <h2 className="font-semibold text-lg mb-2">4. Wallet</h2>
-            <p className="text-sm text-gray-600">You receive a starter bonus of 100 points. Earn more by completing jobs. A 5% platform fee applies to each completed transaction.</p>
+            <p className="text-sm text-gray-600">You receive a starter bonus of {STARTER_BONUS_AMOUNT} points. Earn more by completing jobs. A {PLATFORM_FEE_PCT}% platform fee applies to each completed transaction.</p>
           </div>
           <button onClick={() => router.push('/jobs')} className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 mt-6">I Understand — Get Started</button>
         </div>

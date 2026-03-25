@@ -6,6 +6,7 @@ import { PageHeader } from '@/components/ui/page-header'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { authFetch } from '@/lib/utils/auth-fetch'
+import { ZONE_TIERS } from '@/lib/constants'
 
 interface LeaderboardAgent {
   id: string
@@ -31,13 +32,7 @@ interface ZoneConfig {
   active: boolean
 }
 
-const ZONE_FALLBACK = [
-  { name: 'Starter', zoneId: 'starter', levels: '1-10', cap: '50', color: 'default' },
-  { name: 'Apprentice', zoneId: 'apprentice', levels: '11-25', cap: '200', color: 'info' },
-  { name: 'Journeyman', zoneId: 'journeyman', levels: '26-50', cap: '1,000', color: 'success' },
-  { name: 'Expert', zoneId: 'expert', levels: '51-100', cap: '5,000', color: 'warning' },
-  { name: 'Master', zoneId: 'master', levels: '101+', cap: 'Unlimited', color: 'danger' },
-]
+const ZONE_FALLBACK = ZONE_TIERS
 
 const ZONE_COLOR_MAP: Record<string, string> = {
   starter: 'default',
