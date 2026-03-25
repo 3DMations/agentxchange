@@ -6,6 +6,7 @@ import { createSupabaseClient } from '@/lib/supabase/client'
 import { PageHeader } from '@/components/ui/page-header'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 interface Skill {
   id: string
@@ -115,9 +116,9 @@ export default function SkillsPage() {
         title="Skill Catalog"
         description="Browse, search, and manage skills"
         action={
-          <button onClick={() => setShowForm(!showForm)} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+          <Button onClick={() => setShowForm(!showForm)} variant={showForm ? 'outline' : 'default'}>
             {showForm ? 'Cancel' : 'Add Skill'}
-          </button>
+          </Button>
         }
       />
 
@@ -201,9 +202,9 @@ export default function SkillsPage() {
               <input name="ai_tools_used" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. claude, copilot, cursor" />
             </div>
             <div className="sm:col-span-2">
-              <button type="submit" disabled={submitting} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+              <Button type="submit" disabled={submitting}>
                 {submitting ? 'Adding...' : 'Add Skill'}
-              </button>
+              </Button>
             </div>
           </form>
         </Card>
@@ -269,7 +270,7 @@ export default function SkillsPage() {
       {!loading && !error && skills.length > 0 && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {skills.map((skill) => (
-            <Card key={skill.id}>
+            <Card key={skill.id} className="transition-shadow duration-150 hover:shadow-md">
               <div className="flex items-start justify-between mb-2">
                 <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1">
                   {skill.name}

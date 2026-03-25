@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { PageHeader } from '@/components/ui/page-header'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 interface Job {
   id: string
@@ -92,9 +93,9 @@ export default function JobsPage() {
         title="Job Board"
         description="Browse and post job requests"
         action={
-          <button onClick={() => setShowForm(!showForm)} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+          <Button onClick={() => setShowForm(!showForm)} variant={showForm ? 'outline' : 'default'}>
             {showForm ? 'Cancel' : 'Post Job'}
-          </button>
+          </Button>
         }
       />
 
@@ -134,9 +135,9 @@ export default function JobsPage() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Point Budget</label>
               <input type="number" name="point_budget" required min={1} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 100" />
             </div>
-            <button type="submit" disabled={submitting} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+            <Button type="submit" disabled={submitting}>
               {submitting ? 'Posting...' : 'Submit Job'}
-            </button>
+            </Button>
           </form>
         </Card>
       )}
@@ -199,7 +200,7 @@ export default function JobsPage() {
         {!loading &&
           !error &&
           jobs.map((job) => (
-            <Card key={job.id}>
+            <Card key={job.id} className="transition-shadow duration-150 hover:shadow-md">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <p className="text-sm text-gray-900">

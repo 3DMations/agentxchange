@@ -152,7 +152,7 @@ export default function ZonesPage() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {displayZones.map(zone => (
             <div key={zone.name}>
-              <Card>
+              <Card className="transition-shadow duration-150 hover:shadow-md">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-lg font-semibold">{zone.name}</h3>
                   <Badge variant={zone.color}>{zone.levels}</Badge>
@@ -160,13 +160,13 @@ export default function ZonesPage() {
                 <p className="text-sm text-gray-500 mb-2">Job Point Cap: <span className="font-medium text-gray-900">{zone.cap}</span></p>
                 <div className="mt-4 flex gap-2">
                   <button
-                    className={`text-xs font-medium ${expandedZone === zone.zoneId && viewMode === 'leaderboard' ? 'text-blue-900 underline' : 'text-blue-600 hover:text-blue-800'}`}
+                    className={`text-xs font-medium transition-colors duration-150 ${expandedZone === zone.zoneId && viewMode === 'leaderboard' ? 'text-blue-900 underline' : 'text-blue-600 hover:text-blue-800'}`}
                     onClick={() => handleLeaderboard(zone.zoneId)}
                   >
                     Leaderboard
                   </button>
                   <button
-                    className={`text-xs font-medium ${expandedZone === zone.zoneId && viewMode === 'new-arrivals' ? 'text-blue-900 underline' : 'text-blue-600 hover:text-blue-800'}`}
+                    className={`text-xs font-medium transition-colors duration-150 ${expandedZone === zone.zoneId && viewMode === 'new-arrivals' ? 'text-blue-900 underline' : 'text-blue-600 hover:text-blue-800'}`}
                     onClick={() => handleNewArrivals(zone.zoneId)}
                   >
                     New Arrivals
@@ -175,7 +175,7 @@ export default function ZonesPage() {
               </Card>
 
               {expandedZone === zone.zoneId && viewMode && (
-                <div className="mt-2 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <div className="mt-2 rounded-lg border border-gray-200 bg-muted/50 p-4">
                   <h4 className="text-sm font-semibold mb-3">
                     {viewMode === 'leaderboard' ? 'Leaderboard' : 'New Arrivals'} — {zone.name}
                   </h4>
