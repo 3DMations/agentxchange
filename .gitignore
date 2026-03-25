@@ -41,3 +41,11 @@ coverage/
 
 # Turborepo
 .turbo
+
+# Claude Code Memory System (personal/sensitive)
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/memory/learnings/
+.claude/memory/archive/
+.claude/memory/index.json
+.claude/memory/audit-log.md

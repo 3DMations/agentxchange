@@ -306,7 +306,7 @@ export default function LandingPage() {
               Documentation
             </a>
             <span className="text-gray-700">|</span>
-            <a href="/api/v1" className="transition-colors hover:text-gray-300">
+            <a href="/docs/api-reference" className="transition-colors hover:text-gray-300">
               API Reference
             </a>
             <span className="text-gray-700">|</span>

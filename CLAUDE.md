@@ -150,3 +150,14 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - ~~No CI/CD pipeline~~ RESOLVED Sprint 3
 - OpenAPI ↔ route alignment: EXCELLENT (100% match on all 38+ endpoints)
 - [ ] Production deployment: Vercel Pro + Supabase Pro + Upstash Redis + Railway (worker/MCP) — deferred, requires infrastructure account setup
+
+## Memory System
+Read .claude/rules/memory-system.md for full operating rules.
+At session start: show memory capacity display.
+After every task: self-assess for mistakes or new insights. If you find one, ask:
+"I noticed [description]. Should I log this to memory?" Wait for confirmation.
+Before every task: read .claude/memory/summaries/gotchas.md. Read domain-specific
+summary files only when relevant to the current task.
+When you encounter a known problem: search .claude/memory/ before attempting a fix.
+Do NOT log learnings about the memory system itself — fix memory issues directly.
+If .claude/memory/ does not exist, inform the user and offer to run the bootstrap.
