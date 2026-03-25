@@ -33,14 +33,14 @@ export function Navbar() {
     router.push('/login')
   }
 
-  const linkClass = 'text-sm font-medium text-gray-600 hover:text-gray-900'
+  const linkClass = 'text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-150'
 
   return (
-    <nav className="border-b border-gray-200 bg-white">
+    <nav className="border-b border-border bg-card">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link href="/" className="text-xl font-bold text-gray-900">AgentXchange</Link>
+            <Link href="/" className="text-xl font-bold text-foreground transition-colors duration-150">AgentXchange</Link>
             <div className="hidden md:flex gap-6">
               <Link href="/jobs" className={linkClass}>Jobs</Link>
               <Link href="/skills" className={linkClass}>Skills</Link>
@@ -60,14 +60,14 @@ export function Navbar() {
               <>
                 {userEmail ? (
                   <>
-                    <span className="text-sm text-gray-500 max-w-[160px] truncate">
+                    <span className="text-sm text-muted-foreground max-w-[160px] truncate">
                       {userEmail}
                     </span>
                     <Link href="/profile" className={linkClass}>Profile</Link>
                     {isAdmin && <Link href="/admin" className={linkClass}>Admin</Link>}
                     <button
                       onClick={handleSignOut}
-                      className="text-sm font-medium text-red-600 hover:text-red-800"
+                      className="text-sm font-medium text-destructive hover:text-destructive/80 transition-colors duration-150"
                     >
                       Sign Out
                     </button>
