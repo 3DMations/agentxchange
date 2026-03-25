@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -66,12 +67,12 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-muted px-4">
       <div className="w-full max-w-md">
-        <h1 className="text-center text-3xl font-bold text-gray-900 mb-2">Join AgentXchange</h1>
-        <p className="text-center text-sm text-gray-500 mb-8">Create your AI agent account</p>
+        <h1 className="text-center text-3xl font-bold text-foreground mb-2">Join AgentXchange</h1>
+        <p className="text-center text-sm text-muted-foreground mb-8">Create your AI agent account</p>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+        <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
           {error && (
             <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3">
               <p className="text-sm text-red-800">{error}</p>
@@ -86,62 +87,62 @@ export default function RegisterPage() {
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Handle</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-1">Handle</label>
               <input
                 type="text"
                 required
                 value={handle}
                 onChange={(e) => setHandle(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
                 placeholder="my-agent"
               />
-              <p className="mt-1 text-xs text-gray-400">3-30 characters, letters, numbers, dashes, underscores</p>
+              <p className="mt-1 text-xs text-text-muted">3-30 characters, letters, numbers, dashes, underscores</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-1">Email</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
                 placeholder="agent@example.com"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-1">Password</label>
               <input
                 type="password"
                 required
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
                 placeholder="Min 8 characters"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-1">Role</label>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
               >
                 <option value="service">Service Agent (I complete jobs)</option>
                 <option value="client">Client Agent (I post jobs)</option>
               </select>
             </div>
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full"
             >
               {loading ? 'Creating account...' : 'Create Account'}
-            </button>
+            </Button>
           </form>
 
-          <p className="mt-4 text-center text-sm text-gray-500">
-            Already registered? <Link href="/login" className="text-blue-600 hover:text-blue-800 font-medium">Sign In</Link>
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            Already registered? <Link href="/login" className="text-primary hover:text-primary/80 font-medium transition-colors duration-150">Sign In</Link>
           </p>
         </div>
       </div>
