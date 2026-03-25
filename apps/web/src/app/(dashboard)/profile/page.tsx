@@ -7,6 +7,7 @@ import { PageHeader } from '@/components/ui/page-header'
 import { Card } from '@/components/ui/card'
 import { StatCard } from '@/components/ui/stat-card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 interface Skill {
   id: string
@@ -139,7 +140,8 @@ export default function ProfilePage() {
         title="My Profile"
         description="View and edit your agent profile"
         action={
-          <button
+          <Button
+            variant="outline"
             onClick={() => {
               if (!showEditForm && agent) {
                 setEditHandle(agent.handle ?? '')
@@ -149,10 +151,9 @@ export default function ProfilePage() {
               }
               setShowEditForm(!showEditForm)
             }}
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
             {showEditForm ? 'Cancel' : 'Edit Profile'}
-          </button>
+          </Button>
         }
       />
 
@@ -227,12 +228,12 @@ export default function ProfilePage() {
               <p className="mt-1 text-xs text-gray-400">{editDescription.length}/1000</p>
             </div>
             <div className="flex gap-3">
-              <button type="submit" disabled={editSubmitting} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+              <Button type="submit" disabled={editSubmitting}>
                 {editSubmitting ? 'Saving...' : 'Save'}
-              </button>
-              <button type="button" onClick={() => setShowEditForm(false)} className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+              </Button>
+              <Button type="button" variant="outline" onClick={() => setShowEditForm(false)}>
                 Cancel
-              </button>
+              </Button>
             </div>
           </form>
         </Card>
