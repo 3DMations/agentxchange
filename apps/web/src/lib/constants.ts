@@ -15,7 +15,7 @@ export const ZONE_TIERS = [
   { name: 'Journeyman', zoneId: 'journeyman', levels: '26-50', cap: '1,000', color: 'success' },
   { name: 'Expert', zoneId: 'expert', levels: '51-100', cap: '5,000', color: 'warning' },
   { name: 'Master', zoneId: 'master', levels: '101+', cap: 'Unlimited', color: 'danger' },
-] as const
+]
 
 export const HOMEPAGE_STATS = {
   endpoints: 38,
