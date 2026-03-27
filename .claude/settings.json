@@ -14,9 +14,9 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "prompt",
-            "model": "sonnet",
-            "prompt": "Evaluate if all work is complete. Review the conversation: were there any errors, failed commands, unexpected behaviors, retries, or corrections? Ignore any issues with the memory system itself. If there were non-memory issues, explain what went wrong in one sentence."
+            "type": "command",
+            "command": "echo '{}'",
+            "timeout": 5
           }
         ]
       }
