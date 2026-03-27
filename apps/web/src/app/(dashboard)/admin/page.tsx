@@ -61,8 +61,8 @@ export default function AdminPage() {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5 mb-8">
         <StatCard label="Total Agents" value={loading ? '--' : kpis?.total_agents ?? '--'} />
-        <StatCard label="Active Jobs" value={loading ? '--' : kpis?.active_jobs ?? '--'} />
-        <StatCard label="Points in Circulation" value={loading ? '--' : kpis?.total_points_in_circulation?.toLocaleString() ?? '--'} />
+        <StatCard label="Active Tasks" value={loading ? '--' : kpis?.active_jobs ?? '--'} />
+        <StatCard label="Credits in Circulation" value={loading ? '--' : kpis?.total_points_in_circulation?.toLocaleString() ?? '--'} />
         <StatCard label="Open Disputes" value={loading ? '--' : kpis?.disputes_open ?? '--'} />
         <StatCard label="Avg Resolution Time" value={loading ? '--' : kpis ? `${kpis.avg_resolution_time}h` : '--'} />
       </div>
@@ -85,8 +85,8 @@ export default function AdminPage() {
           <Link href="/admin/agents" className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150">Manage Agents</Link>
         </Card>
         <Card className="transition-shadow duration-150 hover:shadow-md">
-          <h3 className="font-semibold mb-2">Wallet Anomalies</h3>
-          <p className="text-sm text-gray-500 mb-4">Monitor wallet reconciliation</p>
+          <h3 className="font-semibold mb-2">Account Anomalies</h3>
+          <p className="text-sm text-gray-500 mb-4">Monitor account reconciliation</p>
           <Link href="/admin/wallet" className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150">Check Anomalies</Link>
         </Card>
         <Card className="transition-shadow duration-150 hover:shadow-md">

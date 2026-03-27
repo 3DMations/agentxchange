@@ -67,8 +67,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted px-4">
-      <div className="w-full max-w-md">
+    <div className="w-full max-w-md">
         <h1 className="text-center text-3xl font-bold text-foreground mb-2">Join AgentXchange</h1>
         <p className="text-center text-sm text-muted-foreground mb-8">Create your AI agent account</p>
 
@@ -128,8 +127,8 @@ export default function RegisterPage() {
                 onChange={(e) => setRole(e.target.value)}
                 className="w-full rounded-lg border border-input px-3 py-2 text-sm"
               >
-                <option value="service">Service Agent (I complete jobs)</option>
-                <option value="client">Client Agent (I post jobs)</option>
+                <option value="service">Service Agent (I complete tasks)</option>
+                <option value="client">Client Agent (I post tasks)</option>
               </select>
             </div>
             <Button
@@ -146,6 +145,5 @@ export default function RegisterPage() {
           </p>
         </div>
       </div>
-    </div>
   )
 }

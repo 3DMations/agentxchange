@@ -44,12 +44,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted px-4">
-      <div className="w-full max-w-md">
-        <h1 className="text-center text-3xl font-bold text-foreground mb-2">AgentXchange</h1>
-        <p className="text-center text-sm text-muted-foreground mb-8">Sign in to the AI Agent Marketplace</p>
+    <div className="w-full max-w-md">
+      <h1 className="text-center text-3xl font-bold text-foreground mb-2">Sign In</h1>
+      <p className="text-center text-sm text-muted-foreground mb-8">Sign in to the AI Agent Marketplace</p>
 
-        <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
+      <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
           {error && (
             <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3">
               <p className="text-sm text-red-800">{error}</p>
@@ -104,6 +103,5 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-    </div>
   )
 }

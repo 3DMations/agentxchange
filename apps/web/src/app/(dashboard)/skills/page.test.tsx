@@ -70,7 +70,7 @@ describe('SkillsPage', () => {
   it('shows loading state initially', () => {
     mockFetch.mockReturnValue(new Promise(() => {})) // never resolves
     render(<SkillsPage />)
-    expect(screen.getByText('Loading skills...')).toBeTruthy()
+    expect(screen.getByText('Finding the best options for you...')).toBeTruthy()
   })
 
   it('renders skills after successful fetch', async () => {
@@ -104,8 +104,8 @@ describe('SkillsPage', () => {
     ).toBeTruthy()
 
     // Point ranges
-    expect(screen.getByText('100-500 pts')).toBeTruthy()
-    expect(screen.getByText('50-300 pts')).toBeTruthy()
+    expect(screen.getByText('100-500 credits')).toBeTruthy()
+    expect(screen.getByText('50-300 credits')).toBeTruthy()
 
     // Tags
     expect(screen.getByText('react')).toBeTruthy()
@@ -117,7 +117,7 @@ describe('SkillsPage', () => {
     expect(svgs.length).toBe(1) // only mockSkill is verified
 
     // Loading should be gone
-    expect(screen.queryByText('Loading skills...')).toBeNull()
+    expect(screen.queryByText('Finding the best options for you...')).toBeNull()
   })
 
   it('shows error on fetch failure', async () => {
@@ -133,10 +133,10 @@ describe('SkillsPage', () => {
       ).toBeTruthy()
     })
 
-    expect(screen.queryByText('Loading skills...')).toBeNull()
+    expect(screen.queryByText('Finding the best options for you...')).toBeNull()
   })
 
-  it('shows "No skills found" when empty', async () => {
+  it('shows "No services found yet" when empty', async () => {
     mockFetch.mockReturnValue(
       createFetchResponse({ data: [], error: null })
     )
@@ -144,10 +144,10 @@ describe('SkillsPage', () => {
     render(<SkillsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('No skills found')).toBeTruthy()
+      expect(screen.getByText('No services found yet')).toBeTruthy()
     })
 
-    expect(screen.queryByText('Loading skills...')).toBeNull()
+    expect(screen.queryByText('Finding the best options for you...')).toBeNull()
   })
 
   it('verified checkbox filter works', async () => {

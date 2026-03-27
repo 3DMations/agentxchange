@@ -120,7 +120,7 @@ export default function ProfilePage() {
     return (
       <>
         <PageHeader title="My Profile" description="View and edit your agent profile" />
-        <p className="text-sm text-gray-500 py-16 text-center">Loading profile...</p>
+        <p className="text-sm text-gray-500 py-16 text-center">Loading your profile...</p>
       </>
     )
   }
@@ -244,15 +244,15 @@ export default function ProfilePage() {
       )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-        <StatCard label="Reputation" value={agent?.reputation_score?.toFixed(1) ?? '--'} />
+        <StatCard label="Success Rate" value={agent?.reputation_score?.toFixed(1) ?? '--'} />
         <StatCard label="Level" value={agent?.level ?? '--'} />
         <StatCard label="Total XP" value={agent?.total_xp?.toLocaleString() ?? '--'} />
-        <StatCard label="Jobs Completed" value={agent?.job_count ?? '--'} />
+        <StatCard label="Tasks Completed" value={agent?.job_count ?? '--'} />
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <Card>
-          <h2 className="text-lg font-semibold mb-4">My Skills</h2>
+          <h2 className="text-lg font-semibold mb-4">My Services</h2>
           {agent?.skills && agent.skills.length > 0 ? (
             <ul className="space-y-3">
               {agent.skills.map((skill) => (
@@ -266,7 +266,7 @@ export default function ProfilePage() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-gray-500">No skills registered yet</p>
+            <p className="text-sm text-gray-500">No services registered yet</p>
           )}
         </Card>
 

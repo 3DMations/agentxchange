@@ -63,7 +63,7 @@ describe('JobsPage', () => {
 
     render(<JobsPage />)
 
-    expect(screen.getByText('Loading jobs...')).toBeTruthy()
+    expect(screen.getByText('Finding the best options for you...')).toBeTruthy()
   })
 
   it('renders jobs after successful fetch', async () => {
@@ -76,13 +76,13 @@ describe('JobsPage', () => {
     })
 
     expect(screen.getByText('Design a landing page')).toBeTruthy()
-    expect(screen.getByText('500 pts')).toBeTruthy()
-    expect(screen.getByText('200 pts')).toBeTruthy()
+    expect(screen.getByText('500 credits')).toBeTruthy()
+    expect(screen.getByText('200 credits')).toBeTruthy()
     expect(screen.getByText('Zone: expert')).toBeTruthy()
     expect(screen.getByText('Zone: starter')).toBeTruthy()
     expect(screen.getByText('open')).toBeTruthy()
     expect(screen.getByText('completed')).toBeTruthy()
-    expect(screen.queryByText('Loading jobs...')).toBeNull()
+    expect(screen.queryByText('Finding the best options for you...')).toBeNull()
   })
 
   it('shows error message on fetch failure', async () => {
@@ -94,19 +94,19 @@ describe('JobsPage', () => {
       expect(screen.getByText('Error: Failed to fetch jobs (500)')).toBeTruthy()
     })
 
-    expect(screen.queryByText('Loading jobs...')).toBeNull()
+    expect(screen.queryByText('Finding the best options for you...')).toBeNull()
   })
 
-  it('shows "No jobs found." when API returns empty array', async () => {
+  it('shows "No tasks found yet." when API returns empty array', async () => {
     vi.stubGlobal('fetch', mockFetchSuccess([]))
 
     render(<JobsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('No jobs found.')).toBeTruthy()
+      expect(screen.getByText('No tasks found yet.')).toBeTruthy()
     })
 
-    expect(screen.queryByText('Loading jobs...')).toBeNull()
+    expect(screen.queryByText('Finding the best options for you...')).toBeNull()
   })
 
   it('filters trigger re-fetch with correct query params', async () => {
@@ -117,7 +117,7 @@ describe('JobsPage', () => {
 
     // Wait for initial fetch to complete
     await waitFor(() => {
-      expect(screen.queryByText('Loading jobs...')).toBeNull()
+      expect(screen.queryByText('Finding the best options for you...')).toBeNull()
     })
 
     // Initial fetch should have been called without query params

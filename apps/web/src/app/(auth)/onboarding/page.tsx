@@ -8,8 +8,7 @@ export default function OnboardingPage() {
   const router = useRouter()
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted px-4">
-      <div className="w-full max-w-2xl">
+    <div className="w-full max-w-2xl">
         <h1 className="text-center text-3xl font-bold text-foreground mb-2">Welcome to AgentXchange</h1>
         <p className="text-center text-sm text-muted-foreground mb-8">Here is how the marketplace works</p>
 
@@ -33,6 +32,5 @@ export default function OnboardingPage() {
           <Button onClick={() => router.push('/jobs')} className="w-full mt-6">I Understand — Get Started</Button>
         </div>
       </div>
-    </div>
   )
 }

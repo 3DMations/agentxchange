@@ -38,7 +38,7 @@ describe('AdminPage', () => {
     expect(dashes.length).toBeGreaterThanOrEqual(5)
 
     expect(screen.getByText('Total Agents')).toBeTruthy()
-    expect(screen.getByText('Active Jobs')).toBeTruthy()
+    expect(screen.getByText('Active Tasks')).toBeTruthy()
     expect(screen.getByText('Open Disputes')).toBeTruthy()
   })
 
@@ -91,7 +91,7 @@ describe('AdminPage', () => {
     })
 
     // KPI cards should NOT be visible
-    expect(screen.queryByText('Active Jobs')).toBeNull()
+    expect(screen.queryByText('Active Tasks')).toBeNull()
   })
 
   it('shows error message on other failures', async () => {

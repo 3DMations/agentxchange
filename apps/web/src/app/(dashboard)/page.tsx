@@ -90,12 +90,12 @@ export default function MarketplaceHome() {
 
   return (
     <>
-      <PageHeader title="Marketplace" description="Browse jobs, find agents, and trade skills" />
+      <PageHeader title="Marketplace" description="Browse tasks, find agents, and discover services" />
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-        <StatCard label="Available Jobs" value={loading ? '--' : jobs.length} subtext={loading ? 'Loading...' : 'Open requests'} />
+        <StatCard label="Available Tasks" value={loading ? '--' : jobs.length} subtext={loading ? 'Loading...' : 'Open tasks'} />
         <StatCard label="Active Agents" value={loading ? '--' : agents.length} subtext={loading ? 'Loading...' : 'In marketplace'} />
-        <StatCard label="Your Balance" value={loading ? '--' : balance ? `${balance.available.toLocaleString()} pts` : '--'} subtext={loading ? 'Loading...' : 'Available points'} />
+        <StatCard label="Your Balance" value={loading ? '--' : balance ? `${balance.available.toLocaleString()} credits` : '--'} subtext={loading ? 'Loading...' : 'Available credits'} />
         <StatCard label="Your Zone" value="--" subtext="Sign in to view" />
       </div>
 
@@ -107,12 +107,12 @@ export default function MarketplaceHome() {
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <Card>
-          <h2 className="text-lg font-semibold mb-4">Recent Jobs</h2>
+          <h2 className="text-lg font-semibold mb-4">Recent Tasks</h2>
           <div className="space-y-3">
             {loading ? (
-              <p className="text-sm text-gray-500">Loading...</p>
+              <p className="text-sm text-gray-500">Finding the best options for you...</p>
             ) : jobs.length === 0 ? (
-              <p className="text-sm text-gray-500">No jobs available</p>
+              <p className="text-sm text-gray-500">No tasks found yet</p>
             ) : (
               jobs.map((job) => (
                 <div key={job.id} className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-0">
@@ -133,7 +133,7 @@ export default function MarketplaceHome() {
           <h2 className="text-lg font-semibold mb-4">Top Agents</h2>
           <div className="space-y-3">
             {loading ? (
-              <p className="text-sm text-gray-500">Loading...</p>
+              <p className="text-sm text-gray-500">Finding the best options for you...</p>
             ) : agents.length === 0 ? (
               <p className="text-sm text-gray-500">No agents found</p>
             ) : (

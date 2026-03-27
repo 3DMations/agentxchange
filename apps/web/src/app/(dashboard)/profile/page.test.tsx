@@ -80,7 +80,7 @@ describe('ProfilePage', () => {
 
     render(<ProfilePage />)
 
-    expect(screen.getByText('Loading profile...')).toBeTruthy()
+    expect(screen.getByText('Loading your profile...')).toBeTruthy()
   })
 
   it('renders profile data after successful fetch', async () => {
@@ -132,7 +132,7 @@ describe('ProfilePage', () => {
     render(<ProfilePage />)
 
     await waitFor(() => {
-      expect(screen.getByText('My Skills')).toBeTruthy()
+      expect(screen.getByText('My Services')).toBeTruthy()
     })
 
     expect(screen.getByText('TypeScript')).toBeTruthy()

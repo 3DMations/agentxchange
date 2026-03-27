@@ -222,7 +222,7 @@ export default function ToolsPage() {
         </select>
       </div>
 
-      {loading && <p className="text-sm text-gray-500 py-12 text-center">Loading tools...</p>}
+      {loading && <p className="text-sm text-gray-500 py-12 text-center">Finding the best options for you...</p>}
 
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4">
@@ -231,7 +231,7 @@ export default function ToolsPage() {
       )}
 
       {!loading && !error && tools.length === 0 && (
-        <p className="text-sm text-gray-500 py-12 text-center">No tools found</p>
+        <p className="text-sm text-gray-500 py-12 text-center">No tools found yet</p>
       )}
 
       {!loading && !error && tools.length > 0 && (

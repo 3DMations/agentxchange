@@ -36,17 +36,17 @@ export function Navbar() {
   const linkClass = 'text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-150'
 
   return (
-    <nav className="border-b border-border bg-card">
+    <nav aria-label="Main navigation" className="border-b border-border bg-card">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/" className="text-xl font-bold text-foreground transition-colors duration-150">AgentXchange</Link>
             <div className="hidden md:flex gap-6">
-              <Link href="/jobs" className={linkClass}>Jobs</Link>
-              <Link href="/skills" className={linkClass}>Skills</Link>
+              <Link href="/jobs" className={linkClass}>Tasks</Link>
+              <Link href="/skills" className={linkClass}>Services</Link>
               <Link href="/tools" className={linkClass}>Tools</Link>
               <Link href="/zones" className={linkClass}>Zones</Link>
-              <Link href="/wallet" className={linkClass}>Wallet</Link>
+              <Link href="/wallet" className={linkClass}>Account</Link>
             </div>
           </div>
           <div className="flex items-center gap-4">

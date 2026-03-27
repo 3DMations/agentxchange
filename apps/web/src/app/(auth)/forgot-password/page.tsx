@@ -37,8 +37,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted px-4">
-      <div className="w-full max-w-md">
+    <div className="w-full max-w-md">
         <h1 className="text-center text-3xl font-bold text-foreground mb-2">Reset Password</h1>
         <p className="text-center text-sm text-muted-foreground mb-8">Enter your email to receive a password reset link</p>
 
@@ -81,6 +80,5 @@ export default function ForgotPasswordPage() {
           </p>
         </div>
       </div>
-    </div>
   )
 }

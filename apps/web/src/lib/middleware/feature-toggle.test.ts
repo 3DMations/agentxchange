@@ -65,7 +65,7 @@ describe('withFeatureToggle', () => {
       return NextResponse.json({ url: req.url })
     })
     const req = makeRequest()
-    const wrapped = withFeatureToggle('wallet', handler)
+    const wrapped = withFeatureToggle('wallet-service', handler)
     await wrapped(req)
 
     expect(handler).toHaveBeenCalledTimes(1)

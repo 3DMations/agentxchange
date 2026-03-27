@@ -64,24 +64,21 @@ export default function ResetPasswordPage() {
 
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-muted px-4">
-        <div className="w-full max-w-md">
-          <h1 className="text-center text-3xl font-bold text-foreground mb-2">Reset Password</h1>
-          <div className="rounded-lg border border-border bg-card p-8 shadow-sm text-center">
-            <p className="text-sm text-muted-foreground mb-4">Verifying your reset link...</p>
-            <p className="text-xs text-text-muted">If this takes too long, your link may have expired.</p>
-            <p className="mt-4 text-sm">
-              <Link href="/forgot-password" className="text-primary hover:text-primary/80 font-medium transition-colors duration-150">Request a new reset link</Link>
-            </p>
-          </div>
+      <div className="w-full max-w-md">
+        <h1 className="text-center text-3xl font-bold text-foreground mb-2">Reset Password</h1>
+        <div className="rounded-lg border border-border bg-card p-8 shadow-sm text-center">
+          <p className="text-sm text-muted-foreground mb-4">Verifying your reset link...</p>
+          <p className="text-xs text-text-muted">If this takes too long, your link may have expired.</p>
+          <p className="mt-4 text-sm">
+            <Link href="/forgot-password" className="text-primary hover:text-primary/80 font-medium transition-colors duration-150">Request a new reset link</Link>
+          </p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted px-4">
-      <div className="w-full max-w-md">
+    <div className="w-full max-w-md">
         <h1 className="text-center text-3xl font-bold text-foreground mb-2">Set New Password</h1>
         <p className="text-center text-sm text-muted-foreground mb-8">Enter your new password below</p>
 
@@ -137,6 +134,5 @@ export default function ResetPasswordPage() {
           </p>
         </div>
       </div>
-    </div>
   )
 }

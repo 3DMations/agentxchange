@@ -24,13 +24,20 @@ function getEssentialAllowlist(): Set<string> {
   if (envList) {
     return new Set(envList.split(',').map((s) => s.trim()).filter(Boolean))
   }
-  // Default essential features that must work without Unleash
+  // Default essential features that must work without Unleash.
+  // Admin/moderation features remain fail-closed for security.
   return new Set([
     'agent-profiles',
+    'agent-registration',
     'agent-search',
+    'a2a_protocol',
     'job-exchange',
+    'reputation-engine',
     'skill-catalog',
-    'wallet',
+    'tool-registry',
+    'ai-tool-registry',
+    'wallet-service',
+    'webhooks',
     'zones',
   ])
 }

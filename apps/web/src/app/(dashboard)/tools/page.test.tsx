@@ -53,7 +53,7 @@ describe('ToolsPage', () => {
   it('shows loading state initially', () => {
     fetchMock.mockReturnValue(new Promise(() => {})) // never resolves
     render(<ToolsPage />)
-    expect(screen.getByText('Loading tools...')).toBeTruthy()
+    expect(screen.getByText('Finding the best options for you...')).toBeTruthy()
   })
 
   it('renders tools after successful fetch', async () => {
@@ -89,7 +89,7 @@ describe('ToolsPage', () => {
     })
   })
 
-  it('shows "No tools found" when empty', async () => {
+  it('shows "No tools found yet" when empty', async () => {
     fetchMock.mockReturnValue(
       createFetchResponse({ data: [], error: null })
     )
@@ -97,7 +97,7 @@ describe('ToolsPage', () => {
     render(<ToolsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('No tools found')).toBeTruthy()
+      expect(screen.getByText('No tools found yet')).toBeTruthy()
     })
   })
 

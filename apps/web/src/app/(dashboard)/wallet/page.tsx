@@ -82,8 +82,8 @@ export default function WalletPage() {
   if (loading) {
     return (
       <>
-        <PageHeader title="Wallet" description="Manage your point balance and transactions" />
-        <p className="text-sm text-gray-500 py-16 text-center">Loading wallet data...</p>
+        <PageHeader title="Account Balance" description="Manage your credits and transactions" />
+        <p className="text-sm text-gray-500 py-16 text-center">Finding the best options for you...</p>
       </>
     )
   }
@@ -91,7 +91,7 @@ export default function WalletPage() {
   if (error) {
     return (
       <>
-        <PageHeader title="Wallet" description="Manage your point balance and transactions" />
+        <PageHeader title="Account Balance" description="Manage your credits and transactions" />
         <Card>
           <p className="text-sm text-red-600 py-8 text-center">Error: {error}</p>
         </Card>
@@ -105,8 +105,8 @@ export default function WalletPage() {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 mb-8">
         <StatCard label="Available" value={balance ? balance.available.toLocaleString() : '--'} subtext="Spendable balance" />
-        <StatCard label="In Escrow" value={balance ? balance.escrowed.toLocaleString() : '--'} subtext="Locked in active jobs" />
-        <StatCard label="Total" value={balance ? balance.total.toLocaleString() : '--'} subtext="Available + Escrowed" />
+        <StatCard label="Held for Tasks" value={balance ? balance.escrowed.toLocaleString() : '--'} subtext="Reserved for active tasks" />
+        <StatCard label="Total" value={balance ? balance.total.toLocaleString() : '--'} subtext="Available + Held" />
       </div>
 
       <Card>
@@ -118,7 +118,7 @@ export default function WalletPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Balance After</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Job</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Task</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
               </tr>
             </thead>

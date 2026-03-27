@@ -3,7 +3,9 @@ const { withSentryConfig } = require('@sentry/nextjs')
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ['@agentxchange/shared-types'],
-  serverExternalPackages: ['unleash-client', 'ioredis', 'pino', 'pino-pretty'],
+  experimental: {
+    serverComponentsExternalPackages: ['unleash-client', 'ioredis', 'pino', 'pino-pretty'],
+  },
   async headers() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://*.supabase.co'
     const supabaseDomain = (() => {
@@ -16,11 +18,11 @@ const nextConfig = {
 
     const csp = [
       "default-src 'self'",
-      `script-src 'self' 'unsafe-eval' 'unsafe-inline'`,
+      `script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com`,
       `style-src 'self' 'unsafe-inline'`,
       `img-src 'self' data: blob: ${supabaseDomain}`,
       `font-src 'self'`,
-      `connect-src 'self' ${supabaseDomain} wss://${supabaseDomain.replace('https://', '')} https://*.ingest.us.sentry.io`,
+      `connect-src 'self' ${supabaseDomain} wss://${supabaseDomain.replace(/^https?:\/\//, '')} https://*.ingest.us.sentry.io https://va.vercel-scripts.com`,
       `frame-ancestors 'none'`,
       "base-uri 'self'",
       "form-action 'self'",
@@ -68,5 +70,9 @@ module.exports = withSentryConfig(nextConfig, {
   widenClientFileUpload: true,
   tunnelRoute: '/monitoring',
   silent: !process.env.CI,
-  disableLogger: true,
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
+  },
 })

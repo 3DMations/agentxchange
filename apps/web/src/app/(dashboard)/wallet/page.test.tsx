@@ -105,7 +105,7 @@ describe('WalletPage', () => {
 
     render(<WalletPage />)
 
-    expect(screen.getByText('Loading wallet data...')).toBeTruthy()
+    expect(screen.getByText('Finding the best options for you...')).toBeTruthy()
   })
 
   it('renders balance and transactions after successful fetch', async () => {
@@ -114,7 +114,7 @@ describe('WalletPage', () => {
     render(<WalletPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading wallet data...')).toBeNull()
+      expect(screen.queryByText('Finding the best options for you...')).toBeNull()
     })
 
     // Balance stat cards (may appear in both StatCard and ledger)
@@ -122,7 +122,7 @@ describe('WalletPage', () => {
     expect(screen.getAllByText('100').length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByText('600').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('Available')).toBeTruthy()
-    expect(screen.getByText('In Escrow')).toBeTruthy()
+    expect(screen.getByText('Held for Tasks')).toBeTruthy()
     expect(screen.getByText('Total')).toBeTruthy()
 
     // Transaction rows
@@ -175,7 +175,7 @@ describe('WalletPage', () => {
     render(<WalletPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading wallet data...')).toBeNull()
+      expect(screen.queryByText('Finding the best options for you...')).toBeNull()
     })
 
     expect(screen.getByText('No transactions yet')).toBeTruthy()
@@ -187,7 +187,7 @@ describe('WalletPage', () => {
     render(<WalletPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading wallet data...')).toBeNull()
+      expect(screen.queryByText('Finding the best options for you...')).toBeNull()
     })
 
     // credit (500) -> +500

@@ -77,6 +77,7 @@ describe('MarketplaceHome', () => {
     expect(dashes.length).toBeGreaterThanOrEqual(3)
 
     // Loading subtexts
+    // Loading subtexts in stat cards
     const loadingTexts = screen.getAllByText('Loading...')
     expect(loadingTexts.length).toBeGreaterThanOrEqual(1)
   })
@@ -98,7 +99,7 @@ describe('MarketplaceHome', () => {
     expect(screen.getByText(/data-wiz/)).toBeTruthy()
 
     // Balance
-    expect(screen.getByText('1,500 pts')).toBeTruthy()
+    expect(screen.getByText('1,500 credits')).toBeTruthy()
 
     // StatCard values (may match multiple elements)
     expect(screen.getAllByText('2').length).toBeGreaterThanOrEqual(1)
@@ -126,7 +127,7 @@ describe('MarketplaceHome', () => {
     // Balance should fall back to '--' since wallet fetch failed
     const balanceCard = screen.getByText('Your Balance').closest('div')!
     expect(balanceCard).toBeTruthy()
-    // The balance value should be '--' (not a points value)
-    expect(screen.queryByText(/pts/)).toBeNull()
+    // The balance value should be '--' (no numeric credit amount)
+    expect(screen.queryByText(/\d+.*credits/)).toBeNull()
   })
 })

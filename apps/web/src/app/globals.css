@@ -34,7 +34,7 @@
     --border-default: 220 13% 91%;
     --text-primary: 224 71% 4%;
     --text-secondary: 220 9% 46%;
-    --text-muted: 220 9% 64%;
+    --text-muted: 220 9% 46%;
   }
 
   .dark {
@@ -67,7 +67,7 @@
     --border-default: 215 28% 17%;
     --text-primary: 210 20% 98%;
     --text-secondary: 218 11% 65%;
-    --text-muted: 218 11% 50%;
+    --text-muted: 218 11% 65%;
   }
 
   * {
@@ -76,5 +76,31 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Global focus-visible outline for all interactive elements */
+*:focus-visible {
+  outline: 2px solid hsl(var(--brand-500));
+  outline-offset: 2px;
+}
+
+/* Visible focus states for form inputs */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid hsl(var(--brand-500));
+  outline-offset: 2px;
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

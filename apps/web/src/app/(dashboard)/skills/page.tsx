@@ -113,11 +113,11 @@ export default function SkillsPage() {
   return (
     <>
       <PageHeader
-        title="Skill Catalog"
-        description="Browse, search, and manage skills"
+        title="Browse Services"
+        description="Browse, search, and manage services"
         action={
           <Button onClick={() => setShowForm(!showForm)} variant={showForm ? 'outline' : 'default'}>
-            {showForm ? 'Cancel' : 'Add Skill'}
+            {showForm ? 'Cancel' : 'Add a Service'}
           </Button>
         }
       />
@@ -133,7 +133,7 @@ export default function SkillsPage() {
             try {
               const supabase = createSupabaseClient()
               const { data: { user } } = await supabase.auth.getUser()
-              if (!user) { setFormError('Sign in to add skills'); return }
+              if (!user) { setFormError('Sign in to add services'); return }
               const res = await fetch(`/api/v1/agents/${user.id}/skills`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Idempotency-Key': `skill-${Date.now()}` },
@@ -146,8 +146,8 @@ export default function SkillsPage() {
                 }),
               })
               const json = await res.json()
-              if (!res.ok || json.error) throw new Error(json.error?.message || 'Failed to add skill')
-              setFormSuccess('Skill added!'); setShowForm(false); setRefreshKey(k => k + 1)
+              if (!res.ok || json.error) throw new Error(json.error?.message || 'Failed to add service')
+              setFormSuccess('Service added!'); setShowForm(false); setRefreshKey(k => k + 1)
             } catch (err: unknown) { setFormError(err instanceof Error ? err.message : 'Failed') }
             finally { setSubmitting(false) }
           }} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -183,14 +183,14 @@ export default function SkillsPage() {
             </div>
             <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-              <textarea name="description" required minLength={10} rows={2} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Describe this skill..." />
+              <textarea name="description" required minLength={10} rows={2} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Describe this service..." />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Min Points</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Min Credits</label>
               <input type="number" name="point_range_min" required min={1} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 20" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Max Points</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Max Credits</label>
               <input type="number" name="point_range_max" required min={1} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 100" />
             </div>
             <div className="sm:col-span-2">
@@ -203,7 +203,7 @@ export default function SkillsPage() {
             </div>
             <div className="sm:col-span-2">
               <Button type="submit" disabled={submitting}>
-                {submitting ? 'Adding...' : 'Add Skill'}
+                {submitting ? 'Adding...' : 'Add Service'}
               </Button>
             </div>
           </form>
@@ -213,7 +213,7 @@ export default function SkillsPage() {
       <div className="mb-6 flex gap-4 flex-wrap">
         <input
           type="text"
-          placeholder="Search skills..."
+          placeholder="Search services..."
           value={q}
           onChange={(e) => handleSearchChange(e.target.value)}
           className="flex-1 min-w-[200px] rounded-lg border border-gray-300 px-3 py-2 text-sm"
@@ -255,7 +255,7 @@ export default function SkillsPage() {
         </label>
       </div>
 
-      {loading && <p className="text-sm text-gray-500 py-12 text-center col-span-full">Loading skills...</p>}
+      {loading && <p className="text-sm text-gray-500 py-12 text-center col-span-full">Finding the best options for you...</p>}
 
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4">
@@ -264,7 +264,7 @@ export default function SkillsPage() {
       )}
 
       {!loading && !error && skills.length === 0 && (
-        <p className="text-sm text-gray-500 py-12 text-center">No skills found</p>
+        <p className="text-sm text-gray-500 py-12 text-center">No services found yet</p>
       )}
 
       {!loading && !error && skills.length > 0 && (
@@ -289,8 +289,8 @@ export default function SkillsPage() {
               <p className="text-sm text-gray-600 mb-3">{truncate(skill.description)}</p>
 
               <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
-                <span>{skill.point_range_min}-{skill.point_range_max} pts</span>
-                <span>{skill.avg_rating_for_skill.toFixed(1)} rating &middot; {skill.jobs_completed_for_skill} jobs</span>
+                <span>{skill.point_range_min}-{skill.point_range_max} credits</span>
+                <span>{skill.avg_rating_for_skill.toFixed(1)} rating &middot; {skill.jobs_completed_for_skill} completed</span>
               </div>
 
               {skill.tags.length > 0 && (

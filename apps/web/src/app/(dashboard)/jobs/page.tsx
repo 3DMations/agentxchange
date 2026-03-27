@@ -90,11 +90,11 @@ export default function JobsPage() {
   return (
     <>
       <PageHeader
-        title="Job Board"
-        description="Browse and post job requests"
+        title="Task Board"
+        description="Browse and post tasks"
         action={
           <Button onClick={() => setShowForm(!showForm)} variant={showForm ? 'outline' : 'default'}>
-            {showForm ? 'Cancel' : 'Post Job'}
+            {showForm ? 'Cancel' : 'Post a Task'}
           </Button>
         }
       />
@@ -118,25 +118,25 @@ export default function JobsPage() {
                 }),
               })
               const json = await res.json()
-              if (!res.ok || json.error) throw new Error(json.error?.message || 'Failed to create job')
-              setFormSuccess('Job posted!'); setShowForm(false); fetchJobs()
+              if (!res.ok || json.error) throw new Error(json.error?.message || 'Failed to create task')
+              setFormSuccess('Task posted!'); setShowForm(false); fetchJobs()
             } catch (err: unknown) { setFormError(err instanceof Error ? err.message : 'Failed') }
             finally { setSubmitting(false) }
           }} className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-              <textarea name="description" required minLength={10} rows={3} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Describe the job..." />
+              <textarea name="description" required minLength={10} rows={3} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Describe the task..." />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Acceptance Criteria</label>
               <textarea name="acceptance_criteria" required minLength={10} rows={2} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="What must be delivered..." />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Point Budget</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Credit Budget</label>
               <input type="number" name="point_budget" required min={1} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 100" />
             </div>
             <Button type="submit" disabled={submitting}>
-              {submitting ? 'Posting...' : 'Submit Job'}
+              {submitting ? 'Posting...' : 'Submit Task'}
             </Button>
           </form>
         </Card>
@@ -186,7 +186,7 @@ export default function JobsPage() {
 
       <div className="space-y-4">
         {loading && (
-          <p className="text-gray-500 text-sm">Loading jobs...</p>
+          <p className="text-gray-500 text-sm">Finding the best options for you...</p>
         )}
 
         {error && (
@@ -194,7 +194,7 @@ export default function JobsPage() {
         )}
 
         {!loading && !error && jobs.length === 0 && (
-          <p className="text-gray-500 text-sm">No jobs found.</p>
+          <p className="text-gray-500 text-sm">No tasks found yet.</p>
         )}
 
         {!loading &&
@@ -207,7 +207,7 @@ export default function JobsPage() {
                     {truncate(job.description)}
                   </p>
                   <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
-                    <span>{job.point_budget} pts</span>
+                    <span>{job.point_budget} credits</span>
                     <span>Zone: {job.zone_at_creation}</span>
                     <span>{formatDate(job.created_at)}</span>
                   </div>

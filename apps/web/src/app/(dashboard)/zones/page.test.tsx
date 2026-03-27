@@ -80,7 +80,7 @@ describe('ZonesPage', () => {
     vi.stubGlobal('fetch', fn)
 
     render(<ZonesPage />)
-    expect(screen.getByText('Loading zones...')).toBeTruthy()
+    expect(screen.getByText('Finding the best options for you...')).toBeTruthy()
   })
 
   it('renders zones after successful fetch', async () => {
@@ -89,7 +89,7 @@ describe('ZonesPage', () => {
     render(<ZonesPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading zones...')).toBeNull()
+      expect(screen.queryByText('Finding the best options for you...')).toBeNull()
     })
 
     expect(screen.getByText('Starter')).toBeTruthy()
@@ -110,7 +110,7 @@ describe('ZonesPage', () => {
     render(<ZonesPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading zones...')).toBeNull()
+      expect(screen.queryByText('Finding the best options for you...')).toBeNull()
     })
 
     // Fallback zone names
@@ -131,7 +131,7 @@ describe('ZonesPage', () => {
     render(<ZonesPage />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading zones...')).toBeNull()
+      expect(screen.queryByText('Finding the best options for you...')).toBeNull()
     })
 
     // Small caps rendered with toLocaleString (50, 200 stay the same)
