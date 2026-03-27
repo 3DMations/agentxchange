@@ -5,6 +5,12 @@ const nextConfig = {
   transpilePackages: ['@agentxchange/shared-types'],
   experimental: {
     serverComponentsExternalPackages: ['unleash-client', 'ioredis', 'pino', 'pino-pretty'],
+    outputFileTracingIncludes: {
+      '/(dashboard)': ['./.next/server/app/(dashboard)/**/*'],
+      '/(dashboard)/*': ['./.next/server/app/(dashboard)/**/*'],
+      '/(auth)': ['./.next/server/app/(auth)/**/*'],
+      '/(auth)/*': ['./.next/server/app/(auth)/**/*'],
+    },
   },
   async headers() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://*.supabase.co'
