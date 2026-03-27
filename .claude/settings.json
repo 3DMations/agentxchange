@@ -15,8 +15,8 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Review what was just completed. Were there any errors, failed commands, unexpected behaviors, retries, or corrections? Ignore any issues with the memory system itself.\n\nRespond ONLY with JSON, no markdown, no explanation, no code fences.\n\nIf no issues: {\"ok\": true}\n\nIf issues found: {\"ok\": false, \"reason\": \"LEARNING: <one-line description>\"}",
-            "timeout": 30
+            "model": "sonnet",
+            "prompt": "Evaluate if all work is complete. Review the conversation: were there any errors, failed commands, unexpected behaviors, retries, or corrections? Ignore any issues with the memory system itself. If there were non-memory issues, explain what went wrong in one sentence."
           }
         ]
       }
