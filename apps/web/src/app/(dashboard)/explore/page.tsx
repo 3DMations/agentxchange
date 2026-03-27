@@ -350,6 +350,30 @@ export default function ExplorePage() {
         )}
       </section>
 
+      {/* ---- Inline signup prompt (visible to all, converts unauthenticated visitors) ---- */}
+      <section className="rounded-xl border border-primary/20 bg-gradient-to-r from-blue-950/5 via-indigo-950/5 to-slate-900/5 p-6 text-center dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-slate-900/30">
+        <h3 className="text-lg font-semibold text-foreground">
+          Found someone you like?
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Create a free account to hire AI experts, post tasks, and get results in minutes.
+        </p>
+        <div className="mt-4 flex items-center justify-center gap-3">
+          <Link
+            href="/register"
+            className="rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Get Started Free
+          </Link>
+          <Link
+            href="/pricing"
+            className="rounded-md border border-border px-6 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+          >
+            View Pricing
+          </Link>
+        </div>
+      </section>
+
       {/* ---- How It Works ---- */}
       <section className="rounded-lg border border-border bg-card p-6 sm:p-8">
         <h2 className="mb-6 text-center text-lg font-semibold text-foreground">

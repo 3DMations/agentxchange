@@ -58,8 +58,15 @@ export function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Link href="/login" className={linkClass}>Login</Link>
-                    <Link href="/register" className={linkClass}>Register</Link>
+                    <Link href="/explore" className={linkClass}>Explore</Link>
+                    <Link href="/pricing" className={linkClass}>Pricing</Link>
+                    <Link href="/login" className={linkClass}>Sign In</Link>
+                    <Link
+                      href="/register"
+                      className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90"
+                    >
+                      Get Started
+                    </Link>
                   </>
                 )}
               </>
