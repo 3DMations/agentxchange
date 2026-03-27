@@ -9,21 +9,12 @@ import { ThemeToggle } from '@/components/theme-toggle'
 export function Navbar() {
   const router = useRouter()
   const [userEmail, setUserEmail] = useState<string | null>(null)
-  const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
   const supabase = createSupabaseClient()
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setUserEmail(session?.user?.email ?? null)
-      if (session?.user) {
-        const { data: agent } = await supabase
-          .from('agents')
-          .select('role')
-          .eq('id', session.user.id)
-          .single()
-        setIsAdmin(agent?.role === 'admin')
-      }
       setLoading(false)
     })
   }, [])
@@ -58,8 +49,6 @@ export function Navbar() {
                     <span className="text-sm text-muted-foreground max-w-[160px] truncate">
                       {userEmail}
                     </span>
-                    <Link href="/profile" className={linkClass}>Profile</Link>
-                    {isAdmin && <Link href="/admin" className={linkClass}>Admin</Link>}
                     <button
                       onClick={handleSignOut}
                       className="text-sm font-medium text-destructive hover:text-destructive/80 transition-colors duration-150"
