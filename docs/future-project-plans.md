@@ -27,6 +27,68 @@ Ideas to revisit after the website is secured and stable.
 - Breaking change detection and migration guides
 - Reference: Bump.sh, Optic
 
+## Sprint 8: CI/CD Hardening & Deployment Safety
+
+**Context:** Research completed 2026-03-27 via 4-persona panel (DevOps, Vercel Specialist, Release Engineering, DevSecOps). Execute after UI phases are complete.
+
+**Priority:** Before any beta/launch with real transactions.
+
+### P0 — Immediate (30 min total)
+- [ ] Pin all GitHub Actions to commit SHAs (actions/checkout, pnpm/action-setup, actions/setup-node) — CVE-2025-30066 supply chain risk
+- [ ] Add `permissions: contents: read` to ci.yml — currently inherits overly broad defaults
+- [ ] Add `pnpm audit --audit-level=high` step to CI
+- [ ] Enable Vercel staged promotion — disable "Auto-assign Custom Production Domains" in project settings
+- [ ] Enable Vercel Rolling Releases for progressive rollout
+
+### P0 — Branch Protection (15 min)
+- [ ] Require status checks to pass before merge (CI workflow)
+- [ ] Require linear history (no merge commits)
+- [ ] No force push to main
+- [ ] PR reviews: recommended (not required until team grows)
+
+### P1 — CI Security Scanning (1-2 hrs)
+- [ ] Add Gitleaks secret scanning to CI (prevent repeat of leaked Supabase key)
+- [ ] Add Semgrep SAST with `p/owasp-top-ten` + `p/typescript` rulesets
+- [ ] Create `.github/dependabot.yml` for automated dependency update PRs
+- [ ] Add license compliance check (`pnpm licenses list`)
+
+### P1 — CD Pipeline Wiring (2-3 hrs)
+- [ ] Delete `cd-dev.yml` (pure noise — Vercel handles deployment)
+- [ ] Transform `cd-staging.yml` into real workflow: migrations + Railway deploys
+- [ ] Create `cd-prod.yml` with GitHub Environment "production" + required reviewer
+- [ ] Wire `supabase db push` for staging and production (migration-before-deploy ordering)
+- [ ] Add CODEOWNERS for `supabase/migrations/` directory
+
+### P1 — Environment Setup (1-2 hrs)
+- [ ] Set up second Supabase project for staging
+- [ ] Create Vercel custom "Staging" environment with branch rules + stable domain
+- [ ] Separate Vercel env vars: production vs preview credentials
+- [ ] Enable Vercel Authentication on preview deployments
+
+### P2 — Compliance & Audit Trail
+- [ ] Require signed commits on main (SSH signing keys)
+- [ ] Add SBOM generation (CycloneDX) for PCI DSS 4.0 Req 6.3.2
+- [ ] Add `supabase db push --dry-run` to CI for migration validation
+- [ ] Configure Vercel deployment protection (password protection on staging)
+- [ ] Document rollback procedures
+
+### Key Decisions (from panel research)
+- **Vercel native deployment** for web app — no custom GitHub Actions CD needed
+- **GitHub Actions CD** only for Railway (worker, MCP server) and database migrations
+- **Two-environment model** (staging + prod) — dev handled by Vercel preview deployments
+- **Push-to-main→prod OK during development**, must change before real transactions
+- **Approval gate**: Vercel staged promotion for web app, GitHub Environment protection for Railway/migrations
+
+### Sources
+- CISA CVE-2025-30066 (tj-actions supply chain attack, March 2025)
+- Vercel Staged Promotion docs (Oct 2025)
+- Vercel Rolling Releases docs (2025)
+- PCI DSS 4.0 Requirements 6.3.2, 6.5.3, 6.5.4
+- OWASP CI/CD Security Cheat Sheet (2025)
+- Supabase Managing Environments docs
+
+---
+
 ## Other Deferred Ideas
 
 _(Add future ideas here as they come up)_
