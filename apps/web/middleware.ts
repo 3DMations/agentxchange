@@ -21,6 +21,31 @@ function getCorsHeaders(request: NextRequest): Record<string, string> {
   return {}
 }
 
+function buildCspHeader(nonce: string, pathname: string): string {
+  // Scalar API docs need unsafe-inline for styles
+  const isApiDocs =
+    pathname.startsWith('/docs/api-reference') ||
+    pathname.startsWith('/api/reference')
+
+  const styleSrc = isApiDocs
+    ? `style-src 'self' 'unsafe-inline'`
+    : `style-src 'self' 'nonce-${nonce}'`
+
+  const directives = [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' https://va.vercel-scripts.com`,
+    styleSrc,
+    `img-src 'self' data: https:`,
+    `font-src 'self'`,
+    `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://va.vercel-scripts.com https://*.ingest.us.sentry.io`,
+    `frame-ancestors 'none'`,
+    "base-uri 'self'",
+    "form-action 'self'",
+  ]
+
+  return directives.join('; ')
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
@@ -33,7 +58,20 @@ export async function middleware(request: NextRequest) {
     return new NextResponse(null, { status: 204 })
   }
 
+  // Generate a cryptographic nonce for CSP
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+
+  // Set nonce on request headers so server components can read it
+  request.headers.set('x-nonce', nonce)
+
   const response = await updateSession(request)
+
+  // Set CSP header with nonce
+  const csp = buildCspHeader(nonce, pathname)
+  response.headers.set('Content-Security-Policy', csp)
+
+  // Pass nonce to server components via response header
+  response.headers.set('x-nonce', nonce)
 
   // Add CORS headers to API responses
   if (pathname.startsWith('/api/v1')) {

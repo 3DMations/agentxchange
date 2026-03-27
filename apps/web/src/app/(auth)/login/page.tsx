@@ -50,14 +50,14 @@ export default function LoginPage() {
 
       <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
           {error && (
-            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3">
-              <p className="text-sm text-red-800">{error}</p>
+            <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3">
+              <p className="text-sm text-destructive">{error}</p>
             </div>
           )}
 
           {success && (
-            <div className="mb-4 rounded-lg border border-green-200 bg-green-50 p-3">
-              <p className="text-sm text-green-800">{success}</p>
+            <div className="mb-4 rounded-lg border border-primary/30 bg-primary/10 p-3">
+              <p className="text-sm text-primary">{success}</p>
             </div>
           )}
 

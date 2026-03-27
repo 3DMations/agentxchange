@@ -101,8 +101,8 @@ export default function JobsPage() {
 
       {showForm && (
         <Card className="mb-6">
-          {formError && <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3"><p className="text-sm text-red-800">{formError}</p></div>}
-          {formSuccess && <div className="mb-4 rounded-lg border border-green-200 bg-green-50 p-3"><p className="text-sm text-green-800">{formSuccess}</p></div>}
+          {formError && <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3"><p className="text-sm text-destructive">{formError}</p></div>}
+          {formSuccess && <div className="mb-4 rounded-lg border border-primary/30 bg-primary/10 p-3"><p className="text-sm text-primary">{formSuccess}</p></div>}
           <form onSubmit={async (e) => {
             e.preventDefault()
             setFormError(null); setFormSuccess(null); setSubmitting(true)
@@ -124,16 +124,16 @@ export default function JobsPage() {
             finally { setSubmitting(false) }
           }} className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-              <textarea name="description" required minLength={10} rows={3} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Describe the task..." />
+              <label className="block text-sm font-medium text-foreground mb-1">Description</label>
+              <textarea name="description" required minLength={10} rows={3} className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="Describe the task..." />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Acceptance Criteria</label>
-              <textarea name="acceptance_criteria" required minLength={10} rows={2} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="What must be delivered..." />
+              <label className="block text-sm font-medium text-foreground mb-1">Acceptance Criteria</label>
+              <textarea name="acceptance_criteria" required minLength={10} rows={2} className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="What must be delivered..." />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Credit Budget</label>
-              <input type="number" name="point_budget" required min={1} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 100" />
+              <label className="block text-sm font-medium text-foreground mb-1">Credit Budget</label>
+              <input type="number" name="point_budget" required min={1} className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. 100" />
             </div>
             <Button type="submit" disabled={submitting}>
               {submitting ? 'Posting...' : 'Submit Task'}
@@ -144,7 +144,7 @@ export default function JobsPage() {
 
       <div className="mb-6 flex gap-4">
         <select
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
         >
@@ -157,7 +157,7 @@ export default function JobsPage() {
           <option value="cancelled">Cancelled</option>
         </select>
         <select
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
           value={zone}
           onChange={(e) => setZone(e.target.value)}
         >
@@ -171,14 +171,14 @@ export default function JobsPage() {
         <input
           type="number"
           placeholder="Min budget"
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm w-32"
+          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm w-32"
           value={minBudget}
           onChange={(e) => setMinBudget(e.target.value)}
         />
         <input
           type="number"
           placeholder="Max budget"
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm w-32"
+          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm w-32"
           value={maxBudget}
           onChange={(e) => setMaxBudget(e.target.value)}
         />
@@ -186,15 +186,15 @@ export default function JobsPage() {
 
       <div className="space-y-4">
         {loading && (
-          <p className="text-gray-500 text-sm">Finding the best options for you...</p>
+          <p className="text-muted-foreground text-sm">Finding the best options for you...</p>
         )}
 
         {error && (
-          <p className="text-red-600 text-sm">Error: {error}</p>
+          <p className="text-destructive text-sm">Error: {error}</p>
         )}
 
         {!loading && !error && jobs.length === 0 && (
-          <p className="text-gray-500 text-sm">No tasks found yet.</p>
+          <p className="text-muted-foreground text-sm">No tasks found yet.</p>
         )}
 
         {!loading &&
@@ -203,10 +203,10 @@ export default function JobsPage() {
             <Card key={job.id} className="transition-shadow duration-150 hover:shadow-md">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-gray-900">
+                  <p className="text-sm text-foreground">
                     {truncate(job.description)}
                   </p>
-                  <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
+                  <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
                     <span>{job.point_budget} credits</span>
                     <span>Zone: {job.zone_at_creation}</span>
                     <span>{formatDate(job.created_at)}</span>

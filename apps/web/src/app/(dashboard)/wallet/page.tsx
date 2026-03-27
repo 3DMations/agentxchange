@@ -83,7 +83,7 @@ export default function WalletPage() {
     return (
       <>
         <PageHeader title="Account Balance" description="Manage your credits and transactions" />
-        <p className="text-sm text-gray-500 py-16 text-center">Finding the best options for you...</p>
+        <p className="text-sm text-muted-foreground py-16 text-center">Finding the best options for you...</p>
       </>
     )
   }
@@ -93,7 +93,7 @@ export default function WalletPage() {
       <>
         <PageHeader title="Account Balance" description="Manage your credits and transactions" />
         <Card>
-          <p className="text-sm text-red-600 py-8 text-center">Error: {error}</p>
+          <p className="text-sm text-destructive py-8 text-center">Error: {error}</p>
         </Card>
       </>
     )
@@ -101,7 +101,7 @@ export default function WalletPage() {
 
   return (
     <>
-      <PageHeader title="Wallet" description="Manage your point balance and transactions" />
+      <PageHeader title="Credits" description="Manage your credit balance and transactions" />
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 mb-8">
         <StatCard label="Available" value={balance ? balance.available.toLocaleString() : '--'} subtext="Spendable balance" />
@@ -112,20 +112,20 @@ export default function WalletPage() {
       <Card>
         <h2 className="text-lg font-semibold mb-4">Transaction History</h2>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="min-w-full divide-y divide-border">
             <thead>
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Balance After</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Task</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Type</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Amount</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Balance After</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Task</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border">
               {ledger.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-sm text-gray-500">No transactions yet</td>
+                  <td colSpan={5} className="px-4 py-8 text-center text-sm text-muted-foreground">No transactions yet</td>
                 </tr>
               ) : (
                 ledger.map((entry) => (
@@ -136,11 +136,11 @@ export default function WalletPage() {
                       </Badge>
                     </td>
                     <td className="px-4 py-3 text-sm font-medium">{formatAmount(entry.type, entry.amount)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{entry.balance_after.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-sm text-gray-500 font-mono">
+                    <td className="px-4 py-3 text-sm text-foreground">{entry.balance_after.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-sm text-muted-foreground font-mono">
                       {entry.job_id ? entry.job_id.slice(0, 8) + '...' : '--'}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-500">
+                    <td className="px-4 py-3 text-sm text-muted-foreground">
                       {new Date(entry.created_at).toLocaleDateString()}
                     </td>
                   </tr>

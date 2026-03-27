@@ -109,8 +109,8 @@ export default function ToolsPage() {
 
       {showForm && (
         <Card className="mb-6">
-          {formError && <div className="mb-3 rounded-lg border border-red-200 bg-red-50 p-3"><p className="text-sm text-red-800">{formError}</p></div>}
-          {formSuccess && <div className="mb-3 rounded-lg border border-green-200 bg-green-50 p-3"><p className="text-sm text-green-800">{formSuccess}</p></div>}
+          {formError && <div className="mb-3 rounded-lg border border-destructive/30 bg-destructive/10 p-3"><p className="text-sm text-destructive">{formError}</p></div>}
+          {formSuccess && <div className="mb-3 rounded-lg border border-primary/30 bg-primary/10 p-3"><p className="text-sm text-primary">{formSuccess}</p></div>}
           <form onSubmit={async (e) => {
             e.preventDefault()
             setFormError(null); setFormSuccess(null); setSubmitting(true)
@@ -134,24 +134,24 @@ export default function ToolsPage() {
             finally { setSubmitting(false) }
           }} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-              <input name="name" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. GPT-4" />
+              <label className="block text-sm font-medium text-foreground mb-1">Name</label>
+              <input name="name" required className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. GPT-4" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Provider</label>
-              <input name="provider" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. OpenAI" />
+              <label className="block text-sm font-medium text-foreground mb-1">Provider</label>
+              <input name="provider" required className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. OpenAI" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Version</label>
-              <input name="version" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 4.0" />
+              <label className="block text-sm font-medium text-foreground mb-1">Version</label>
+              <input name="version" required className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. 4.0" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">URL</label>
-              <input name="url" type="url" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="https://..." />
+              <label className="block text-sm font-medium text-foreground mb-1">URL</label>
+              <input name="url" type="url" required className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="https://..." />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-              <select name="tool_category" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+              <label className="block text-sm font-medium text-foreground mb-1">Category</label>
+              <select name="tool_category" required className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm">
                 <option value="llm">LLM</option>
                 <option value="code_assistant">Code Assistant</option>
                 <option value="image_gen">Image Gen</option>
@@ -162,8 +162,8 @@ export default function ToolsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Pricing</label>
-              <select name="pricing_model" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+              <label className="block text-sm font-medium text-foreground mb-1">Pricing</label>
+              <select name="pricing_model" className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm">
                 <option value="free">Free</option>
                 <option value="per_token">Per Token</option>
                 <option value="per_call">Per Call</option>
@@ -171,12 +171,12 @@ export default function ToolsPage() {
               </select>
             </div>
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Short Description</label>
-              <input name="description_short" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Brief description..." />
+              <label className="block text-sm font-medium text-foreground mb-1">Short Description</label>
+              <input name="description_short" className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="Brief description..." />
             </div>
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Capabilities (comma-separated)</label>
-              <input name="capabilities" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. code-gen, analysis, chat" />
+              <label className="block text-sm font-medium text-foreground mb-1">Capabilities (comma-separated)</label>
+              <input name="capabilities" className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. code-gen, analysis, chat" />
             </div>
             <div className="sm:col-span-2">
               <Button type="submit" disabled={submitting}>
@@ -193,12 +193,12 @@ export default function ToolsPage() {
           placeholder="Search tools..."
           value={q}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          className="flex-1 rounded-lg border border-input text-foreground px-3 py-2 text-sm"
         />
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
         >
           <option value="">All Categories</option>
           <option value="llm">LLM</option>
@@ -212,7 +212,7 @@ export default function ToolsPage() {
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
         >
           <option value="">All Statuses</option>
           <option value="pending">Pending</option>
@@ -222,16 +222,16 @@ export default function ToolsPage() {
         </select>
       </div>
 
-      {loading && <p className="text-sm text-gray-500 py-12 text-center">Finding the best options for you...</p>}
+      {loading && <p className="text-sm text-muted-foreground py-12 text-center">Finding the best options for you...</p>}
 
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4">
+          <p className="text-sm text-destructive">{error}</p>
         </div>
       )}
 
       {!loading && !error && tools.length === 0 && (
-        <p className="text-sm text-gray-500 py-12 text-center">No tools found yet</p>
+        <p className="text-sm text-muted-foreground py-12 text-center">No tools found yet</p>
       )}
 
       {!loading && !error && tools.length > 0 && (
@@ -240,8 +240,8 @@ export default function ToolsPage() {
             <Card key={tool.id} className="transition-shadow duration-150 hover:shadow-md">
               <div className="mb-3 flex items-start justify-between">
                 <div>
-                  <h3 className="text-base font-semibold text-gray-900">{tool.name}</h3>
-                  <p className="text-xs text-gray-500">{tool.provider} &middot; v{tool.version}</p>
+                  <h3 className="text-base font-semibold text-foreground">{tool.name}</h3>
+                  <p className="text-xs text-muted-foreground">{tool.provider} &middot; v{tool.version}</p>
                 </div>
                 <Badge variant={STATUS_BADGE_VARIANT[tool.verification_status] ?? 'default'}>
                   {tool.verification_status}
@@ -253,7 +253,7 @@ export default function ToolsPage() {
               </div>
 
               {tool.description_short && (
-                <p className="mb-3 text-sm text-gray-600">{tool.description_short}</p>
+                <p className="mb-3 text-sm text-muted-foreground">{tool.description_short}</p>
               )}
 
               {tool.capabilities && tool.capabilities.length > 0 && (
@@ -264,7 +264,7 @@ export default function ToolsPage() {
                 </div>
               )}
 
-              <p className="text-xs text-gray-400">Pricing: {tool.pricing_model ?? 'N/A'}</p>
+              <p className="text-xs text-muted-foreground">Pricing: {tool.pricing_model ?? 'N/A'}</p>
             </Card>
           ))}
         </div>

@@ -6,7 +6,6 @@ import type { Metadata } from 'next'
 
 const VALID_SLUGS = [
   'getting-started',
-  'api-reference',
   'mcp-tools',
   'a2a-protocol',
   'sdk-reference',
@@ -17,7 +16,6 @@ type DocSlug = (typeof VALID_SLUGS)[number]
 
 const SLUG_TITLES: Record<DocSlug, string> = {
   'getting-started': 'Getting Started',
-  'api-reference': 'API Reference',
   'mcp-tools': 'MCP Tools',
   'a2a-protocol': 'A2A Protocol',
   'sdk-reference': 'SDK Reference',

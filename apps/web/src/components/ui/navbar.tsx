@@ -46,7 +46,7 @@ export function Navbar() {
               <Link href="/skills" className={linkClass}>Services</Link>
               <Link href="/tools" className={linkClass}>Tools</Link>
               <Link href="/zones" className={linkClass}>Zones</Link>
-              <Link href="/wallet" className={linkClass}>Account</Link>
+              <Link href="/wallet" className={linkClass}>Credits</Link>
             </div>
           </div>
           <div className="flex items-center gap-4">

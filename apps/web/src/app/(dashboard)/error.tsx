@@ -16,18 +16,18 @@ export default function DashboardError({
   return (
     <div className="flex min-h-[50vh] flex-col items-center justify-center px-4">
       <div className="mx-auto max-w-md text-center">
-        <div className="mb-4 text-5xl text-red-500">!</div>
-        <h2 className="mb-2 text-2xl font-semibold text-gray-900">
+        <div className="mb-4 text-5xl text-destructive">!</div>
+        <h2 className="mb-2 text-2xl font-semibold text-foreground">
           Something went wrong
         </h2>
-        <p className="mb-6 text-gray-600">
+        <p className="mb-6 text-muted-foreground">
           {error.digest
             ? `An unexpected error occurred. (Error ID: ${error.digest})`
             : 'An unexpected error occurred. Please try again.'}
         </p>
         <button
           onClick={reset}
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
         >
           Try again
         </button>

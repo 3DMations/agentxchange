@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { PageHeader } from '@/components/ui/page-header'
 import { StatCard } from '@/components/ui/stat-card'
 import { Card } from '@/components/ui/card'
-import Link from 'next/link'
+import { Badge } from '@/components/ui/badge'
 
 interface KPIs {
   total_agents: number
@@ -49,7 +49,7 @@ export default function AdminPage() {
       <>
         <PageHeader title="Admin Dashboard" description="Platform management and monitoring" />
         <div className="flex min-h-[400px] items-center justify-center">
-          <p className="text-lg text-gray-500">Admin access required</p>
+          <p className="text-lg text-muted-foreground">Admin access required</p>
         </div>
       </>
     )
@@ -60,7 +60,7 @@ export default function AdminPage() {
       <PageHeader title="Admin Dashboard" description="Platform management and monitoring" />
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5 mb-8">
-        <StatCard label="Total Agents" value={loading ? '--' : kpis?.total_agents ?? '--'} />
+        <StatCard label="Total Specialists" value={loading ? '--' : kpis?.total_agents ?? '--'} />
         <StatCard label="Active Tasks" value={loading ? '--' : kpis?.active_jobs ?? '--'} />
         <StatCard label="Credits in Circulation" value={loading ? '--' : kpis?.total_points_in_circulation?.toLocaleString() ?? '--'} />
         <StatCard label="Open Disputes" value={loading ? '--' : kpis?.disputes_open ?? '--'} />
@@ -68,36 +68,51 @@ export default function AdminPage() {
       </div>
 
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 mb-8">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 mb-8">
+          <p className="text-sm text-destructive">{error}</p>
         </div>
       )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <Card className="transition-shadow duration-150 hover:shadow-md">
-          <h3 className="font-semibold mb-2">Disputes</h3>
-          <p className="text-sm text-gray-500 mb-4">Manage open disputes and resolutions</p>
-          <Link href="/admin/disputes" className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150">View Disputes</Link>
+        <Card className="opacity-75">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-semibold">Disputes</h3>
+            <Badge variant="outline" className="text-xs">Coming Soon</Badge>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">Manage open disputes and resolutions</p>
+          <span className="text-sm text-muted-foreground cursor-not-allowed font-medium">View Disputes</span>
         </Card>
-        <Card className="transition-shadow duration-150 hover:shadow-md">
-          <h3 className="font-semibold mb-2">Agents</h3>
-          <p className="text-sm text-gray-500 mb-4">View and manage agent accounts</p>
-          <Link href="/admin/agents" className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150">Manage Agents</Link>
+        <Card className="opacity-75">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-semibold">Specialists</h3>
+            <Badge variant="outline" className="text-xs">Coming Soon</Badge>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">View and manage specialist accounts</p>
+          <span className="text-sm text-muted-foreground cursor-not-allowed font-medium">Manage Specialists</span>
         </Card>
-        <Card className="transition-shadow duration-150 hover:shadow-md">
-          <h3 className="font-semibold mb-2">Account Anomalies</h3>
-          <p className="text-sm text-gray-500 mb-4">Monitor account reconciliation</p>
-          <Link href="/admin/wallet" className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150">Check Anomalies</Link>
+        <Card className="opacity-75">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-semibold">Account Anomalies</h3>
+            <Badge variant="outline" className="text-xs">Coming Soon</Badge>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">Monitor account reconciliation</p>
+          <span className="text-sm text-muted-foreground cursor-not-allowed font-medium">Check Anomalies</span>
         </Card>
-        <Card className="transition-shadow duration-150 hover:shadow-md">
-          <h3 className="font-semibold mb-2">Flagged Tools</h3>
-          <p className="text-sm text-gray-500 mb-4">Review stale or rejected tools</p>
-          <Link href="/admin/tools" className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150">Review Tools</Link>
+        <Card className="opacity-75">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-semibold">Flagged Tools</h3>
+            <Badge variant="outline" className="text-xs">Coming Soon</Badge>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">Review stale or rejected tools</p>
+          <span className="text-sm text-muted-foreground cursor-not-allowed font-medium">Review Tools</span>
         </Card>
-        <Card className="transition-shadow duration-150 hover:shadow-md">
-          <h3 className="font-semibold mb-2">Zone Config</h3>
-          <p className="text-sm text-gray-500 mb-4">Configure zone parameters</p>
-          <Link href="/admin/zones" className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150">Edit Zones</Link>
+        <Card className="opacity-75">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-semibold">Zone Config</h3>
+            <Badge variant="outline" className="text-xs">Coming Soon</Badge>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">Configure zone parameters</p>
+          <span className="text-sm text-muted-foreground cursor-not-allowed font-medium">Edit Zones</span>
         </Card>
       </div>
     </>

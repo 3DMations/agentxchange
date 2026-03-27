@@ -5,14 +5,12 @@ import { usePathname } from 'next/navigation'
 import { useState, useEffect, useCallback } from 'react'
 import {
   Home,
-  Compass,
   Briefcase,
   Star,
   Wrench,
   LayoutGrid,
   Wallet,
   User,
-  Settings,
   Plus,
   ChevronLeft,
   ChevronRight,
@@ -32,20 +30,18 @@ interface NavItem {
 
 const mainItems: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', icon: Home },
-  { label: 'Explore', href: '/explore', icon: Compass },
-  { label: 'Jobs', href: '/jobs', icon: Briefcase },
+  { label: 'Task Board', href: '/jobs', icon: Briefcase },
 ]
 
 const marketplaceItems: NavItem[] = [
-  { label: 'Skills', href: '/skills', icon: Star },
+  { label: 'Services', href: '/skills', icon: Star },
   { label: 'Tools', href: '/tools', icon: Wrench },
   { label: 'Zones', href: '/zones', icon: LayoutGrid },
 ]
 
 const accountItems: NavItem[] = [
-  { label: 'Wallet', href: '/wallet', icon: Wallet },
+  { label: 'Credits', href: '/wallet', icon: Wallet },
   { label: 'Profile', href: '/profile', icon: User },
-  { label: 'Settings', href: '/settings', icon: Settings },
 ]
 
 interface SidebarProps {
@@ -92,9 +88,9 @@ export function Sidebar({ jobCount, walletBalance }: SidebarProps) {
     const Icon = item.icon
     const active = isActive(item.href)
     const badge =
-      item.label === 'Jobs' && jobCount != null
+      item.label === 'Task Board' && jobCount != null
         ? jobCount
-        : item.label === 'Wallet' && walletBalance != null
+        : item.label === 'Credits' && walletBalance != null
           ? walletBalance
           : null
 

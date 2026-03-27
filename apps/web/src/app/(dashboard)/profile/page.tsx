@@ -111,7 +111,7 @@ export default function ProfilePage() {
   if (noUser) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <p className="text-lg text-gray-500">Sign in to view your profile</p>
+        <p className="text-lg text-muted-foreground">Sign in to view your profile</p>
       </div>
     )
   }
@@ -119,8 +119,8 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <>
-        <PageHeader title="My Profile" description="View and edit your agent profile" />
-        <p className="text-sm text-gray-500 py-16 text-center">Loading your profile...</p>
+        <PageHeader title="My Profile" description="View and edit your profile" />
+        <p className="text-sm text-muted-foreground py-16 text-center">Loading your profile...</p>
       </>
     )
   }
@@ -128,8 +128,8 @@ export default function ProfilePage() {
   if (error) {
     return (
       <>
-        <PageHeader title="My Profile" description="View and edit your agent profile" />
-        <p className="text-sm text-red-600 py-16 text-center">{error}</p>
+        <PageHeader title="My Profile" description="View and edit your profile" />
+        <p className="text-sm text-destructive py-16 text-center">{error}</p>
       </>
     )
   }
@@ -138,7 +138,7 @@ export default function ProfilePage() {
     <>
       <PageHeader
         title="My Profile"
-        description="View and edit your agent profile"
+        description="View and edit your profile"
         action={
           <Button
             variant="outline"
@@ -159,8 +159,8 @@ export default function ProfilePage() {
 
       {showEditForm && (
         <Card className="mb-6">
-          {editError && <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3"><p className="text-sm text-red-800">{editError}</p></div>}
-          {editSuccess && <div className="mb-4 rounded-lg border border-green-200 bg-green-50 p-3"><p className="text-sm text-green-800">{editSuccess}</p></div>}
+          {editError && <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3"><p className="text-sm text-destructive">{editError}</p></div>}
+          {editSuccess && <div className="mb-4 rounded-lg border border-primary/30 bg-primary/10 p-3"><p className="text-sm text-primary">{editSuccess}</p></div>}
           <form onSubmit={async (e) => {
             e.preventDefault()
             setEditError(null)
@@ -201,7 +201,7 @@ export default function ProfilePage() {
             }
           }} className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Handle</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Handle</label>
               <input
                 type="text"
                 value={editHandle}
@@ -210,22 +210,22 @@ export default function ProfilePage() {
                 minLength={3}
                 maxLength={30}
                 pattern="^[a-zA-Z0-9_-]+$"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm"
                 placeholder="your-handle"
               />
-              <p className="mt-1 text-xs text-gray-400">3-30 characters, letters, numbers, dashes, underscores</p>
+              <p className="mt-1 text-xs text-muted-foreground">3-30 characters, letters, numbers, dashes, underscores</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Description</label>
               <textarea
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
                 maxLength={1000}
                 rows={3}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
-                placeholder="Describe your agent..."
+                className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm"
+                placeholder="Describe your expertise..."
               />
-              <p className="mt-1 text-xs text-gray-400">{editDescription.length}/1000</p>
+              <p className="mt-1 text-xs text-muted-foreground">{editDescription.length}/1000</p>
             </div>
             <div className="flex gap-3">
               <Button type="submit" disabled={editSubmitting}>
@@ -240,7 +240,7 @@ export default function ProfilePage() {
       )}
 
       {editSuccess && !showEditForm && (
-        <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-3"><p className="text-sm text-green-800">{editSuccess}</p></div>
+        <div className="mb-6 rounded-lg border border-primary/30 bg-primary/10 p-3"><p className="text-sm text-primary">{editSuccess}</p></div>
       )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
@@ -256,17 +256,17 @@ export default function ProfilePage() {
           {agent?.skills && agent.skills.length > 0 ? (
             <ul className="space-y-3">
               {agent.skills.map((skill) => (
-                <li key={skill.id} className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+                <li key={skill.id} className="flex items-center justify-between border-b border-border pb-3 last:border-0 last:pb-0">
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{skill.name}</p>
-                    <p className="text-xs text-gray-500">{skill.proficiency_level}</p>
+                    <p className="text-sm font-medium text-foreground">{skill.name}</p>
+                    <p className="text-xs text-muted-foreground">{skill.proficiency_level}</p>
                   </div>
                   <Badge>{skill.category}</Badge>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-gray-500">No services registered yet</p>
+            <p className="text-sm text-muted-foreground">No services registered yet</p>
           )}
         </Card>
 
@@ -275,10 +275,10 @@ export default function ProfilePage() {
           {jobs.length > 0 ? (
             <ul className="space-y-3">
               {jobs.map((job) => (
-                <li key={job.id} className="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+                <li key={job.id} className="flex items-start justify-between border-b border-border pb-3 last:border-0 last:pb-0">
                   <div className="min-w-0 flex-1 mr-3">
-                    <p className="text-sm text-gray-900 truncate">{truncate(job.description)}</p>
-                    <p className="text-xs text-gray-400">{formatDate(job.created_at)}</p>
+                    <p className="text-sm text-foreground truncate">{truncate(job.description)}</p>
+                    <p className="text-xs text-muted-foreground">{formatDate(job.created_at)}</p>
                   </div>
                   <Badge variant={STATUS_VARIANTS[job.status] ?? 'default'}>
                     {job.status.replace(/_/g, ' ')}
@@ -287,7 +287,7 @@ export default function ProfilePage() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-gray-500">No recent activity</p>
+            <p className="text-sm text-muted-foreground">No recent activity</p>
           )}
         </Card>
       </div>

@@ -124,8 +124,8 @@ export default function SkillsPage() {
 
       {showForm && (
         <Card className="mb-6">
-          {formError && <div className="mb-3 rounded-lg border border-red-200 bg-red-50 p-3"><p className="text-sm text-red-800">{formError}</p></div>}
-          {formSuccess && <div className="mb-3 rounded-lg border border-green-200 bg-green-50 p-3"><p className="text-sm text-green-800">{formSuccess}</p></div>}
+          {formError && <div className="mb-3 rounded-lg border border-destructive/30 bg-destructive/10 p-3"><p className="text-sm text-destructive">{formError}</p></div>}
+          {formSuccess && <div className="mb-3 rounded-lg border border-primary/30 bg-primary/10 p-3"><p className="text-sm text-primary">{formSuccess}</p></div>}
           <form onSubmit={async (e) => {
             e.preventDefault()
             setFormError(null); setFormSuccess(null); setSubmitting(true)
@@ -152,12 +152,12 @@ export default function SkillsPage() {
             finally { setSubmitting(false) }
           }} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-              <input name="name" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. React Development" />
+              <label className="block text-sm font-medium text-foreground mb-1">Name</label>
+              <input name="name" required className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. React Development" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-              <select name="category" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+              <label className="block text-sm font-medium text-foreground mb-1">Category</label>
+              <select name="category" required className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm">
                 <option value="code_generation">Code Generation</option>
                 <option value="data_analysis">Data Analysis</option>
                 <option value="content_creation">Content Creation</option>
@@ -169,12 +169,12 @@ export default function SkillsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Domain</label>
-              <input name="domain" required className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. Frontend" />
+              <label className="block text-sm font-medium text-foreground mb-1">Domain</label>
+              <input name="domain" required className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. Frontend" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Proficiency</label>
-              <select name="proficiency_level" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+              <label className="block text-sm font-medium text-foreground mb-1">Proficiency</label>
+              <select name="proficiency_level" className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm">
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
                 <option value="advanced">Advanced</option>
@@ -182,24 +182,24 @@ export default function SkillsPage() {
               </select>
             </div>
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-              <textarea name="description" required minLength={10} rows={2} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Describe this service..." />
+              <label className="block text-sm font-medium text-foreground mb-1">Description</label>
+              <textarea name="description" required minLength={10} rows={2} className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="Describe this service..." />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Min Credits</label>
-              <input type="number" name="point_range_min" required min={1} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 20" />
+              <label className="block text-sm font-medium text-foreground mb-1">Min Credits</label>
+              <input type="number" name="point_range_min" required min={1} className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. 20" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Max Credits</label>
-              <input type="number" name="point_range_max" required min={1} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. 100" />
+              <label className="block text-sm font-medium text-foreground mb-1">Max Credits</label>
+              <input type="number" name="point_range_max" required min={1} className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. 100" />
             </div>
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tags (comma-separated)</label>
-              <input name="tags" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. react, typescript, nextjs" />
+              <label className="block text-sm font-medium text-foreground mb-1">Tags (comma-separated)</label>
+              <input name="tags" className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. react, typescript, nextjs" />
             </div>
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">AI Tools Used (comma-separated)</label>
-              <input name="ai_tools_used" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="e.g. claude, copilot, cursor" />
+              <label className="block text-sm font-medium text-foreground mb-1">AI Tools Used (comma-separated)</label>
+              <input name="ai_tools_used" className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm" placeholder="e.g. claude, copilot, cursor" />
             </div>
             <div className="sm:col-span-2">
               <Button type="submit" disabled={submitting}>
@@ -216,12 +216,12 @@ export default function SkillsPage() {
           placeholder="Search services..."
           value={q}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="flex-1 min-w-[200px] rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          className="flex-1 min-w-[200px] rounded-lg border border-input text-foreground px-3 py-2 text-sm"
         />
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
         >
           <option value="">All Categories</option>
           <option value="code_generation">Code Generation</option>
@@ -236,7 +236,7 @@ export default function SkillsPage() {
         <select
           value={proficiency}
           onChange={(e) => setProficiency(e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
         >
           <option value="">All Levels</option>
           <option value="beginner">Beginner</option>
@@ -244,7 +244,7 @@ export default function SkillsPage() {
           <option value="advanced">Advanced</option>
           <option value="expert">Expert</option>
         </select>
-        <label className="flex items-center gap-2 text-sm text-gray-600">
+        <label className="flex items-center gap-2 text-sm text-muted-foreground">
           <input
             type="checkbox"
             className="rounded"
@@ -255,16 +255,16 @@ export default function SkillsPage() {
         </label>
       </div>
 
-      {loading && <p className="text-sm text-gray-500 py-12 text-center col-span-full">Finding the best options for you...</p>}
+      {loading && <p className="text-sm text-muted-foreground py-12 text-center col-span-full">Finding the best options for you...</p>}
 
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4">
+          <p className="text-sm text-destructive">{error}</p>
         </div>
       )}
 
       {!loading && !error && skills.length === 0 && (
-        <p className="text-sm text-gray-500 py-12 text-center">No services found yet</p>
+        <p className="text-sm text-muted-foreground py-12 text-center">No services found yet</p>
       )}
 
       {!loading && !error && skills.length > 0 && (
@@ -272,7 +272,7 @@ export default function SkillsPage() {
           {skills.map((skill) => (
             <Card key={skill.id} className="transition-shadow duration-150 hover:shadow-md">
               <div className="flex items-start justify-between mb-2">
-                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1">
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-1">
                   {skill.name}
                   {skill.verified && (
                     <svg className="h-4 w-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
@@ -285,10 +285,10 @@ export default function SkillsPage() {
                 </Badge>
               </div>
 
-              <p className="text-xs text-gray-500 mb-1">{skill.domain} &middot; {skill.proficiency_level}</p>
-              <p className="text-sm text-gray-600 mb-3">{truncate(skill.description)}</p>
+              <p className="text-xs text-muted-foreground mb-1">{skill.domain} &middot; {skill.proficiency_level}</p>
+              <p className="text-sm text-muted-foreground mb-3">{truncate(skill.description)}</p>
 
-              <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
+              <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
                 <span>{skill.point_range_min}-{skill.point_range_max} credits</span>
                 <span>{skill.avg_rating_for_skill.toFixed(1)} rating &middot; {skill.jobs_completed_for_skill} completed</span>
               </div>
@@ -296,7 +296,7 @@ export default function SkillsPage() {
               {skill.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1">
                   {skill.tags.slice(0, 5).map((tag) => (
-                    <span key={tag} className="inline-block rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
+                    <span key={tag} className="inline-block rounded bg-muted px-2 py-0.5 text-xs text-muted-foreground">
                       {tag}
                     </span>
                   ))}

@@ -144,10 +144,10 @@ export default function ZonesPage() {
 
   return (
     <>
-      <PageHeader title="Zones" description="Agent tiers with increasing task limits and visibility" />
+      <PageHeader title="Zones" description="Specialist tiers with increasing task limits and visibility" />
 
       {loading ? (
-        <p className="text-sm text-gray-500 py-12 text-center">Finding the best options for you...</p>
+        <p className="text-sm text-muted-foreground py-12 text-center">Finding the best options for you...</p>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {displayZones.map(zone => (
@@ -157,7 +157,7 @@ export default function ZonesPage() {
                   <h3 className="text-lg font-semibold">{zone.name}</h3>
                   <Badge variant={zone.color}>{zone.levels}</Badge>
                 </div>
-                <p className="text-sm text-gray-500 mb-2">Task Credit Limit: <span className="font-medium text-gray-900">{zone.cap}</span></p>
+                <p className="text-sm text-muted-foreground mb-2">Task Credit Limit: <span className="font-medium text-foreground">{zone.cap}</span></p>
                 <div className="mt-4 flex gap-2">
                   <button
                     className={`text-xs font-medium transition-colors duration-150 ${expandedZone === zone.zoneId && viewMode === 'leaderboard' ? 'text-blue-900 underline' : 'text-blue-600 hover:text-blue-800'}`}
@@ -175,36 +175,36 @@ export default function ZonesPage() {
               </Card>
 
               {expandedZone === zone.zoneId && viewMode && (
-                <div className="mt-2 rounded-lg border border-gray-200 bg-muted/50 p-4">
+                <div className="mt-2 rounded-lg border border-border bg-muted/50 p-4">
                   <h4 className="text-sm font-semibold mb-3">
                     {viewMode === 'leaderboard' ? 'Leaderboard' : 'New Arrivals'} — {zone.name}
                   </h4>
                   {zoneLoading ? (
-                    <p className="text-xs text-gray-500">Finding agents...</p>
+                    <p className="text-xs text-muted-foreground">Finding specialists...</p>
                   ) : viewMode === 'leaderboard' ? (
                     leaderboard.length === 0 ? (
-                      <p className="text-xs text-gray-500">No agents found in this zone.</p>
+                      <p className="text-xs text-muted-foreground">No specialists found in this zone.</p>
                     ) : (
                       <ul className="space-y-2">
                         {leaderboard.map(agent => (
                           <li key={agent.id} className="flex items-center gap-2 text-sm">
                             <span className="font-medium">{agent.handle}</span>
                             <Badge variant="default">Lvl {agent.level}</Badge>
-                            <span className="text-gray-500 text-xs">Success Rate: {agent.reputation_score}</span>
+                            <span className="text-muted-foreground text-xs">Success Rate: {agent.reputation_score}</span>
                           </li>
                         ))}
                       </ul>
                     )
                   ) : (
                     newArrivals.length === 0 ? (
-                      <p className="text-xs text-gray-500">No new arrivals in this zone.</p>
+                      <p className="text-xs text-muted-foreground">No new arrivals in this zone.</p>
                     ) : (
                       <ul className="space-y-2">
                         {newArrivals.map(agent => (
                           <li key={agent.id} className="flex items-center gap-2 text-sm">
                             <span className="font-medium">{agent.handle}</span>
                             <Badge variant="default">Lvl {agent.level}</Badge>
-                            <span className="text-gray-500 text-xs">Joined {new Date(agent.created_at).toLocaleDateString()}</span>
+                            <span className="text-muted-foreground text-xs">Joined {new Date(agent.created_at).toLocaleDateString()}</span>
                           </li>
                         ))}
                       </ul>

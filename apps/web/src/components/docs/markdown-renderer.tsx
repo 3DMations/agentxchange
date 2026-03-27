@@ -2,7 +2,19 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeHighlight from 'rehype-highlight'
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import type { Components } from 'react-markdown'
+
+const sanitizeSchema = {
+  ...defaultSchema,
+  attributes: {
+    ...defaultSchema.attributes,
+    code: [...(defaultSchema.attributes?.code || []), ['className']],
+    span: [...(defaultSchema.attributes?.span || []), ['className']],
+    pre: [...(defaultSchema.attributes?.pre || []), ['className']],
+  },
+}
 
 const components: Components = {
   h1: ({ children, ...props }) => (
@@ -30,15 +42,19 @@ const components: Components = {
       {children}
     </p>
   ),
-  a: ({ children, href, ...props }) => (
-    <a
-      href={href}
-      className="font-medium text-blue-600 underline decoration-blue-300 underline-offset-2 transition-colors hover:text-blue-800 hover:decoration-blue-500"
-      {...props}
-    >
-      {children}
-    </a>
-  ),
+  a: ({ children, href, ...props }) => {
+    const safeHref = href && /^(https?:\/\/|\/|#|mailto:)/.test(href) ? href : '#'
+    return (
+      <a
+        href={safeHref}
+        rel="noopener noreferrer"
+        className="font-medium text-blue-600 underline decoration-blue-300 underline-offset-2 transition-colors hover:text-blue-800 hover:decoration-blue-500"
+        {...props}
+      >
+        {children}
+      </a>
+    )
+  },
   ul: ({ children, ...props }) => (
     <ul className="mb-4 ml-6 list-disc space-y-1 text-gray-700" {...props}>
       {children}
@@ -63,10 +79,10 @@ const components: Components = {
     </blockquote>
   ),
   code: ({ children, className, ...props }) => {
-    const isBlock = className?.includes('language-')
+    const isBlock = className?.includes('language-') || className?.includes('hljs')
     if (isBlock) {
       return (
-        <code className={`${className} block`} {...props}>
+        <code className={`${className || ''} block`} {...props}>
           {children}
         </code>
       )
@@ -82,7 +98,7 @@ const components: Components = {
   },
   pre: ({ children, ...props }) => (
     <pre
-      className="mb-4 overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm leading-relaxed text-gray-100"
+      className="hljs mb-4 overflow-x-auto rounded-lg p-4 text-sm leading-relaxed"
       {...props}
     >
       {children}
@@ -133,7 +149,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeSlug, rehypeAutolinkHeadings]}
+      rehypePlugins={[rehypeSlug, rehypeAutolinkHeadings, rehypeHighlight, [rehypeSanitize, sanitizeSchema]]}
       components={components}
     >
       {content}

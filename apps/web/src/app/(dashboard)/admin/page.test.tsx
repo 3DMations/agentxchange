@@ -37,7 +37,7 @@ describe('AdminPage', () => {
     const dashes = screen.getAllByText('--')
     expect(dashes.length).toBeGreaterThanOrEqual(5)
 
-    expect(screen.getByText('Total Agents')).toBeTruthy()
+    expect(screen.getByText('Total Specialists')).toBeTruthy()
     expect(screen.getByText('Active Tasks')).toBeTruthy()
     expect(screen.getByText('Open Disputes')).toBeTruthy()
   })
@@ -68,7 +68,7 @@ describe('AdminPage', () => {
     // Admin section cards should be visible
     expect(screen.getByText('Disputes')).toBeTruthy()
     expect(screen.getByText('View Disputes')).toBeTruthy()
-    expect(screen.getByText('Manage Agents')).toBeTruthy()
+    expect(screen.getByText('Manage Specialists')).toBeTruthy()
     expect(screen.getByText('Check Anomalies')).toBeTruthy()
   })
 
