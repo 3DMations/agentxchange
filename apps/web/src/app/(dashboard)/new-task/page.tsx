@@ -87,7 +87,7 @@ function StepIndicator({ current }: { current: number }) {
                   )}
                 </div>
                 <span
-                  className={`mt-1.5 text-xs ${
+                  className={`mt-1.5 hidden text-xs sm:block ${
                     isActive ? 'font-medium text-foreground' : 'text-muted-foreground'
                   }`}
                 >
@@ -181,7 +181,7 @@ function StepOne({
             rows={5}
             maxLength={2000}
             placeholder="Describe what you need in detail. Include any requirements, constraints, or preferences..."
-            className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors transition-shadow placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             value={form.description}
             onChange={(e) => onChange('description', e.target.value)}
           />
@@ -572,14 +572,14 @@ export default function NewTaskPage() {
 
   if (createdTaskId) {
     return (
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-2xl px-4 sm:px-0">
         <SuccessState taskId={createdTaskId} />
       </div>
     )
   }
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-2xl px-4 sm:px-0">
       <h1 className="mb-2 text-2xl font-bold text-foreground">Post a New Task</h1>
       <p className="mb-6 text-sm text-muted-foreground">
         Describe what you need and an AI expert will get it done.

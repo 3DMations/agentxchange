@@ -1,12 +1,12 @@
 'use client'
 
+import Link from 'next/link'
 import { authFetch } from '@/lib/utils/auth-fetch'
 
 import { useEffect, useState } from 'react'
 import { PageHeader } from '@/components/ui/page-header'
 import { StatCard } from '@/components/ui/stat-card'
 import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 
 interface KPIs {
   total_agents: number
@@ -74,46 +74,51 @@ export default function AdminPage() {
       )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <Card className="opacity-75">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold">Disputes</h3>
-            <Badge variant="outline" className="text-xs">Coming Soon</Badge>
-          </div>
-          <p className="text-sm text-muted-foreground mb-4">Manage open disputes and resolutions</p>
-          <span className="text-sm text-muted-foreground cursor-not-allowed font-medium">View Disputes</span>
-        </Card>
-        <Card className="opacity-75">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold">Specialists</h3>
-            <Badge variant="outline" className="text-xs">Coming Soon</Badge>
-          </div>
-          <p className="text-sm text-muted-foreground mb-4">View and manage specialist accounts</p>
-          <span className="text-sm text-muted-foreground cursor-not-allowed font-medium">Manage Specialists</span>
-        </Card>
-        <Card className="opacity-75">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold">Account Anomalies</h3>
-            <Badge variant="outline" className="text-xs">Coming Soon</Badge>
-          </div>
-          <p className="text-sm text-muted-foreground mb-4">Monitor account reconciliation</p>
-          <span className="text-sm text-muted-foreground cursor-not-allowed font-medium">Check Anomalies</span>
-        </Card>
-        <Card className="opacity-75">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold">Flagged Tools</h3>
-            <Badge variant="outline" className="text-xs">Coming Soon</Badge>
-          </div>
-          <p className="text-sm text-muted-foreground mb-4">Review stale or rejected tools</p>
-          <span className="text-sm text-muted-foreground cursor-not-allowed font-medium">Review Tools</span>
-        </Card>
-        <Card className="opacity-75">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold">Zone Config</h3>
-            <Badge variant="outline" className="text-xs">Coming Soon</Badge>
-          </div>
-          <p className="text-sm text-muted-foreground mb-4">Configure zone parameters</p>
-          <span className="text-sm text-muted-foreground cursor-not-allowed font-medium">Edit Zones</span>
-        </Card>
+        <Link href="/admin/disputes" className="group">
+          <Card className="transition-shadow group-hover:shadow-md">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-semibold">Disputes</h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">Manage open disputes and resolutions</p>
+            <span className="text-sm text-primary font-medium group-hover:underline">View Disputes</span>
+          </Card>
+        </Link>
+        <Link href="/admin/agents" className="group">
+          <Card className="transition-shadow group-hover:shadow-md">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-semibold">Specialists</h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">View and manage specialist accounts</p>
+            <span className="text-sm text-primary font-medium group-hover:underline">Manage Specialists</span>
+          </Card>
+        </Link>
+        <Link href="/admin/wallet" className="group">
+          <Card className="transition-shadow group-hover:shadow-md">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-semibold">Financial Overview</h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">Monitor credits, escrow, and transactions</p>
+            <span className="text-sm text-primary font-medium group-hover:underline">View Financials</span>
+          </Card>
+        </Link>
+        <Link href="/admin/tools" className="group">
+          <Card className="transition-shadow group-hover:shadow-md">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-semibold">Tool Approval</h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">Review and approve submitted tools</p>
+            <span className="text-sm text-primary font-medium group-hover:underline">Review Tools</span>
+          </Card>
+        </Link>
+        <Link href="/admin/zones" className="group">
+          <Card className="transition-shadow group-hover:shadow-md">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-semibold">Zone Config</h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">Configure zone parameters</p>
+            <span className="text-sm text-primary font-medium group-hover:underline">Edit Zones</span>
+          </Card>
+        </Link>
       </div>
     </>
   )

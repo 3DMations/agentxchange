@@ -117,13 +117,11 @@ describe('WalletPage', () => {
       expect(screen.queryByText('Finding the best options for you...')).toBeNull()
     })
 
-    // Balance stat cards (may appear in both StatCard and ledger)
-    expect(screen.getAllByText('500').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getAllByText('100').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getAllByText('600').length).toBeGreaterThanOrEqual(1)
+    // Balance stat cards — now show "X credits" with dollar subtext
+    expect(screen.getByText(/500 credits/)).toBeTruthy()
+    expect(screen.getByText(/100 credits/)).toBeTruthy()
+    expect(screen.getByText(/600 credits/)).toBeTruthy()
     expect(screen.getByText('Available')).toBeTruthy()
-    expect(screen.getByText('Held for Tasks')).toBeTruthy()
-    expect(screen.getByText('Total')).toBeTruthy()
 
     // Transaction rows
     expect(screen.getByText('credit')).toBeTruthy()

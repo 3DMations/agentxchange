@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
+import { StarRating } from '@/components/ui/star-rating'
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -267,33 +268,6 @@ function ProgressTimeline({ steps }: { steps: TimelineStep[] }) {
   )
 }
 
-function StarRating({
-  value,
-  onChange,
-}: {
-  value: number
-  onChange: (rating: number) => void
-}) {
-  return (
-    <div className="flex gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          onClick={() => onChange(star)}
-          className={cn(
-            'text-2xl transition-colors',
-            star <= value ? 'text-rating' : 'text-muted-foreground/50'
-          )}
-          aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
-        >
-          ★
-        </button>
-      ))}
-    </div>
-  )
-}
-
 function LoadingSkeleton() {
   return (
     <div className="space-y-6">
@@ -328,6 +302,7 @@ export default function TaskDetailPage() {
   const [error, setError] = useState<string | null>(null)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [rating, setRating] = useState(0)
+  const [reviewText, setReviewText] = useState('')
   const [usingMockData, setUsingMockData] = useState(false)
 
   /* ---- Fetch task ---- */
@@ -418,7 +393,7 @@ export default function TaskDetailPage() {
           if (rating === 0) return
           url = `/api/v1/requests/${task.id}/rate`
           method = 'POST'
-          body = { helpfulness_score: rating }
+          body = { helpfulness_score: rating, review_text: reviewText || undefined }
           break
         default:
           return
@@ -676,26 +651,33 @@ export default function TaskDetailPage() {
 
               {isCompleted && !task.helpfulness_score && (
                 <div className="space-y-3">
+                  <p className="text-sm font-medium text-foreground">Leave a Review</p>
                   <p className="text-sm text-muted-foreground">
                     How helpful were the results?
                   </p>
-                  <StarRating value={rating} onChange={setRating} />
+                  <StarRating rating={rating} onRate={setRating} />
+                  <textarea
+                    value={reviewText}
+                    onChange={(e) => setReviewText(e.target.value)}
+                    placeholder="Share your experience working with this expert (optional)"
+                    rows={3}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
                   <Button
                     onClick={() => handleAction('rate')}
                     disabled={rating === 0 || actionLoading === 'rate'}
                   >
-                    {actionLoading === 'rate' ? 'Submitting...' : 'Leave a Review'}
+                    {actionLoading === 'rate' ? 'Submitting...' : 'Submit Review'}
                   </Button>
                 </div>
               )}
 
               {isCompleted && task.helpfulness_score !== null && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">Your rating:</span>
-                  <span className="text-rating text-lg">
-                    {'★'.repeat(task.helpfulness_score)}
-                    {'☆'.repeat(5 - task.helpfulness_score)}
-                  </span>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">Your rating:</span>
+                    <StarRating rating={task.helpfulness_score} size="sm" />
+                  </div>
                 </div>
               )}
 
@@ -736,9 +718,12 @@ export default function TaskDetailPage() {
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground">Avg Rating</p>
-                        <p className="font-medium text-foreground">
-                          {expert.avg_rating.toFixed(1)} / 5.0
-                        </p>
+                        <div className="flex items-center gap-1.5">
+                          <StarRating rating={expert.avg_rating} size="sm" />
+                          <span className="text-xs text-muted-foreground">
+                            {expert.avg_rating.toFixed(1)}
+                          </span>
+                        </div>
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground">Reputation</p>

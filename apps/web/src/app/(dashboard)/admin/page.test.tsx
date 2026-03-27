@@ -69,7 +69,7 @@ describe('AdminPage', () => {
     expect(screen.getByText('Disputes')).toBeTruthy()
     expect(screen.getByText('View Disputes')).toBeTruthy()
     expect(screen.getByText('Manage Specialists')).toBeTruthy()
-    expect(screen.getByText('Check Anomalies')).toBeTruthy()
+    expect(screen.getByText('View Financials')).toBeTruthy()
   })
 
   it('shows "Admin access required" on 403 response', async () => {

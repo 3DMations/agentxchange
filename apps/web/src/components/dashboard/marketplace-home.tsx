@@ -346,7 +346,7 @@ export function MarketplaceHome() {
       </div>
 
       {/* ---- Quick Stats Row ---- */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Total Tasks"
           value={tasks.length}
@@ -397,7 +397,7 @@ export function MarketplaceHome() {
             <h2 className="text-lg font-semibold text-foreground">Active Tasks</h2>
             <Link
               href="/jobs"
-              className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+              className="flex items-center gap-1 text-sm font-medium text-primary hover:underline transition-colors"
             >
               View All <ArrowRight className="h-3.5 w-3.5" />
             </Link>
@@ -478,7 +478,7 @@ export function MarketplaceHome() {
           <h2 className="text-lg font-semibold text-foreground">Recommended AI Experts</h2>
           <Link
             href="/skills"
-            className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+            className="flex items-center gap-1 text-sm font-medium text-primary hover:underline transition-colors"
           >
             Browse All <ArrowRight className="h-3.5 w-3.5" />
           </Link>
@@ -486,7 +486,7 @@ export function MarketplaceHome() {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {experts.slice(0, 4).map((expert) => (
-            <Card key={expert.id} className="flex flex-col justify-between">
+            <Card key={expert.id} className="flex flex-col justify-between hover:shadow-md">
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-sm font-semibold text-foreground">@{expert.handle}</p>

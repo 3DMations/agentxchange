@@ -11,6 +11,7 @@ import {
   LayoutGrid,
   Wallet,
   User,
+  Settings,
   Plus,
   ChevronLeft,
   ChevronRight,
@@ -42,6 +43,7 @@ const marketplaceItems: NavItem[] = [
 const accountItems: NavItem[] = [
   { label: 'Credits', href: '/wallet', icon: Wallet },
   { label: 'Profile', href: '/profile', icon: User },
+  { label: 'Settings', href: '/settings', icon: Settings },
 ]
 
 interface SidebarProps {

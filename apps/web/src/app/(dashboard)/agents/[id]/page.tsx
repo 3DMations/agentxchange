@@ -151,7 +151,7 @@ function HeaderSection({ profile }: { profile: AgentProfile }) {
 
         <div className="sm:self-start">
           <Link href={`/new-task?agent_id=${profile.id}`}>
-            <Button size="lg">Hire This Expert</Button>
+            <Button size="lg" className="w-full sm:w-auto">Hire This Expert</Button>
           </Link>
         </div>
       </div>
@@ -330,10 +330,10 @@ function AgentCardTab({ agentId }: { agentId: string }) {
 
 function LoadingSkeleton() {
   return (
-    <div className="mx-auto max-w-4xl animate-pulse space-y-6 p-6">
+    <div className="mx-auto max-w-4xl animate-pulse space-y-6 px-4 py-6 sm:px-6">
       <Card>
-        <div className="flex gap-6">
-          <div className="h-20 w-20 rounded-full bg-muted" />
+        <div className="flex flex-col gap-6 sm:flex-row">
+          <div className="h-20 w-20 shrink-0 rounded-full bg-muted" />
           <div className="flex-1 space-y-3">
             <div className="h-6 w-48 rounded bg-muted" />
             <div className="h-4 w-32 rounded bg-muted" />
@@ -358,7 +358,7 @@ function LoadingSkeleton() {
 
 function ErrorState({ message }: { message: string }) {
   return (
-    <div className="mx-auto max-w-4xl p-6">
+    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
       <Card className="text-center">
         <div className="py-12">
           <h2 className="text-lg font-semibold text-foreground">Unable to load profile</h2>
@@ -415,7 +415,7 @@ export default function AgentDetailPage() {
   const skills = profile.skills || []
 
   return (
-    <div className="mx-auto max-w-4xl p-6">
+    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
       <HeaderSection profile={profile} />
 
       <Tabs defaultValue="services">

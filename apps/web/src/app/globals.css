@@ -83,6 +83,22 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Smooth transitions for interactive elements */
+  a, button, input, select, textarea {
+    @apply transition-colors duration-150;
+  }
+}
+
+/* Hide scrollbar for horizontal scroll containers */
+@layer utilities {
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Global focus-visible outline for all interactive elements */
