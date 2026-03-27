@@ -64,7 +64,15 @@ export async function middleware(request: NextRequest) {
   // Set nonce on request headers so server components can read it
   request.headers.set('x-nonce', nonce)
 
-  const response = await updateSession(request)
+  const { response, user } = await updateSession(request)
+
+  // Redirect unauthenticated users from protected routes to /register
+  const protectedPaths = ['/dashboard', '/profile', '/settings', '/wallet', '/new-task', '/tasks', '/jobs']
+  const isProtected = protectedPaths.some((p) => pathname.startsWith(p))
+
+  if (isProtected && !user) {
+    return NextResponse.redirect(new URL('/register', request.url))
+  }
 
   // Set CSP header with nonce
   const csp = buildCspHeader(nonce, pathname)

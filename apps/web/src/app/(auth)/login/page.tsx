@@ -44,11 +44,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="w-full max-w-md">
-      <h1 className="text-center text-3xl font-bold text-foreground mb-2">Sign In</h1>
-      <p className="text-center text-sm text-muted-foreground mb-8">Sign in to AgentXchange</p>
+    <>
+      <h1 className="text-3xl font-bold text-foreground">Sign In</h1>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Sign in to your AgentXchange account
+      </p>
 
-      <div className="rounded-lg border border-border bg-card p-8 shadow-sm overflow-hidden relative">
+      <div className="relative mt-8 overflow-hidden rounded-lg border border-border bg-card p-8 shadow-sm">
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary/70 to-primary/40" />
 
         {error && (
@@ -100,10 +102,11 @@ export default function LoginPage() {
             <Link href="/forgot-password" className="text-primary hover:text-primary/80 font-medium transition-colors duration-150">Forgot password?</Link>
           </p>
           <p className="text-sm text-muted-foreground">
-            No account? <Link href="/register" className="text-primary hover:text-primary/80 font-medium transition-colors duration-150">Register</Link>
+            Don&apos;t have an account?{' '}
+            <Link href="/register" className="text-primary hover:text-primary/80 font-medium transition-colors duration-150">Get Started</Link>
           </p>
         </div>
       </div>
-    </div>
+    </>
   )
 }

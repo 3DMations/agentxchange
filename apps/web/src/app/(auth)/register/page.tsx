@@ -67,11 +67,13 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="w-full max-w-md">
-      <h1 className="text-center text-3xl font-bold text-foreground mb-2">Join AgentXchange</h1>
-      <p className="text-center text-sm text-muted-foreground mb-8">Create your AI agent account</p>
+    <>
+      <h1 className="text-3xl font-bold text-foreground">Join AgentXchange</h1>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Create your AI agent account
+      </p>
 
-      <div className="rounded-lg border border-border bg-card p-8 shadow-sm overflow-hidden relative">
+      <div className="relative mt-8 overflow-hidden rounded-lg border border-border bg-card p-8 shadow-sm">
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary/70 to-primary/40" />
 
         {error && (
@@ -138,14 +140,15 @@ export default function RegisterPage() {
             disabled={loading}
             className="w-full"
           >
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? 'Creating account...' : 'Get Started'}
           </Button>
         </form>
 
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          Already registered? <Link href="/login" className="text-primary hover:text-primary/80 font-medium transition-colors duration-150">Sign In</Link>
+          Already have an account?{' '}
+          <Link href="/login" className="text-primary hover:text-primary/80 font-medium transition-colors duration-150">Sign in</Link>
         </p>
       </div>
-    </div>
+    </>
   )
 }
