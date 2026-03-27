@@ -34,30 +34,41 @@ Ideas to revisit after the website is secured and stable.
 **Priority:** Before any beta/launch with real transactions.
 
 ### P0 — Immediate (30 min total)
-- [ ] Pin all GitHub Actions to commit SHAs (actions/checkout, pnpm/action-setup, actions/setup-node) — CVE-2025-30066 supply chain risk
-- [ ] Add `permissions: contents: read` to ci.yml — currently inherits overly broad defaults
-- [ ] Add `pnpm audit --audit-level=high` step to CI
-- [ ] Enable Vercel staged promotion — disable "Auto-assign Custom Production Domains" in project settings
-- [ ] Enable Vercel Rolling Releases for progressive rollout
+- [x] Pin all GitHub Actions to commit SHAs (actions/checkout, pnpm/action-setup, actions/setup-node) — CVE-2025-30066 supply chain risk
+- [x] Add `permissions: contents: read` to ci.yml — currently inherits overly broad defaults
+- [x] Add `pnpm audit --audit-level=high` step to CI
+- [x] Delete `cd-dev.yml` (was causing false failures — Vercel handles deployment natively)
+- [ ] Enable Vercel staged promotion (requires Vercel dashboard — disable "Auto-assign Custom Production Domains" in project settings)
+- [ ] Enable Vercel Rolling Releases (requires Vercel dashboard)
 
-### P0 — Branch Protection (15 min)
-- [ ] Require status checks to pass before merge (CI workflow)
-- [ ] Require linear history (no merge commits)
-- [ ] No force push to main
-- [ ] PR reviews: recommended (not required until team grows)
+### P0 — Branch Protection (Manual Steps)
+- [ ] Enable branch protection on main (requires GitHub settings — see setup steps below)
+
+### Branch Protection Setup (Manual Steps)
+
+To enable branch protection on `main`:
+1. Go to GitHub repo Settings > Branches > Add branch protection rule
+2. Branch name pattern: `main`
+3. Enable: "Require a pull request before merging" (optional for solo dev)
+4. Enable: "Require status checks to pass before merging"
+   - Add required check: "Build and Test"
+   - Add required check: "Secret Scanning"
+5. Enable: "Require linear history"
+6. Enable: "Do not allow bypassing the above settings"
+7. DO NOT enable: "Require signed commits" (defer to P2)
 
 ### P1 — CI Security Scanning (1-2 hrs)
-- [ ] Add Gitleaks secret scanning to CI (prevent repeat of leaked Supabase key)
+- [x] Add Gitleaks secret scanning to CI (prevent repeat of leaked Supabase key)
 - [ ] Add Semgrep SAST with `p/owasp-top-ten` + `p/typescript` rulesets
-- [ ] Create `.github/dependabot.yml` for automated dependency update PRs
+- [x] Create `.github/dependabot.yml` for automated dependency update PRs
 - [ ] Add license compliance check (`pnpm licenses list`)
 
 ### P1 — CD Pipeline Wiring (2-3 hrs)
-- [ ] Delete `cd-dev.yml` (pure noise — Vercel handles deployment)
+- [x] Delete `cd-dev.yml` (was causing false failures — Vercel handles deployment)
 - [ ] Transform `cd-staging.yml` into real workflow: migrations + Railway deploys
 - [ ] Create `cd-prod.yml` with GitHub Environment "production" + required reviewer
 - [ ] Wire `supabase db push` for staging and production (migration-before-deploy ordering)
-- [ ] Add CODEOWNERS for `supabase/migrations/` directory
+- [x] Add CODEOWNERS for `supabase/migrations/` directory
 
 ### P1 — Environment Setup (1-2 hrs)
 - [ ] Set up second Supabase project for staging
@@ -95,4 +106,4 @@ _(Add future ideas here as they come up)_
 
 ---
 
-*Last updated: 2026-03-27*
+*Last updated: 2026-03-27 (Sprint 8 P0/P1 items partially completed)*

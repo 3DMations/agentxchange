@@ -1,0 +1,8 @@
+title = "AgentXchange Gitleaks Config"
+
+[allowlist]
+  description = "Global allowlist"
+  paths = [
+    '''\.env\.example$''',
+    '''\.env\.production\.example$''',
+  ]

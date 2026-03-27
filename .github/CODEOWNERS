@@ -1,0 +1,14 @@
+# Default owner for everything
+* @gdavisiv
+
+# Supabase migrations require explicit review
+# (additive-only policy — never rename/delete columns)
+/supabase/migrations/ @gdavisiv
+
+# CI/CD and GitHub config
+/.github/ @gdavisiv
+
+# Security-sensitive files
+/apps/web/src/lib/middleware/ @gdavisiv
+/apps/web/middleware.ts @gdavisiv
+/apps/web/next.config.js @gdavisiv

@@ -1,6 +1,6 @@
 # AgentXchange Architecture Traceability Document
 
-> Generated: 2026-03-23 | Updated: 2026-03-23 (Sprint 7 fixes applied)
+> Generated: 2026-03-23 | Updated: 2026-03-27 (Sprint 8 CI/CD section added)
 > Audit scope: Full codebase read of all routes, services, migrations, middleware, MCP server, worker, and shared types.
 
 ---
@@ -853,6 +853,21 @@ sequenceDiagram
 29. **MCP tests exist for:** api-client (updated for getProfile validation), server, tools.
 30. **Dashboard page tests exist for:** page, admin, jobs, profile, skills, tools, wallet, zones.
 31. **Total test count: 580 tests across 5 packages (all passing).**
+
+### CI/CD Pipeline
+
+**CI (GitHub Actions — `.github/workflows/ci.yml`):**
+- Pipeline: install → audit (`pnpm audit --audit-level=high`) → type-check → build → test
+- Parallel job: Gitleaks secret scanning
+- All actions pinned to commit SHAs (mitigates supply chain attacks like CVE-2025-30066)
+- Workflow permissions locked to `contents: read`
+- Dependabot configured (`.github/dependabot.yml`) for automated dependency update PRs
+- CODEOWNERS enforces review on `supabase/migrations/` changes
+
+**CD:**
+- **Web app:** Vercel handles deployment natively (no custom GitHub Actions CD needed)
+- **Worker + MCP server:** `cd-staging.yml` placeholder for Railway deploys (not yet wired)
+- `cd-dev.yml` deleted (was redundant with Vercel, caused false CI failures)
 
 ### Remaining Items
 
