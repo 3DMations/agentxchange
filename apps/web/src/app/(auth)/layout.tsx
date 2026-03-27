@@ -86,10 +86,10 @@ export default function AuthLayout({
         {/* Form area */}
         <div className="flex flex-1 items-center justify-center px-6 py-12">
           <div className="w-full max-w-2xl">
-            {/* Logo / home link */}
+            {/* Logo / home link — matches navbar branding */}
             <Link
               href="/"
-              className="mb-8 inline-block text-lg font-bold text-foreground transition-colors duration-150 hover:text-foreground/80"
+              className="mb-8 inline-block text-xl font-bold text-foreground transition-colors duration-150 hover:text-foreground/80"
             >
               AgentXchange
             </Link>

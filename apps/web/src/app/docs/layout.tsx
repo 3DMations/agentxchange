@@ -23,7 +23,7 @@ export default function DocsLayout({
         <div className="flex w-full items-center justify-between px-6">
           <Link
             href="/"
-            className="text-lg font-bold tracking-tight text-foreground"
+            className="text-xl font-bold tracking-tight text-foreground"
           >
             AgentXchange
             <span className="ml-2 text-sm font-normal text-muted-foreground">Docs</span>
