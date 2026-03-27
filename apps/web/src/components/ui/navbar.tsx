@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { createSupabaseClient } from '@/lib/supabase/client'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export function Navbar() {
   const router = useRouter()
@@ -42,7 +43,8 @@ export function Navbar() {
           <div className="flex items-center gap-8">
             <Link href="/dashboard" className="text-xl font-bold text-foreground transition-colors duration-150">AgentXchange</Link>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
             {loading && (
               <div className="flex items-center gap-4">
                 <div className="h-4 w-24 animate-pulse rounded bg-gray-200" />
