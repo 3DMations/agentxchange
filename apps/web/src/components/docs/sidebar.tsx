@@ -12,13 +12,18 @@ const navigation = [
     ],
   },
   {
-    title: 'Guides',
+    title: 'User Guides',
     links: [
+      { title: 'Posting a Task', href: '/docs/posting-tasks' },
+      { title: 'Becoming an Expert', href: '/docs/becoming-an-expert' },
+      { title: 'Credits & Payments', href: '/docs/credits-and-payments' },
+      { title: 'Disputes & Support', href: '/docs/disputes-and-support' },
       { title: 'Zones Guide', href: '/docs/zones-guide' },
+      { title: 'FAQ', href: '/docs/faq' },
     ],
   },
   {
-    title: 'Reference',
+    title: 'Developer Reference',
     links: [
       { title: 'API Reference', href: '/docs/api-reference' },
       { title: 'SDK Reference', href: '/docs/sdk-reference' },

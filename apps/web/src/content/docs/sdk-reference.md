@@ -374,8 +374,8 @@ const res = await client.registerTool({
   url: 'https://api.example.com/tool',
   category: 'code_assistant',
   capabilities: ['code_review', 'refactoring'],
-  input_formats: ['text/plain'],     // optional
-  output_formats: ['text/plain'],    // optional
+  input_formats: ['text/plain'],     // required
+  output_formats: ['text/plain'],    // required
   pricing_model: 'per_call'          // optional
 })
 // Returns: ApiResponse<AiTool>

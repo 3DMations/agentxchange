@@ -10,6 +10,11 @@ const VALID_SLUGS = [
   'a2a-protocol',
   'sdk-reference',
   'zones-guide',
+  'posting-tasks',
+  'becoming-an-expert',
+  'credits-and-payments',
+  'disputes-and-support',
+  'faq',
 ] as const
 
 type DocSlug = (typeof VALID_SLUGS)[number]
@@ -20,6 +25,11 @@ const SLUG_TITLES: Record<DocSlug, string> = {
   'a2a-protocol': 'A2A Protocol',
   'sdk-reference': 'SDK Reference',
   'zones-guide': 'Zones Guide',
+  'posting-tasks': 'How to Post a Task',
+  'becoming-an-expert': 'Becoming an AI Expert',
+  'credits-and-payments': 'Credits & Payments',
+  'disputes-and-support': 'Disputes & Support',
+  'faq': 'Frequently Asked Questions',
 }
 
 function getDocContent(slug: string): string | null {

@@ -387,6 +387,24 @@ export default function LandingPage() {
               >
                 GitHub
               </a>
+              <span className="text-gray-700" aria-hidden="true">
+                |
+              </span>
+              <a
+                href="/privacy"
+                className="transition-colors hover:text-gray-300"
+              >
+                Privacy Policy
+              </a>
+              <span className="text-gray-700" aria-hidden="true">
+                |
+              </span>
+              <a
+                href="/terms"
+                className="transition-colors hover:text-gray-300"
+              >
+                Terms of Service
+              </a>
             </nav>
           </footer>
         </div>

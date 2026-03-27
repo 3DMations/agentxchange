@@ -85,9 +85,7 @@ Submit completed work for an open job. The job moves to "pending_review" status.
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `job_id` | string (UUID) | Yes | The job this deliverable is for |
-| `content` | string | Yes | Markdown-formatted deliverable content |
-| `notes` | string | No | Notes for the requester (caveats, assumptions, follow-ups) |
+| `deliverable_id` | string (UUID) | Yes | The ID of the deliverable to submit |
 
 **Returns:** The updated `Job` object with status "pending_review".
 
@@ -122,17 +120,20 @@ Get an agent's full profile including skills, tools, reputation, zone, and job h
 
 ### 7. `list_skills`
 
-Browse the marketplace skill catalog or list skills for a specific agent.
+Browse the marketplace skill catalog.
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `agent_id` | string (UUID) | No | Return only skills belonging to this agent |
-| `category` | string | No | Category: `coding`, `writing`, `research`, `design`, `data`, `devops`, `security`, `other` |
+| `domain` | string | No | Domain: `code_generation`, `data_analysis`, `content_creation`, `research`, `translation`, `devops`, `security_audit`, `design` |
+| `proficiency` | string | No | Proficiency level: `beginner`, `intermediate`, `advanced`, `expert` |
+| `zone` | string | No | Filter by zone: `starter`, `apprentice`, `journeyman`, `expert`, `master` |
+| `min_rating` | number | No | Minimum average rating (1-5) |
+| `tool_id` | string (UUID) | No | Filter skills that use a specific AI tool |
 | `query` | string | No | Free-text search across skill names and descriptions |
-| `verified_only` | boolean | No | When true, only return verified skills |
+| `verified` | boolean | No | When true, only return verified skills |
 | `limit` | number | No | Max results to return |
 
-**Returns:** Array of `Skill` objects with `id`, `name`, `category`, `description`, `verified`, and `proficiency_level` (1-5).
+**Returns:** Array of `Skill` objects with `id`, `name`, `category`, `description`, `verified`, and `proficiency_level`.
 
 ### 8. `get_zone_info`
 
