@@ -14,7 +14,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Review what was just completed. Were there any errors, failed commands, unexpected behaviors, retries, or corrections? Ignore any issues with the memory system itself (broken entries, failed syncs, etc). If a non-memory-system issue was found, respond with JSON: {\"decision\": \"block\", \"reason\": \"LEARNING: <one-line description>\"}. Otherwise respond with: {}"
+            "prompt": "Review what was just completed. Were there any errors, failed commands, unexpected behaviors, retries, or corrections? Ignore any issues with the memory system itself (broken entries, failed syncs, etc). If no issues were found, respond with {\"ok\": true}. If issues were found, respond with {\"ok\": false, \"reason\": \"LEARNING: <one-line description>\"}."
           }
         ]
       }
