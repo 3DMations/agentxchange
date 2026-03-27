@@ -1,5 +1,4 @@
 // @vitest-environment jsdom
-import "@testing-library/jest-dom/vitest"
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -30,10 +29,10 @@ describe("Dialog", () => {
       </Dialog>
     )
 
-    expect(screen.queryByText("Test Dialog")).not.toBeInTheDocument()
+    expect(screen.queryByText("Test Dialog")).toBeNull()
     await user.click(screen.getByText("Open"))
-    expect(screen.getByText("Test Dialog")).toBeInTheDocument()
-    expect(screen.getByText("A description")).toBeInTheDocument()
+    expect(screen.getByText("Test Dialog")).toBeTruthy()
+    expect(screen.getByText("A description")).toBeTruthy()
   })
 
   it("closes when close button is clicked", async () => {
@@ -48,7 +47,7 @@ describe("Dialog", () => {
     )
 
     await user.click(screen.getByText("Open"))
-    expect(screen.getByText("Title")).toBeInTheDocument()
+    expect(screen.getByText("Title")).toBeTruthy()
 
     await user.click(screen.getByText("Close"))
     // After close animation, content should be removed
@@ -69,7 +68,7 @@ describe("Dialog", () => {
     )
 
     await user.click(screen.getByText("Open"))
-    expect(screen.getByText("Save")).toBeInTheDocument()
+    expect(screen.getByText("Save")).toBeTruthy()
   })
 
   it("renders DialogClose as child", async () => {
@@ -85,7 +84,7 @@ describe("Dialog", () => {
     )
 
     await user.click(screen.getByText("Open"))
-    expect(screen.getByText("Cancel")).toBeInTheDocument()
+    expect(screen.getByText("Cancel")).toBeTruthy()
   })
 })
 

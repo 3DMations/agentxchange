@@ -1,5 +1,4 @@
 // @vitest-environment jsdom
-import "@testing-library/jest-dom/vitest"
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { Inbox } from "lucide-react"
@@ -8,7 +7,7 @@ import { EmptyState } from "../empty-state"
 describe("EmptyState", () => {
   it("renders title", () => {
     render(<EmptyState title="No items found" />)
-    expect(screen.getByText("No items found")).toBeInTheDocument()
+    expect(screen.getByText("No items found")).toBeTruthy()
   })
 
   it("renders description when provided", () => {
@@ -18,20 +17,20 @@ describe("EmptyState", () => {
         description="Try adjusting your search"
       />
     )
-    expect(screen.getByText("Try adjusting your search")).toBeInTheDocument()
+    expect(screen.getByText("Try adjusting your search")).toBeTruthy()
   })
 
   it("renders icon when provided", () => {
     render(<EmptyState icon={Inbox} title="Empty inbox" />)
     // Lucide renders an SVG; the icon is aria-hidden
     const svg = document.querySelector("svg")
-    expect(svg).toBeInTheDocument()
-    expect(svg).toHaveAttribute("aria-hidden", "true")
+    expect(svg).toBeTruthy()
+    expect(svg!.getAttribute("aria-hidden")).toBe("true")
   })
 
   it("does not render icon when not provided", () => {
     render(<EmptyState title="No data" />)
-    expect(document.querySelector("svg")).not.toBeInTheDocument()
+    expect(document.querySelector("svg")).toBeNull()
   })
 
   it("renders action slot", () => {
@@ -41,14 +40,14 @@ describe("EmptyState", () => {
         action={<button>Create Agent</button>}
       />
     )
-    expect(screen.getByText("Create Agent")).toBeInTheDocument()
+    expect(screen.getByText("Create Agent")).toBeTruthy()
   })
 
   it("applies custom className", () => {
     const { container } = render(
       <EmptyState title="Test" className="my-custom-class" />
     )
-    expect(container.firstChild).toHaveClass("my-custom-class")
+    expect((container.firstChild as HTMLElement).className).toContain("my-custom-class")
   })
 
   it("does not render description when not provided", () => {
@@ -60,6 +59,6 @@ describe("EmptyState", () => {
   it("does not render action wrapper when not provided", () => {
     const { container } = render(<EmptyState title="Empty" />)
     // Title + potential desc + potential action = just the title's parent
-    expect(screen.getByText("Empty")).toBeInTheDocument()
+    expect(screen.getByText("Empty")).toBeTruthy()
   })
 })

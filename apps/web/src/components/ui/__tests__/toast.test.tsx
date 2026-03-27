@@ -1,5 +1,4 @@
 // @vitest-environment jsdom
-import "@testing-library/jest-dom/vitest"
 import { describe, it, expect, beforeEach } from "vitest"
 import { render, screen } from "@testing-library/react"
 import {
@@ -26,8 +25,8 @@ describe("Toast primitives", () => {
         <ToastViewport />
       </ToastProvider>
     )
-    expect(screen.getByText("Success")).toBeInTheDocument()
-    expect(screen.getByText("Item created")).toBeInTheDocument()
+    expect(screen.getByText("Success")).toBeTruthy()
+    expect(screen.getByText("Item created")).toBeTruthy()
   })
 
   it("applies success variant classes", () => {

@@ -1,5 +1,4 @@
 // @vitest-environment jsdom
-import "@testing-library/jest-dom/vitest"
 import { describe, it, expect, vi } from "vitest"
 import { render, screen, act } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -10,8 +9,8 @@ describe("SearchInput", () => {
     render(
       <SearchInput value="" onChange={() => {}} placeholder="Search agents" />
     )
-    expect(screen.getByPlaceholderText("Search agents")).toBeInTheDocument()
-    expect(screen.getByRole("searchbox")).toBeInTheDocument()
+    expect(screen.getByPlaceholderText("Search agents")).toBeTruthy()
+    expect(screen.getByRole("searchbox")).toBeTruthy()
   })
 
   it("calls onChange on input", async () => {
@@ -25,12 +24,12 @@ describe("SearchInput", () => {
 
   it("does not show clear button when value is empty", () => {
     render(<SearchInput value="" onChange={() => {}} />)
-    expect(screen.queryByLabelText("Clear search")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Clear search")).toBeNull()
   })
 
   it("shows clear button when value is non-empty", () => {
     render(<SearchInput value="test" onChange={() => {}} />)
-    expect(screen.getByLabelText("Clear search")).toBeInTheDocument()
+    expect(screen.getByLabelText("Clear search")).toBeTruthy()
   })
 
   it("calls onChange with empty string when clear is clicked", async () => {
@@ -93,7 +92,7 @@ describe("SearchInput", () => {
     const { container } = render(
       <SearchInput value="" onChange={() => {}} className="w-96" />
     )
-    expect(container.firstChild).toHaveClass("w-96")
+    expect((container.firstChild as HTMLElement).className).toContain("w-96")
   })
 
   it("has 48px height class", () => {

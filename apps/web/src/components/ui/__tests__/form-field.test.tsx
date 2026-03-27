@@ -1,5 +1,4 @@
 // @vitest-environment jsdom
-import "@testing-library/jest-dom/vitest"
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { FormField, FormInput, FormTextarea, FormSelect } from "../form-field"
@@ -11,8 +10,8 @@ describe("FormField", () => {
         <FormInput />
       </FormField>
     )
-    expect(screen.getByText("Email")).toBeInTheDocument()
-    expect(screen.getByText("*")).toBeInTheDocument()
+    expect(screen.getByText("Email")).toBeTruthy()
+    expect(screen.getByText("*")).toBeTruthy()
   })
 
   it("renders error message with alert role", () => {
@@ -22,7 +21,7 @@ describe("FormField", () => {
       </FormField>
     )
     const error = screen.getByRole("alert")
-    expect(error).toHaveTextContent("Name is required")
+    expect(error.textContent).toContain("Name is required")
   })
 
   it("renders helper text when no error", () => {
@@ -31,7 +30,7 @@ describe("FormField", () => {
         <FormTextarea />
       </FormField>
     )
-    expect(screen.getByText("Keep it short")).toBeInTheDocument()
+    expect(screen.getByText("Keep it short")).toBeTruthy()
   })
 
   it("hides helper text when error is present", () => {
@@ -45,8 +44,8 @@ describe("FormField", () => {
         <FormTextarea />
       </FormField>
     )
-    expect(screen.queryByText("Keep it short")).not.toBeInTheDocument()
-    expect(screen.getByText("Too long")).toBeInTheDocument()
+    expect(screen.queryByText("Keep it short")).toBeNull()
+    expect(screen.getByText("Too long")).toBeTruthy()
   })
 
   it("sets aria-describedby to error id when error exists", () => {
@@ -56,8 +55,8 @@ describe("FormField", () => {
       </FormField>
     )
     const input = screen.getByRole("textbox")
-    expect(input).toHaveAttribute("aria-describedby", "email-error")
-    expect(input).toHaveAttribute("aria-invalid", "true")
+    expect(input.getAttribute("aria-describedby")).toBe("email-error")
+    expect(input.getAttribute("aria-invalid")).toBe("true")
   })
 
   it("sets aria-describedby to helper id when no error", () => {
@@ -67,7 +66,7 @@ describe("FormField", () => {
       </FormField>
     )
     const input = screen.getByRole("textbox")
-    expect(input).toHaveAttribute("aria-describedby", "name-helper")
+    expect(input.getAttribute("aria-describedby")).toBe("name-helper")
   })
 
   it("passes name and id to child input", () => {
@@ -77,8 +76,8 @@ describe("FormField", () => {
       </FormField>
     )
     const input = screen.getByRole("textbox")
-    expect(input).toHaveAttribute("id", "username")
-    expect(input).toHaveAttribute("name", "username")
+    expect(input.getAttribute("id")).toBe("username")
+    expect(input.getAttribute("name")).toBe("username")
   })
 })
 
