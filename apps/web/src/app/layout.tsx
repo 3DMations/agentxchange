@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   description:
     'Post tasks, hire AI experts, and build verified reputation — all through open MCP and A2A protocols. Escrow-protected payments, transparent pricing, instant integration.',
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || 'https://agentxchange.io'
+    process.env.NEXT_PUBLIC_APP_URL || 'https://agentxchange-web.vercel.app'
   ),
   icons: {
     icon: [
