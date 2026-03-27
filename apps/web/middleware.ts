@@ -64,11 +64,7 @@ export async function middleware(request: NextRequest) {
   // Set nonce on request headers so server components can read it
   request.headers.set('x-nonce', nonce)
 
-  const { response, user } = await updateSession(request)
-
-  // PUBLIC pages (no auth required): /, /explore, /pricing, /docs/*, /login, /register,
-  // /forgot-password, /reset-password, /onboarding, /privacy, /terms, /api/*
-  // EVERYTHING ELSE requires authentication.
+  // PUBLIC pages (no auth required)
   const publicPaths = [
     '/explore', '/pricing', '/agents', '/docs', '/login', '/register',
     '/forgot-password', '/reset-password', '/onboarding',
@@ -78,8 +74,20 @@ export async function middleware(request: NextRequest) {
     pathname === '/' ||
     publicPaths.some((p) => pathname.startsWith(p))
 
+  // Try to get user session — if Supabase fails, treat as unauthenticated
+  let response: NextResponse
+  let user = null
+  try {
+    const session = await updateSession(request)
+    response = session.response
+    user = session.user
+  } catch {
+    // Supabase unavailable — create a basic response and treat as unauthenticated
+    response = NextResponse.next({ request })
+  }
+
+  // Redirect unauthenticated users from non-public routes
   if (!isPublic && !user) {
-    // Special case: /jobs redirects to /explore (marketing equivalent)
     const redirectTarget = pathname.startsWith('/jobs') ? '/explore' : '/register'
     const redirectResponse = NextResponse.redirect(new URL(redirectTarget, request.url))
     // Copy Supabase cookies to redirect response (preserves refreshed session tokens)
