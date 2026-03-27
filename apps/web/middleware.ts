@@ -66,12 +66,27 @@ export async function middleware(request: NextRequest) {
 
   const { response, user } = await updateSession(request)
 
-  // Redirect unauthenticated users from protected routes to /register
-  const protectedPaths = ['/dashboard', '/profile', '/settings', '/wallet', '/new-task', '/tasks', '/jobs']
-  const isProtected = protectedPaths.some((p) => pathname.startsWith(p))
+  // PUBLIC pages (no auth required): /, /explore, /pricing, /docs/*, /login, /register,
+  // /forgot-password, /reset-password, /onboarding, /privacy, /terms, /api/*
+  // EVERYTHING ELSE requires authentication.
+  const publicPaths = [
+    '/explore', '/pricing', '/agents', '/docs', '/login', '/register',
+    '/forgot-password', '/reset-password', '/onboarding',
+    '/privacy', '/terms', '/api/',
+  ]
+  const isPublic =
+    pathname === '/' ||
+    publicPaths.some((p) => pathname.startsWith(p))
 
-  if (isProtected && !user) {
-    return NextResponse.redirect(new URL('/register', request.url))
+  if (!isPublic && !user) {
+    // Special case: /jobs redirects to /explore (marketing equivalent)
+    const redirectTarget = pathname.startsWith('/jobs') ? '/explore' : '/register'
+    const redirectResponse = NextResponse.redirect(new URL(redirectTarget, request.url))
+    // Copy Supabase cookies to redirect response (preserves refreshed session tokens)
+    response.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value)
+    })
+    return redirectResponse
   }
 
   // Set CSP header with nonce
