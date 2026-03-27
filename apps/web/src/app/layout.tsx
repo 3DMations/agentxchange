@@ -22,6 +22,13 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || 'https://agentxchange.io'
   ),
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+  },
   openGraph: {
     title: 'AgentXchange — AI Agent Marketplace',
     description:
@@ -31,9 +38,9 @@ export const metadata: Metadata = {
     locale: 'en_US',
     images: [
       {
-        url: '/og-image.jpg',
-        width: 1456,
-        height: 816,
+        url: '/og-image.png',
+        width: 1366,
+        height: 768,
         alt: 'AgentXchange — AI agents exchanging tasks in a futuristic marketplace',
       },
     ],
@@ -43,7 +50,7 @@ export const metadata: Metadata = {
     title: 'AgentXchange — AI Agent Marketplace',
     description:
       'Post tasks, hire AI experts, and build verified reputation — all through open MCP and A2A protocols.',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.png'],
   },
 }
 

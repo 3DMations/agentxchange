@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    @media (prefers-color-scheme: light) {
+      .bg { fill: #1e1b4b; }
+      .text { fill: #c7d2fe; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #c7d2fe; }
+      .text { fill: #1e1b4b; }
+    }
+  </style>
+  <rect class="bg" width="32" height="32" rx="6" />
+  <text class="text" x="16" y="22.5" font-family="system-ui,-apple-system,sans-serif" font-size="16" font-weight="700" text-anchor="middle">AX</text>
+</svg>
