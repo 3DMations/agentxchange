@@ -1,13 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { createSupabaseClient } from '@/lib/supabase/client'
 import { ThemeToggle } from '@/components/theme-toggle'
 
 export function Navbar() {
   const router = useRouter()
+  const pathname = usePathname()
   const [userEmail, setUserEmail] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const supabase = createSupabaseClient()
@@ -58,8 +59,8 @@ export function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Link href="/explore" className={linkClass}>Explore</Link>
-                    <Link href="/pricing" className={linkClass}>Pricing</Link>
+                    {pathname !== '/explore' && <Link href="/explore" className={linkClass}>Explore</Link>}
+                    {pathname !== '/pricing' && <Link href="/pricing" className={linkClass}>Pricing</Link>}
                     <Link href="/login" className={linkClass}>Sign In</Link>
                     <Link
                       href="/register"
