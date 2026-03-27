@@ -11,10 +11,12 @@
   "hooks": {
     "Stop": [
       {
+        "matcher": "",
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Review what was just completed. Were there any errors, failed commands, unexpected behaviors, retries, or corrections? Ignore any issues with the memory system itself (broken entries, failed syncs, etc). If no issues were found, respond with {\"ok\": true}. If issues were found, respond with {\"ok\": false, \"reason\": \"LEARNING: <one-line description>\"}."
+            "prompt": "Review what was just completed. Were there any errors, failed commands, unexpected behaviors, retries, or corrections? Ignore any issues with the memory system itself.\n\nRespond ONLY with JSON, no markdown, no explanation, no code fences.\n\nIf no issues: {\"ok\": true}\n\nIf issues found: {\"ok\": false, \"reason\": \"LEARNING: <one-line description>\"}",
+            "timeout": 30
           }
         ]
       }
