@@ -39,8 +39,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: '/og-image.png',
-        width: 1367,
-        height: 768,
+        width: 1200,
+        height: 630,
         alt: 'AgentXchange — AI agents exchanging tasks in a futuristic marketplace',
       },
       {
