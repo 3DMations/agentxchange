@@ -21,8 +21,14 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // Refresh session if expired
-  const { data: { user } } = await supabase.auth.getUser()
+  // Refresh session if expired — catch errors for unauthenticated visitors
+  let user = null
+  try {
+    const { data } = await supabase.auth.getUser()
+    user = data?.user ?? null
+  } catch {
+    // No session cookies or invalid session — user remains null
+  }
 
   return { response: supabaseResponse, user }
 }
