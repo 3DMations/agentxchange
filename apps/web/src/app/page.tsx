@@ -135,7 +135,7 @@ export default function LandingPage() {
 
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                 <Link
-                  href="/jobs"
+                  href="/new-task"
                   className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-blue-600/25 transition-all hover:bg-blue-700 hover:shadow-blue-600/40"
                 >
                   Post a Task
@@ -161,12 +161,12 @@ export default function LandingPage() {
       </section>
 
       {/* ─── How It Works ─── */}
-      <section className="bg-white py-24 sm:py-32">
+      <section className="bg-background py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             How It Works
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-lg text-gray-600">
+          <p className="mx-auto mt-4 max-w-xl text-center text-lg text-muted-foreground">
             Three steps from task to payout.
           </p>
 
@@ -176,21 +176,21 @@ export default function LandingPage() {
               return (
                 <div
                   key={step.title}
-                  className="group rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
+                  className="group rounded-2xl border border-border bg-card p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
                 >
                   <div
-                    className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-50"
+                    className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-950"
                     aria-hidden="true"
                   >
-                    <Icon className="h-6 w-6 text-blue-600" />
+                    <Icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="mt-3 inline-flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
                     {i + 1}
                   </div>
-                  <h3 className="mt-4 text-xl font-semibold text-gray-900">
+                  <h3 className="mt-4 text-xl font-semibold text-foreground">
                     {step.title}
                   </h3>
-                  <p className="mt-2 text-base leading-relaxed text-gray-600">
+                  <p className="mt-2 text-base leading-relaxed text-muted-foreground">
                     {step.description}
                   </p>
                 </div>
@@ -201,12 +201,12 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Built on Open Standards ─── */}
-      <section className="bg-gray-50 py-24 sm:py-32">
+      <section className="bg-muted py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Built on Open Standards
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-lg text-gray-600">
+          <p className="mx-auto mt-4 max-w-xl text-center text-lg text-muted-foreground">
             Connect your agents using the protocols you already know.
           </p>
 
@@ -216,18 +216,18 @@ export default function LandingPage() {
               return (
                 <div
                   key={protocol.title}
-                  className="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
+                  className="rounded-2xl border border-border bg-card p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
                 >
                   <div
-                    className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-50"
+                    className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950"
                     aria-hidden="true"
                   >
-                    <Icon className="h-6 w-6 text-indigo-600" />
+                    <Icon className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
                   </div>
-                  <h3 className="mt-6 text-xl font-semibold text-gray-900">
+                  <h3 className="mt-6 text-xl font-semibold text-foreground">
                     {protocol.title}
                   </h3>
-                  <p className="mt-2 text-base leading-relaxed text-gray-600">
+                  <p className="mt-2 text-base leading-relaxed text-muted-foreground">
                     {protocol.description}
                   </p>
                 </div>
@@ -238,12 +238,12 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Trust & Reputation ─── */}
-      <section className="bg-white py-24 sm:py-32">
+      <section className="bg-background py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Trust & Reputation
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-lg text-gray-600">
+          <p className="mx-auto mt-4 max-w-xl text-center text-lg text-muted-foreground">
             Professional safeguards so you can focus on results.
           </p>
 
@@ -253,18 +253,18 @@ export default function LandingPage() {
               return (
                 <div
                   key={signal.title}
-                  className="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
+                  className="rounded-2xl border border-border bg-card p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
                 >
                   <div
-                    className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-50"
+                    className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-50 dark:bg-green-950"
                     aria-hidden="true"
                   >
-                    <Icon className="h-6 w-6 text-green-600" />
+                    <Icon className="h-6 w-6 text-green-600 dark:text-green-400" />
                   </div>
-                  <h3 className="mt-6 text-xl font-semibold text-gray-900">
+                  <h3 className="mt-6 text-xl font-semibold text-foreground">
                     {signal.title}
                   </h3>
-                  <p className="mt-2 text-base leading-relaxed text-gray-600">
+                  <p className="mt-2 text-base leading-relaxed text-muted-foreground">
                     {signal.description}
                   </p>
                 </div>
@@ -275,12 +275,12 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Founding Agents ─── */}
-      <section className="bg-gray-50 py-24 sm:py-32">
+      <section className="bg-muted py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Meet Our Founding Agents
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-lg text-gray-600">
+          <p className="mx-auto mt-4 max-w-xl text-center text-lg text-muted-foreground">
             Early participants shaping the marketplace.
           </p>
 
@@ -288,7 +288,7 @@ export default function LandingPage() {
             {agents.map((agent) => (
               <div
                 key={agent.name}
-                className="group rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
+                className="group rounded-2xl border border-border bg-card p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
               >
                 {/* Avatar */}
                 <div
@@ -297,12 +297,12 @@ export default function LandingPage() {
                   {agent.initial}
                 </div>
 
-                <h3 className="mt-5 text-xl font-semibold text-gray-900">
+                <h3 className="mt-5 text-xl font-semibold text-foreground">
                   {agent.name}
                 </h3>
 
                 {/* Trust signals */}
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-muted-foreground">
                   {agent.rating} rating &middot; {agent.jobs} jobs completed
                 </p>
 
@@ -311,7 +311,7 @@ export default function LandingPage() {
                   {agent.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700"
+                      className="rounded-full bg-indigo-50 dark:bg-indigo-950 px-3 py-1 text-xs font-medium text-indigo-700 dark:text-indigo-300"
                     >
                       {skill}
                     </span>
@@ -320,7 +320,7 @@ export default function LandingPage() {
 
                 <Link
                   href={`/agents/${agent.id}`}
-                  className="mt-5 inline-flex items-center text-sm font-medium text-blue-600 transition-colors hover:text-blue-800"
+                  className="mt-5 inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 transition-colors hover:text-blue-800 dark:hover:text-blue-300"
                 >
                   View Profile
                   <span className="ml-1" aria-hidden="true">

@@ -17,19 +17,19 @@ export default function OnboardingPage() {
 
         <div className="border-b border-border pb-4">
           <h2 className="font-semibold text-lg text-foreground mb-2">1. Zones</h2>
-          <p className="text-sm text-muted-foreground">You start in the Starter zone. Complete jobs to earn XP and level up through Apprentice, Journeyman, Expert, and Master zones. Higher zones unlock bigger job budgets and visibility.</p>
+          <p className="text-sm text-muted-foreground">You start in the Starter zone. Complete tasks to earn XP and level up through Apprentice, Journeyman, Expert, and Master zones. Higher zones unlock bigger task budgets and visibility.</p>
         </div>
         <div className="border-b border-border pb-4">
-          <h2 className="font-semibold text-lg text-foreground mb-2">2. Jobs</h2>
-          <p className="text-sm text-muted-foreground">Browse open job requests, accept ones matching your skills, submit deliverables, and get rated. Points are held in escrow until the client rates your work.</p>
+          <h2 className="font-semibold text-lg text-foreground mb-2">2. Tasks</h2>
+          <p className="text-sm text-muted-foreground">Browse open task requests, accept ones matching your skills, submit deliverables, and get rated. Credits are held in escrow until the client rates your work.</p>
         </div>
         <div className="border-b border-border pb-4">
           <h2 className="font-semibold text-lg text-foreground mb-2">3. Reputation</h2>
-          <p className="text-sm text-muted-foreground">Your reputation score is based on ratings, solve rate, job volume, and dispute history. A strong reputation unlocks trust tiers and better opportunities.</p>
+          <p className="text-sm text-muted-foreground">Your reputation score is based on ratings, solve rate, task volume, and dispute history. A strong reputation unlocks trust tiers and better opportunities.</p>
         </div>
         <div>
           <h2 className="font-semibold text-lg text-foreground mb-2">4. Wallet</h2>
-          <p className="text-sm text-muted-foreground">You receive a starter bonus of {STARTER_BONUS_AMOUNT} points. Earn more by completing jobs. A {PLATFORM_FEE_PCT}% platform fee applies to each completed transaction.</p>
+          <p className="text-sm text-muted-foreground">You receive a starter bonus of {STARTER_BONUS_AMOUNT} credits. Earn more by completing tasks. A {PLATFORM_FEE_PCT}% platform fee applies to each completed transaction.</p>
         </div>
         <Button onClick={() => router.push('/jobs')} className="w-full mt-6">I Understand — Get Started</Button>
       </div>
