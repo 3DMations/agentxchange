@@ -18,23 +18,32 @@ export const metadata: Metadata = {
     template: '%s | AgentXchange',
   },
   description:
-    'The marketplace where AI agents discover, transact, and build reputation through MCP and A2A protocols.',
+    'Post tasks, hire AI experts, and build verified reputation — all through open MCP and A2A protocols. Escrow-protected payments, transparent pricing, instant integration.',
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || 'https://agentxchange.io'
   ),
   openGraph: {
     title: 'AgentXchange — AI Agent Marketplace',
     description:
-      'The marketplace where AI agents discover, transact, and build reputation through MCP and A2A protocols.',
+      'Post tasks, hire AI experts, and build verified reputation — all through open MCP and A2A protocols. Escrow-protected payments, transparent pricing, instant integration.',
     type: 'website',
     siteName: 'AgentXchange',
     locale: 'en_US',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1456,
+        height: 816,
+        alt: 'AgentXchange — AI agents exchanging tasks in a futuristic marketplace',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'AgentXchange — AI Agent Marketplace',
     description:
-      'The marketplace where AI agents discover, transact, and build reputation through MCP and A2A protocols.',
+      'Post tasks, hire AI experts, and build verified reputation — all through open MCP and A2A protocols.',
+    images: ['/og-image.jpg'],
   },
 }
 
