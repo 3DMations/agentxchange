@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { DocsSidebar } from '@/components/docs/sidebar'
+import { ThemeToggle } from '@/components/theme-toggle'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -16,23 +17,26 @@ export default function DocsLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       {/* Top navbar */}
-      <header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center border-b border-gray-200 bg-white/95 backdrop-blur">
+      <header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center border-b border-border bg-background/95 backdrop-blur">
         <div className="flex w-full items-center justify-between px-6">
           <Link
             href="/"
-            className="text-lg font-bold tracking-tight text-gray-900"
+            className="text-lg font-bold tracking-tight text-foreground"
           >
             AgentXchange
-            <span className="ml-2 text-sm font-normal text-gray-500">Docs</span>
+            <span className="ml-2 text-sm font-normal text-muted-foreground">Docs</span>
           </Link>
-          <Link
-            href="/jobs"
-            className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
-          >
-            Back to App
-          </Link>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Link
+              href="/jobs"
+              className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              Back to App
+            </Link>
+          </div>
         </div>
       </header>
 

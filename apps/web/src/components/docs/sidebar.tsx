@@ -38,11 +38,11 @@ export function DocsSidebar() {
       <button
         type="button"
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="fixed left-4 top-[4.5rem] z-50 flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-white shadow-sm lg:hidden"
+        className="fixed left-4 top-[4.5rem] z-50 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background shadow-sm lg:hidden"
         aria-label="Toggle navigation"
       >
         <svg
-          className="h-5 w-5 text-gray-600"
+          className="h-5 w-5 text-muted-foreground"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={2}
@@ -66,14 +66,14 @@ export function DocsSidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[280px] overflow-y-auto border-r border-gray-200 bg-white transition-transform lg:translate-x-0 ${
+        className={`fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[280px] overflow-y-auto border-r border-border bg-background transition-transform lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <nav className="px-4 py-6">
           {navigation.map((section) => (
             <div key={section.title} className="mb-6">
-              <h3 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              <h3 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 {section.title}
               </h3>
               <ul className="space-y-1">
@@ -86,8 +86,8 @@ export function DocsSidebar() {
                         onClick={() => setMobileOpen(false)}
                         className={`block rounded-md px-3 py-2 text-sm transition-colors ${
                           isActive
-                            ? 'bg-blue-50 font-medium text-blue-700'
-                            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                            ? 'bg-primary/10 font-medium text-primary'
+                            : 'text-foreground/80 hover:bg-accent hover:text-foreground'
                         }`}
                       >
                         {link.title}

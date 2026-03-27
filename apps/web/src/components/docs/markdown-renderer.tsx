@@ -18,27 +18,27 @@ const sanitizeSchema = {
 
 const components: Components = {
   h1: ({ children, ...props }) => (
-    <h1 className="mb-6 text-3xl font-bold tracking-tight text-gray-900" {...props}>
+    <h1 className="mb-6 text-3xl font-bold tracking-tight text-foreground" {...props}>
       {children}
     </h1>
   ),
   h2: ({ children, ...props }) => (
-    <h2 className="mb-4 mt-10 border-b border-gray-200 pb-2 text-2xl font-semibold text-gray-900" {...props}>
+    <h2 className="mb-4 mt-10 border-b border-border pb-2 text-2xl font-semibold text-foreground" {...props}>
       {children}
     </h2>
   ),
   h3: ({ children, ...props }) => (
-    <h3 className="mb-3 mt-8 text-xl font-semibold text-gray-900" {...props}>
+    <h3 className="mb-3 mt-8 text-xl font-semibold text-foreground" {...props}>
       {children}
     </h3>
   ),
   h4: ({ children, ...props }) => (
-    <h4 className="mb-2 mt-6 text-lg font-semibold text-gray-900" {...props}>
+    <h4 className="mb-2 mt-6 text-lg font-semibold text-foreground" {...props}>
       {children}
     </h4>
   ),
   p: ({ children, ...props }) => (
-    <p className="mb-4 leading-7 text-gray-700" {...props}>
+    <p className="mb-4 leading-7 text-foreground/80" {...props}>
       {children}
     </p>
   ),
@@ -48,7 +48,7 @@ const components: Components = {
       <a
         href={safeHref}
         rel="noopener noreferrer"
-        className="font-medium text-blue-600 underline decoration-blue-300 underline-offset-2 transition-colors hover:text-blue-800 hover:decoration-blue-500"
+        className="font-medium text-primary underline decoration-primary/30 underline-offset-2 transition-colors hover:text-primary/80 hover:decoration-primary/60"
         {...props}
       >
         {children}
@@ -56,12 +56,12 @@ const components: Components = {
     )
   },
   ul: ({ children, ...props }) => (
-    <ul className="mb-4 ml-6 list-disc space-y-1 text-gray-700" {...props}>
+    <ul className="mb-4 ml-6 list-disc space-y-1 text-foreground/80" {...props}>
       {children}
     </ul>
   ),
   ol: ({ children, ...props }) => (
-    <ol className="mb-4 ml-6 list-decimal space-y-1 text-gray-700" {...props}>
+    <ol className="mb-4 ml-6 list-decimal space-y-1 text-foreground/80" {...props}>
       {children}
     </ol>
   ),
@@ -72,7 +72,7 @@ const components: Components = {
   ),
   blockquote: ({ children, ...props }) => (
     <blockquote
-      className="mb-4 border-l-4 border-blue-300 bg-blue-50/50 py-1 pl-4 italic text-gray-700"
+      className="mb-4 border-l-4 border-primary/30 bg-primary/5 py-1 pl-4 italic text-foreground/80"
       {...props}
     >
       {children}
@@ -89,7 +89,7 @@ const components: Components = {
     }
     return (
       <code
-        className="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-mono text-gray-800"
+        className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono text-foreground"
         {...props}
       >
         {children}
@@ -106,35 +106,35 @@ const components: Components = {
   ),
   table: ({ children, ...props }) => (
     <div className="mb-4 overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-300 border border-gray-200" {...props}>
+      <table className="min-w-full divide-y divide-border border border-border" {...props}>
         {children}
       </table>
     </div>
   ),
   thead: ({ children, ...props }) => (
-    <thead className="bg-gray-50" {...props}>
+    <thead className="bg-muted/50" {...props}>
       {children}
     </thead>
   ),
   th: ({ children, ...props }) => (
     <th
-      className="px-4 py-3 text-left text-sm font-semibold text-gray-900"
+      className="px-4 py-3 text-left text-sm font-semibold text-foreground"
       {...props}
     >
       {children}
     </th>
   ),
   tr: ({ children, ...props }) => (
-    <tr className="even:bg-gray-50" {...props}>
+    <tr className="even:bg-muted/30" {...props}>
       {children}
     </tr>
   ),
   td: ({ children, ...props }) => (
-    <td className="px-4 py-3 text-sm text-gray-700" {...props}>
+    <td className="px-4 py-3 text-sm text-foreground/80" {...props}>
       {children}
     </td>
   ),
-  hr: () => <hr className="my-8 border-gray-200" />,
+  hr: () => <hr className="my-8 border-border" />,
   img: ({ src, alt, ...props }) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt || ''} className="my-4 rounded-lg" {...props} />
