@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/ui/search-input'
+import { getCategoryColor } from '@/lib/utils/category-colors'
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -116,11 +117,11 @@ const MOCK_AGENTS: ExploreAgent[] = [
 /* ------------------------------------------------------------------ */
 
 const TIER_BADGE_VARIANT: Record<string, string> = {
-  new: 'default',
-  bronze: 'warning',
-  silver: 'info',
-  gold: 'success',
-  platinum: 'success',
+  new: 'tier-new',
+  bronze: 'tier-bronze',
+  silver: 'tier-silver',
+  gold: 'tier-gold',
+  platinum: 'tier-platinum',
 }
 
 function renderStars(rating: number) {
@@ -130,7 +131,7 @@ function renderStars(rating: number) {
     stars.push(
       <Star
         key={i}
-        className={`h-3.5 w-3.5 ${i < full ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground/50'}`}
+        className={`h-3.5 w-3.5 ${i < full ? 'fill-rating text-rating' : 'text-muted-foreground/50'}`}
       />
     )
   }
@@ -240,38 +241,45 @@ export default function ExplorePage() {
   return (
     <div className="space-y-10">
       {/* ---- Search Hero ---- */}
-      <section className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          Find the Right AI Expert
-        </h1>
-        <p className="mx-auto mt-2 max-w-xl text-muted-foreground">
-          Browse top-rated AI experts ready to tackle code, data, content, research, and more.
-        </p>
-        <div className="mx-auto mt-6 max-w-2xl">
-          <SearchInput
-            value={searchValue}
-            onChange={setSearchValue}
-            onSearch={handleSearch}
-            placeholder="What do you need done?"
-            debounceMs={400}
-            className="w-full"
-          />
+      <section className="relative overflow-hidden text-center">
+        <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-48 w-96 rounded-full bg-indigo-500/10 blur-3xl" />
+        <div className="relative">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Find the Right AI Expert
+          </h1>
+          <p className="mx-auto mt-2 max-w-xl text-muted-foreground">
+            Browse top-rated AI experts ready to tackle code, data, content, research, and more.
+          </p>
+          <div className="mx-auto mt-6 max-w-2xl">
+            <SearchInput
+              value={searchValue}
+              onChange={setSearchValue}
+              onSearch={handleSearch}
+              placeholder="What do you need done?"
+              debounceMs={400}
+              className="w-full"
+            />
+          </div>
         </div>
       </section>
 
       {/* ---- Category Pills ---- */}
       <nav aria-label="Filter by category" className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-        {CATEGORIES.map((cat) => (
-          <Button
-            key={cat.value}
-            variant={activeDomain === cat.value ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => handleDomainChange(cat.value)}
-            className="shrink-0"
-          >
-            {cat.label}
-          </Button>
-        ))}
+        {CATEGORIES.map((cat) => {
+          const isActive = activeDomain === cat.value
+          const colors = cat.value ? getCategoryColor(cat.value) : null
+          return (
+            <Button
+              key={cat.value}
+              variant={isActive ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleDomainChange(cat.value)}
+              className={`shrink-0 ${isActive && colors ? `${colors.bg} ${colors.text} ${colors.darkBg} ${colors.darkText} border-transparent hover:opacity-90` : ''}`}
+            >
+              {cat.label}
+            </Button>
+          )
+        })}
       </nav>
 
       {/* ---- Agents Grid ---- */}
@@ -307,9 +315,9 @@ export default function ExplorePage() {
                         {agent.handle}
                       </h3>
                       {agent.domain && (
-                        <p className="mt-0.5 text-xs text-muted-foreground">
+                        <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-medium ${getCategoryColor(agent.domain).bg} ${getCategoryColor(agent.domain).text} ${getCategoryColor(agent.domain).darkBg} ${getCategoryColor(agent.domain).darkText}`}>
                           {categoryLabel(agent.domain)}
-                        </p>
+                        </span>
                       )}
                     </div>
                     <Badge variant={TIER_BADGE_VARIANT[agent.trust_tier] ?? 'default'}>

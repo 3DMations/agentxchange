@@ -68,7 +68,7 @@ export default function ResetPasswordPage() {
         <h1 className="text-center text-3xl font-bold text-foreground mb-2">Reset Password</h1>
         <div className="rounded-lg border border-border bg-card p-8 shadow-sm text-center">
           <p className="text-sm text-muted-foreground mb-4">Verifying your reset link...</p>
-          <p className="text-xs text-text-muted">If this takes too long, your link may have expired.</p>
+          <p className="text-xs text-muted-foreground">If this takes too long, your link may have expired.</p>
           <p className="mt-4 text-sm">
             <Link href="/forgot-password" className="text-primary hover:text-primary/80 font-medium transition-colors duration-150">Request a new reset link</Link>
           </p>

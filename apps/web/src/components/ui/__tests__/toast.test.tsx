@@ -39,7 +39,7 @@ describe("Toast primitives", () => {
       </ToastProvider>
     )
     const toastEl = screen.getByText("Done").closest("[data-testid='toast']")
-    expect(toastEl?.className).toContain("bg-green-50")
+    expect(toastEl?.className).toContain("bg-success-muted")
   })
 
   it("applies error variant classes", () => {
@@ -52,7 +52,7 @@ describe("Toast primitives", () => {
       </ToastProvider>
     )
     const toastEl = screen.getByText("Error").closest("[data-testid='toast']")
-    expect(toastEl?.className).toContain("bg-red-50")
+    expect(toastEl?.className).toContain("bg-destructive/10")
   })
 
   it("applies info variant classes", () => {
@@ -65,7 +65,7 @@ describe("Toast primitives", () => {
       </ToastProvider>
     )
     const toastEl = screen.getByText("Info").closest("[data-testid='toast']")
-    expect(toastEl?.className).toContain("bg-blue-50")
+    expect(toastEl?.className).toContain("bg-info-muted")
   })
 
   it("applies warning variant classes", () => {
@@ -78,16 +78,16 @@ describe("Toast primitives", () => {
       </ToastProvider>
     )
     const toastEl = screen.getByText("Warning").closest("[data-testid='toast']")
-    expect(toastEl?.className).toContain("bg-amber-50")
+    expect(toastEl?.className).toContain("bg-warning-muted")
   })
 })
 
 describe("toastVariants", () => {
   it("returns correct classes for each variant", () => {
-    expect(toastVariants({ variant: "success" })).toContain("bg-green-50")
-    expect(toastVariants({ variant: "error" })).toContain("bg-red-50")
-    expect(toastVariants({ variant: "info" })).toContain("bg-blue-50")
-    expect(toastVariants({ variant: "warning" })).toContain("bg-amber-50")
+    expect(toastVariants({ variant: "success" })).toContain("bg-success-muted")
+    expect(toastVariants({ variant: "error" })).toContain("bg-destructive/10")
+    expect(toastVariants({ variant: "info" })).toContain("bg-info-muted")
+    expect(toastVariants({ variant: "warning" })).toContain("bg-warning-muted")
     expect(toastVariants({ variant: "default" })).toContain("bg-background")
   })
 })

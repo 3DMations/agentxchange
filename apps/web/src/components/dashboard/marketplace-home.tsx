@@ -22,6 +22,7 @@ import { StatCard } from '@/components/ui/stat-card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/ui/empty-state'
+import { getCategoryColor } from '@/lib/utils/category-colors'
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -117,9 +118,18 @@ function pickActivityIcon(description: string): React.ElementType {
   return Clock
 }
 
+/** Activity event type for icon tinting */
+type ActivityEventType = 'posted' | 'assigned' | 'completed'
+
+const ACTIVITY_EVENT_STYLES: Record<ActivityEventType, { bg: string; text: string }> = {
+  posted: { bg: 'bg-blue-50 dark:bg-blue-950', text: 'text-blue-600 dark:text-blue-400' },
+  assigned: { bg: 'bg-amber-50 dark:bg-amber-950', text: 'text-amber-600 dark:text-amber-400' },
+  completed: { bg: 'bg-green-50 dark:bg-green-950', text: 'text-green-600 dark:text-green-400' },
+}
+
 /** Build a synthetic activity feed from tasks */
 function buildActivityFeed(tasks: Task[]) {
-  const events: { id: string; description: string; timestamp: string; icon: React.ElementType }[] = []
+  const events: { id: string; description: string; timestamp: string; icon: React.ElementType; eventType: ActivityEventType }[] = []
 
   for (const task of tasks) {
     events.push({
@@ -127,6 +137,7 @@ function buildActivityFeed(tasks: Task[]) {
       description: `Task posted: ${truncate(task.description, 40)}`,
       timestamp: task.created_at,
       icon: Clipboard,
+      eventType: 'posted',
     })
 
     if (task.status === 'accepted' || task.status === 'in_progress') {
@@ -135,6 +146,7 @@ function buildActivityFeed(tasks: Task[]) {
         description: `Expert assigned${task.assigned_agent_handle ? `: @${task.assigned_agent_handle}` : ''}`,
         timestamp: task.created_at,
         icon: UserPlus,
+        eventType: 'assigned',
       })
     }
 
@@ -144,6 +156,7 @@ function buildActivityFeed(tasks: Task[]) {
         description: `Task completed: ${truncate(task.description, 40)}`,
         timestamp: task.created_at,
         icon: CheckCircle,
+        eventType: 'completed',
       })
     }
   }
@@ -247,7 +260,7 @@ export function MarketplaceHome() {
     return (
       <div className="space-y-8">
         {/* Welcome banner skeleton */}
-        <div className="rounded-xl border border-border bg-gradient-to-r from-primary/5 to-primary/10 p-6">
+        <div className="rounded-2xl bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 p-6">
           <Skeleton className="h-8 w-64 mb-2" />
           <Skeleton className="h-4 w-48" />
         </div>
@@ -300,27 +313,30 @@ export function MarketplaceHome() {
       )}
 
       {/* ---- Welcome Banner ---- */}
-      <div className="rounded-xl border border-border bg-gradient-to-r from-primary/5 via-background to-primary/10 p-6 sm:p-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 p-6 sm:p-8 text-white">
+        {/* Decorative glow orbs */}
+        <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-indigo-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl" />
+        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
+            <h1 className="text-2xl font-bold text-white sm:text-3xl">
               Welcome back
             </h1>
-            <p className="mt-1 text-muted-foreground">
+            <p className="mt-1 text-white/80">
               What do you need done today?
             </p>
-            <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+            <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-white/80">
               <span className="flex items-center gap-1.5">
                 <Briefcase className="h-4 w-4" />
-                <span className="font-medium text-foreground">{activeTasks.length}</span> active task{activeTasks.length !== 1 ? 's' : ''}
+                <span className="font-medium text-white">{activeTasks.length}</span> active task{activeTasks.length !== 1 ? 's' : ''}
               </span>
               <span className="flex items-center gap-1.5">
                 <Wallet className="h-4 w-4" />
-                <span className="font-medium text-foreground">{balance ? balance.available.toLocaleString() : '--'}</span> credits
+                <span className="font-medium text-white">{balance ? balance.available.toLocaleString() : '--'}</span> credits
               </span>
             </div>
           </div>
-          <Button asChild size="lg" className="shrink-0">
+          <Button asChild size="lg" className="shrink-0 bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25 text-white">
             <Link href="/new-task">
               <Plus className="mr-2 h-5 w-5" />
               New Task
@@ -335,21 +351,41 @@ export function MarketplaceHome() {
           label="Total Tasks"
           value={tasks.length}
           subtext="All time"
+          icon={
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-950">
+              <Briefcase className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+            </div>
+          }
         />
         <StatCard
           label="Completed"
           value={completedTasks.length}
           subtext={`${successRate}% success rate`}
+          icon={
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-50 dark:bg-green-950">
+              <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+            </div>
+          }
         />
         <StatCard
           label="Active"
           value={activeTasks.length}
           subtext="In progress"
+          icon={
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-50 dark:bg-amber-950">
+              <TrendingUp className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            </div>
+          }
         />
         <StatCard
           label="Credits Balance"
           value={balance ? `${balance.available.toLocaleString()}` : '--'}
           subtext={balance ? `${balance.escrowed.toLocaleString()} in escrow` : 'Sign in to view'}
+          icon={
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950">
+              <Wallet className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+            </div>
+          }
         />
       </div>
 
@@ -414,10 +450,11 @@ export function MarketplaceHome() {
             <div className="space-y-4">
               {activityFeed.map((event) => {
                 const Icon = event.icon
+                const style = ACTIVITY_EVENT_STYLES[event.eventType]
                 return (
                   <div key={event.id} className="flex items-start gap-3">
-                    <div className="mt-0.5 rounded-full bg-muted p-1.5">
-                      <Icon className="h-3.5 w-3.5 text-muted-foreground" />
+                    <div className={`mt-0.5 rounded-full p-1.5 ${style.bg}`}>
+                      <Icon className={`h-3.5 w-3.5 ${style.text}`} />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm text-foreground leading-snug">
@@ -456,23 +493,27 @@ export function MarketplaceHome() {
                   <Badge
                     variant={
                       expert.trust_tier === 'platinum'
-                        ? 'success'
+                        ? 'tier-platinum'
                         : expert.trust_tier === 'gold'
-                          ? 'warning'
+                          ? 'tier-gold'
                           : expert.trust_tier === 'silver'
-                            ? 'info'
-                            : 'default'
+                            ? 'tier-silver'
+                            : expert.trust_tier === 'bronze'
+                              ? 'tier-bronze'
+                              : 'tier-new'
                     }
                   >
                     {expert.trust_tier}
                   </Badge>
                 </div>
                 {expert.domain && (
-                  <p className="text-xs text-muted-foreground mb-1">{expert.domain}</p>
+                  <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium mb-1 ${getCategoryColor(expert.domain).bg} ${getCategoryColor(expert.domain).text} ${getCategoryColor(expert.domain).darkBg} ${getCategoryColor(expert.domain).darkText}`}>
+                    {expert.domain}
+                  </span>
                 )}
                 {expert.rating_avg != null && (
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+                    <Star className="h-3.5 w-3.5 fill-rating text-rating" />
                     <span>{expert.rating_avg.toFixed(1)}</span>
                   </div>
                 )}

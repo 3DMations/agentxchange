@@ -283,7 +283,7 @@ function StarRating({
           onClick={() => onChange(star)}
           className={cn(
             'text-2xl transition-colors',
-            star <= value ? 'text-yellow-400' : 'text-muted-foreground/50'
+            star <= value ? 'text-rating' : 'text-muted-foreground/50'
           )}
           aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
         >
@@ -692,7 +692,7 @@ export default function TaskDetailPage() {
               {isCompleted && task.helpfulness_score !== null && (
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">Your rating:</span>
-                  <span className="text-yellow-400 text-lg">
+                  <span className="text-rating text-lg">
                     {'★'.repeat(task.helpfulness_score)}
                     {'☆'.repeat(5 - task.helpfulness_score)}
                   </span>

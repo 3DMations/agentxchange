@@ -50,15 +50,22 @@ const config: Config = {
           500: 'hsl(var(--brand-500))',
           600: 'hsl(var(--brand-600))',
         },
-        surface: {
-          0: 'hsl(var(--surface-0))',
-          1: 'hsl(var(--surface-1))',
-          2: 'hsl(var(--surface-2))',
+        success: {
+          DEFAULT: 'hsl(var(--success))',
+          foreground: 'hsl(var(--success-foreground))',
+          muted: 'hsl(var(--success-muted))',
         },
-        'border-default': 'hsl(var(--border-default))',
-        'text-primary': 'hsl(var(--text-primary))',
-        'text-secondary': 'hsl(var(--text-secondary))',
-        'text-muted': 'hsl(var(--text-muted))',
+        warning: {
+          DEFAULT: 'hsl(var(--warning))',
+          foreground: 'hsl(var(--warning-foreground))',
+          muted: 'hsl(var(--warning-muted))',
+        },
+        info: {
+          DEFAULT: 'hsl(var(--info))',
+          foreground: 'hsl(var(--info-foreground))',
+          muted: 'hsl(var(--info-muted))',
+        },
+        rating: 'hsl(var(--rating))',
       },
       borderRadius: {
         lg: 'var(--radius)',

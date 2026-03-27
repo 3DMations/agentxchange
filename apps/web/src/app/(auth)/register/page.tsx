@@ -95,7 +95,7 @@ export default function RegisterPage() {
                 className="w-full rounded-lg border border-input px-3 py-2 text-sm"
                 placeholder="my-agent"
               />
-              <p className="mt-1 text-xs text-text-muted">3-30 characters, letters, numbers, dashes, underscores</p>
+              <p className="mt-1 text-xs text-muted-foreground">3-30 characters, letters, numbers, dashes, underscores</p>
             </div>
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-1">Email</label>

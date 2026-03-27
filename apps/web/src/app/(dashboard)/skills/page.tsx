@@ -7,6 +7,7 @@ import { PageHeader } from '@/components/ui/page-header'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { getCategoryColor } from '@/lib/utils/category-colors'
 
 interface Skill {
   id: string
@@ -280,9 +281,9 @@ export default function SkillsPage() {
                     </svg>
                   )}
                 </h3>
-                <Badge variant={CATEGORY_VARIANTS[skill.category] ?? 'default'}>
+                <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${getCategoryColor(skill.category).bg} ${getCategoryColor(skill.category).text} ${getCategoryColor(skill.category).darkBg} ${getCategoryColor(skill.category).darkText}`}>
                   {formatCategory(skill.category)}
-                </Badge>
+                </span>
               </div>
 
               <p className="text-xs text-muted-foreground mb-1">{skill.domain} &middot; {skill.proficiency_level}</p>

@@ -487,7 +487,9 @@ Every competitor uses dark gradients, purple/blue color schemes, floating partic
 
 ### Visual Identity Direction
 
-**Color palette (warm, professional, trustworthy):**
+> **NOTE (2026-03-27):** The deployed system uses the cool blue/indigo palette (shadcn/ui defaults, hsl 221) rather than the coral palette proposed below. The blue system is already live, tested, and the landing page is built around it. See the **Color System** section below for the canonical color decisions.
+
+**Original color palette proposal (warm, professional, trustworthy):**
 - Primary: Warm coral/terracotta `#E8634A` — energy and approachability without being aggressive
 - Background: Warm white `#FAF7F2` — immediately separates from cold gray/white dev tools
 - Text: Deep navy `#1A2B4A` — softer than pure black, more considered
@@ -547,6 +549,79 @@ Every competitor uses dark gradients, purple/blue color schemes, floating partic
 4. **Delivery Receipt** — Beautiful post-delivery summary: what was requested, what was delivered, how it was made, sources used, what to do next. This is the screenshot-and-share moment.
 
 5. **"Agent Stack" Recommendations** — "People who used [Content Writer] also hired [SEO Optimizer]." Amazon's "frequently bought together" for AI agents.
+
+---
+
+## Color System
+
+### Color System Decision (2026-03-27)
+
+The original UI project plan proposed a warm coral/terracotta (#E8634A) palette to differentiate from the typical "AI startup" dark-gradient aesthetic. However, during implementation the deployed system was built on the cool blue/indigo palette inherited from shadcn/ui (primary hsl 221).
+
+**Decision: KEEP the deployed blue system.** Rationale:
+- The landing page, dashboard, and all components are already built around it
+- The blue-indigo palette (blue-950, indigo-950, blue-600) has been tested across light and dark modes
+- Changing the palette now would require reworking every page with no user-facing benefit
+- The blue-indigo palette is the brand identity going forward
+
+### Three-Lane Color Namespace
+
+Colors are organized into three strictly separated namespaces. These namespaces NEVER overlap — each color has exactly one semantic meaning.
+
+**Status colors** (task lifecycle):
+| Status | Color | Usage |
+|--------|-------|-------|
+| Open | Blue | New jobs awaiting assignment |
+| In Progress | Amber | Active work underway |
+| Completed | Green | Successfully delivered |
+| Disputed | Red | Under review or contested |
+| Cancelled | Gray | Withdrawn or expired |
+
+**Category colors** (agent domain type):
+| Category | Color | Usage |
+|----------|-------|-------|
+| Code Generation | Indigo | Programming and development tasks |
+| Data Analysis | Teal | Data processing and insights |
+| Content Creation | Orange | Writing, design, and media |
+| Research | Purple | Investigation and synthesis |
+| Translation | Emerald | Language and localization |
+
+**Trust tier colors** (seller level):
+| Tier | Color | Usage |
+|------|-------|-------|
+| New | Gray | Unproven agents |
+| Bronze | Amber | Early track record |
+| Silver | Slate | Established reliability |
+| Gold | Yellow | Top-tier performance |
+| Platinum | Violet | Elite status |
+
+### Semantic Design Tokens
+
+Custom semantic tokens added to `globals.css` extending the shadcn/ui base:
+
+| Token | Purpose |
+|-------|---------|
+| `--success` / `--success-foreground` / `--success-muted` | Positive outcomes, completions, confirmations |
+| `--warning` / `--warning-foreground` / `--warning-muted` | Caution states, pending actions, approaching limits |
+| `--info` / `--info-foreground` / `--info-muted` | Informational callouts, tips, neutral highlights |
+| `--rating` | Star ratings and review scores |
+
+**Note:** Layer 2 tokens (`--text-primary`, `--text-secondary`, etc.) were initially considered but deprecated in favor of shadcn's built-in equivalents (`--foreground`, `--muted-foreground`, etc.) to avoid a parallel naming system.
+
+### Visual Continuity: Landing to Dashboard
+
+The design system ensures smooth visual transitions as users move from the marketing landing page into the authenticated dashboard:
+
+- **Hero gradient carry-through:** The landing page hero gradient (blue-950/indigo-950) carries into the dashboard welcome banner, creating continuity rather than a jarring context switch
+- **Tinted icon backgrounds:** Stat cards and activity feeds use soft tinted backgrounds (blue-50, green-50, amber-50, indigo-50) that echo the landing page's color accents
+- **Subtle glow orbs:** Indigo-500/20 with blur-3xl are used in feature zones (welcome banner, explore search) to maintain the premium feel from the landing page
+- **CTA buttons:** Primary actions use blue-600 with shadow-blue-600/25 glow, consistent from landing page CTAs through dashboard actions
+
+### Dark Mode Approach
+
+- All category, tier, and status colors have dark mode counterparts using -950 backgrounds with -200/-300 text for proper contrast
+- Implemented via `next-themes` with `defaultTheme="dark"` and system preference detection
+- `suppressHydrationWarning` on the HTML element prevents flash of unstyled content (FOUC) during theme initialization
 
 ---
 

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import type { Agent, AgentCard, TrustTier } from '@agentxchange/shared-types'
 import type { Skill } from '@agentxchange/shared-types'
+import { getCategoryColor } from '@/lib/utils/category-colors'
 
 // --- Types ---
 
@@ -25,11 +26,11 @@ interface ApiResponse<T> {
 // --- Constants ---
 
 const TRUST_TIER_CONFIG: Record<TrustTier, { label: string; variant: string }> = {
-  new: { label: 'New', variant: 'default' },
-  bronze: { label: 'Verified', variant: 'info' },
-  silver: { label: 'Trusted', variant: 'info' },
-  gold: { label: 'Top Rated', variant: 'success' },
-  platinum: { label: 'Elite', variant: 'success' },
+  new: { label: 'New', variant: 'tier-new' },
+  bronze: { label: 'Verified', variant: 'tier-bronze' },
+  silver: { label: 'Trusted', variant: 'tier-silver' },
+  gold: { label: 'Top Rated', variant: 'tier-gold' },
+  platinum: { label: 'Elite', variant: 'tier-platinum' },
 }
 
 const AVATAR_COLORS = [
@@ -129,7 +130,17 @@ function HeaderSection({ profile }: { profile: AgentProfile }) {
             <h1 className="text-2xl font-bold text-foreground">{profile.handle}</h1>
             <TrustBadge tier={profile.trust_tier} />
           </div>
-          <p className="mt-1 text-sm text-muted-foreground">{primaryDomain}</p>
+          {(() => {
+            const rawDomain = profile.skills?.[0]?.category
+            const domainColors = rawDomain ? getCategoryColor(rawDomain) : null
+            return domainColors ? (
+              <span className={`mt-1 inline-block rounded-full px-2.5 py-0.5 text-sm font-medium ${domainColors.bg} ${domainColors.text} ${domainColors.darkBg} ${domainColors.darkText}`}>
+                {primaryDomain}
+              </span>
+            ) : (
+              <p className="mt-1 text-sm text-muted-foreground">{primaryDomain}</p>
+            )
+          })()}
 
           <div className="mt-4 flex flex-wrap gap-6">
             <StatItem label="Success Rate" value={formatSuccessRate(profile.avg_rating)} />
@@ -165,7 +176,9 @@ function ServicesTab({ skills }: { skills: Skill[] }) {
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="font-semibold text-foreground">{skill.name}</h3>
-                <Badge variant="outline">{formatCategory(skill.category)}</Badge>
+                <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${getCategoryColor(skill.category).bg} ${getCategoryColor(skill.category).text} ${getCategoryColor(skill.category).darkBg} ${getCategoryColor(skill.category).darkText}`}>
+                  {formatCategory(skill.category)}
+                </span>
                 <Badge variant="info">
                   {PROFICIENCY_LABELS[skill.proficiency_level] || skill.proficiency_level}
                 </Badge>
