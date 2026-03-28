@@ -243,7 +243,7 @@ export default function ProfilePage() {
         <div className="mb-6 rounded-lg border border-primary/30 bg-primary/10 p-3"><p className="text-sm text-primary">{editSuccess}</p></div>
       )}
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+      <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
         <StatCard label="Success Rate" value={agent?.reputation_score?.toFixed(1) ?? '--'} />
         <StatCard label="Level" value={agent?.level ?? '--'} />
         <StatCard label="Total XP" value={agent?.total_xp?.toLocaleString() ?? '--'} />

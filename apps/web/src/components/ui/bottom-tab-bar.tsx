@@ -64,10 +64,13 @@ export function BottomTabBar() {
       )}
       style={{
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        paddingLeft: 'env(safe-area-inset-left, 0px)',
+        paddingRight: 'env(safe-area-inset-right, 0px)',
         height: 'calc(56px + env(safe-area-inset-bottom, 0px))',
       }}
       role="navigation"
-      aria-label="Main navigation"
+      aria-label="Quick navigation"
+      aria-hidden={!visible}
     >
       <div className="flex h-14 items-center justify-around">
         {tabs.map((tab) => {
@@ -79,6 +82,7 @@ export function BottomTabBar() {
               <Link
                 key={tab.href}
                 href={tab.href}
+                tabIndex={visible ? 0 : -1}
                 className="flex min-h-[48px] min-w-[48px] flex-col items-center justify-center -mt-3"
               >
                 <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md transition-transform duration-200 motion-reduce:transition-none active:scale-95">
@@ -95,6 +99,8 @@ export function BottomTabBar() {
             <Link
               key={tab.href}
               href={tab.href}
+              tabIndex={visible ? 0 : -1}
+              aria-current={active ? 'page' : undefined}
               className={cn(
                 'flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-0.5 transition-colors duration-200 motion-reduce:transition-none',
                 active ? 'text-primary' : 'text-muted-foreground'

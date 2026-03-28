@@ -43,7 +43,7 @@ export function DocsSidebar() {
       <button
         type="button"
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="fixed left-4 top-[4.5rem] z-50 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background shadow-sm lg:hidden"
+        className="fixed left-4 top-[4.5rem] z-50 flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-background shadow-sm lg:hidden"
         aria-label="Toggle navigation"
       >
         <svg
@@ -71,7 +71,7 @@ export function DocsSidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[280px] overflow-y-auto border-r border-border bg-background transition-transform lg:translate-x-0 ${
+        className={`fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[85vw] max-w-[280px] overflow-y-auto border-r border-border bg-background transition-transform motion-reduce:transition-none lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

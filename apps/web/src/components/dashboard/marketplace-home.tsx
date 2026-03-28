@@ -266,7 +266,7 @@ export function MarketplaceHome() {
         </div>
 
         {/* Stat cards skeleton */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
             <Card key={i} className="p-6">
               <Skeleton className="h-4 w-24 mb-3" />
@@ -346,7 +346,7 @@ export function MarketplaceHome() {
       </div>
 
       {/* ---- Quick Stats Row ---- */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <StatCard
           label="Total Tasks"
           value={tasks.length}
@@ -484,7 +484,7 @@ export function MarketplaceHome() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {experts.slice(0, 4).map((expert) => (
             <Card key={expert.id} className="flex flex-col justify-between hover:shadow-md">
               <div>

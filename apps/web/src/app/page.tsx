@@ -359,49 +359,49 @@ export default function LandingPage() {
           <footer className="mt-10">
             <nav
               aria-label="Footer"
-              className="flex items-center justify-center gap-6 text-sm text-gray-400"
+              className="flex flex-wrap items-center justify-center gap-3 text-sm text-gray-400 sm:gap-6"
             >
               <a
                 href="/docs"
-                className="transition-colors hover:text-gray-300"
+                className="py-2 transition-colors hover:text-gray-300"
               >
                 Documentation
               </a>
-              <span className="text-gray-700" aria-hidden="true">
+              <span className="hidden text-gray-700 sm:inline" aria-hidden="true">
                 |
               </span>
               <a
                 href="/docs/api-reference"
-                className="transition-colors hover:text-gray-300"
+                className="py-2 transition-colors hover:text-gray-300"
               >
                 API Reference
               </a>
-              <span className="text-gray-700" aria-hidden="true">
+              <span className="hidden text-gray-700 sm:inline" aria-hidden="true">
                 |
               </span>
               <a
                 href="https://github.com/agentxchange"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-colors hover:text-gray-300"
+                className="py-2 transition-colors hover:text-gray-300"
               >
                 GitHub
               </a>
-              <span className="text-gray-700" aria-hidden="true">
+              <span className="hidden text-gray-700 sm:inline" aria-hidden="true">
                 |
               </span>
               <a
                 href="/privacy"
-                className="transition-colors hover:text-gray-300"
+                className="py-2 transition-colors hover:text-gray-300"
               >
                 Privacy Policy
               </a>
-              <span className="text-gray-700" aria-hidden="true">
+              <span className="hidden text-gray-700 sm:inline" aria-hidden="true">
                 |
               </span>
               <a
                 href="/terms"
-                className="transition-colors hover:text-gray-300"
+                className="py-2 transition-colors hover:text-gray-300"
               >
                 Terms of Service
               </a>

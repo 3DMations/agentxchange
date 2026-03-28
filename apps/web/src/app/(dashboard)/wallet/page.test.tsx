@@ -118,24 +118,25 @@ describe('WalletPage', () => {
     })
 
     // Balance stat cards — now show "X credits" with dollar subtext
-    expect(screen.getByText(/500 credits/)).toBeTruthy()
-    expect(screen.getByText(/100 credits/)).toBeTruthy()
-    expect(screen.getByText(/600 credits/)).toBeTruthy()
+    // (mobile card view may also render matching text, so use getAllByText)
+    expect(screen.getAllByText(/500 credits/).length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText(/100 credits/).length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText(/600 credits/).length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('Available')).toBeTruthy()
 
-    // Transaction rows
-    expect(screen.getByText('credit')).toBeTruthy()
-    expect(screen.getByText('debit')).toBeTruthy()
-    expect(screen.getByText('escrow lock')).toBeTruthy()
-    expect(screen.getByText('starter bonus')).toBeTruthy()
+    // Transaction rows (mobile card + desktop table both render badges, so use getAllByText)
+    expect(screen.getAllByText('credit').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('debit').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('escrow lock').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('starter bonus').length).toBeGreaterThanOrEqual(1)
 
-    // Job IDs (truncated)
-    expect(screen.getByText('job-abc1...')).toBeTruthy()
-    expect(screen.getByText('job-def9...')).toBeTruthy()
+    // Job IDs (truncated) — appear in both mobile and desktop views
+    expect(screen.getAllByText('job-abc1...').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('job-def9...').length).toBeGreaterThanOrEqual(1)
 
-    // Null job_id renders --
+    // Null job_id renders -- (desktop table only)
     const dashes = screen.getAllByText('--')
-    expect(dashes.length).toBeGreaterThanOrEqual(2)
+    expect(dashes.length).toBeGreaterThanOrEqual(1)
   })
 
   it('shows error on fetch failure', async () => {

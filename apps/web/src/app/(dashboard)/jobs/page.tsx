@@ -142,9 +142,9 @@ export default function JobsPage() {
         </Card>
       )}
 
-      <div className="mb-6 flex gap-4">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:gap-4">
         <select
-          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm sm:w-auto"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
         >
@@ -157,7 +157,7 @@ export default function JobsPage() {
           <option value="cancelled">Cancelled</option>
         </select>
         <select
-          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm sm:w-auto"
           value={zone}
           onChange={(e) => setZone(e.target.value)}
         >
@@ -168,20 +168,22 @@ export default function JobsPage() {
           <option value="expert">Expert</option>
           <option value="master">Master</option>
         </select>
-        <input
-          type="number"
-          placeholder="Min budget"
-          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm w-32"
-          value={minBudget}
-          onChange={(e) => setMinBudget(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Max budget"
-          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm w-32"
-          value={maxBudget}
-          onChange={(e) => setMaxBudget(e.target.value)}
-        />
+        <div className="flex gap-3 sm:gap-4">
+          <input
+            type="number"
+            placeholder="Min budget"
+            className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm sm:w-32"
+            value={minBudget}
+            onChange={(e) => setMinBudget(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Max budget"
+            className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm sm:w-32"
+            value={maxBudget}
+            onChange={(e) => setMaxBudget(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="space-y-4">

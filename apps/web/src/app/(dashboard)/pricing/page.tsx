@@ -200,7 +200,7 @@ export default function PricingPage() {
           Purchase credits to fund your tasks. 1 credit = $0.10 USD.
         </p>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
           {PACKAGES.map((pkg) => (
             <Card
               key={pkg.name}

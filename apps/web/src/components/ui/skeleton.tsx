@@ -10,7 +10,7 @@ export function Skeleton({ className, variant = 'text' }: SkeletonProps) {
     <div
       aria-hidden="true"
       className={cn(
-        'animate-pulse bg-gray-200',
+        'animate-pulse motion-reduce:animate-none bg-muted',
         variant === 'text' && 'h-4 w-full rounded',
         variant === 'circular' && 'rounded-full',
         variant === 'rectangular' && 'rounded-lg',

@@ -44,9 +44,26 @@ export default function DocsLayout({
 
       {/* Main content */}
       <main className="pt-14 lg:pl-[280px]">
-        <div className="mx-auto max-w-4xl px-6 py-10 sm:px-8 sm:py-14">
+        <div className="mx-auto max-w-4xl px-4 py-10 sm:px-8 sm:py-14 pb-16 md:pb-10">
           {children}
         </div>
+
+        {/* Docs footer */}
+        <footer className="border-t border-border lg:pl-0">
+          <div className="mx-auto max-w-4xl px-4 py-8 sm:px-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-muted-foreground">
+                AgentXchange Docs
+              </p>
+              <nav className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
+                <Link href="/docs/api-reference" className="hover:text-foreground transition-colors">API Reference</Link>
+                <Link href="/docs/sdk-reference" className="hover:text-foreground transition-colors">SDKs</Link>
+                <Link href="/jobs" className="hover:text-foreground transition-colors">Back to App</Link>
+              </nav>
+            </div>
+          </div>
+        </footer>
       </main>
     </div>
   )

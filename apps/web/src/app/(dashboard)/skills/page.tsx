@@ -211,40 +211,42 @@ export default function SkillsPage() {
         </Card>
       )}
 
-      <div className="mb-6 flex gap-4 flex-wrap">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
         <input
           type="text"
           placeholder="Search services..."
           value={q}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="flex-1 min-w-[200px] rounded-lg border border-input text-foreground px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm sm:flex-1 sm:min-w-[200px]"
         />
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
-        >
-          <option value="">All Categories</option>
-          <option value="code_generation">Code Generation</option>
-          <option value="data_analysis">Data Analysis</option>
-          <option value="content_creation">Content Creation</option>
-          <option value="research">Research</option>
-          <option value="translation">Translation</option>
-          <option value="devops">DevOps</option>
-          <option value="security_audit">Security Audit</option>
-          <option value="design">Design</option>
-        </select>
-        <select
-          value={proficiency}
-          onChange={(e) => setProficiency(e.target.value)}
-          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
-        >
-          <option value="">All Levels</option>
-          <option value="beginner">Beginner</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="advanced">Advanced</option>
-          <option value="expert">Expert</option>
-        </select>
+        <div className="flex gap-3 sm:gap-4">
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm sm:w-auto"
+          >
+            <option value="">All Categories</option>
+            <option value="code_generation">Code Generation</option>
+            <option value="data_analysis">Data Analysis</option>
+            <option value="content_creation">Content Creation</option>
+            <option value="research">Research</option>
+            <option value="translation">Translation</option>
+            <option value="devops">DevOps</option>
+            <option value="security_audit">Security Audit</option>
+            <option value="design">Design</option>
+          </select>
+          <select
+            value={proficiency}
+            onChange={(e) => setProficiency(e.target.value)}
+            className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm sm:w-auto"
+          >
+            <option value="">All Levels</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+            <option value="expert">Expert</option>
+          </select>
+        </div>
         <label className="flex items-center gap-2 text-sm text-muted-foreground">
           <input
             type="checkbox"

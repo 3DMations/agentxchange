@@ -133,61 +133,97 @@ export default function WalletPage() {
 
       <Card>
         <h2 className="text-lg font-semibold mb-4">Transaction History</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-border">
-            <thead>
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Type</th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Credits</th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">USD</th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Balance After</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Task</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {ledger.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-sm text-muted-foreground">No transactions yet</td>
-                </tr>
-              ) : (
-                ledger.map((entry) => {
-                  const debit = isDebit(entry.type)
-                  const amountColor = debit ? 'text-destructive' : 'text-success'
-                  const dollarPrefix = debit ? '-' : '+'
 
-                  return (
-                    <tr key={entry.id}>
-                      <td className="px-4 py-3 text-sm">
-                        <Badge variant={typeBadgeVariant[entry.type] || 'default'}>
-                          {entry.type.replace(/_/g, ' ')}
-                        </Badge>
-                      </td>
-                      <td className={`px-4 py-3 text-sm font-medium text-right ${amountColor}`}>
-                        {formatAmount(entry.type, entry.amount)}
-                      </td>
-                      <td className={`px-4 py-3 text-sm text-right ${amountColor}`}>
-                        {dollarPrefix}{creditsToDollars(entry.amount).slice(1)}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-foreground text-right">
-                        {entry.balance_after.toLocaleString()}
-                        <span className="text-xs text-muted-foreground ml-1">
-                          ({creditsToDollars(entry.balance_after)})
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-muted-foreground font-mono">
-                        {entry.job_id ? entry.job_id.slice(0, 8) + '...' : '--'}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-muted-foreground">
+        {ledger.length === 0 ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">No transactions yet</p>
+        ) : (
+          <>
+            {/* Mobile card view */}
+            <div className="space-y-3 md:hidden">
+              {ledger.map((entry) => {
+                const debit = isDebit(entry.type)
+                const amountColor = debit ? 'text-destructive' : 'text-success'
+                const dollarPrefix = debit ? '-' : '+'
+
+                return (
+                  <div key={entry.id} className="rounded-lg border border-border p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge variant={typeBadgeVariant[entry.type] || 'default'}>
+                        {entry.type.replace(/_/g, ' ')}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
                         {new Date(entry.created_at).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                      </span>
+                    </div>
+                    <div className="flex items-baseline justify-between">
+                      <span className={`text-lg font-semibold ${amountColor}`}>
+                        {formatAmount(entry.type, entry.amount)} credits
+                      </span>
+                      <span className={`text-sm ${amountColor}`}>
+                        {dollarPrefix}{creditsToDollars(entry.amount).slice(1)}
+                      </span>
+                    </div>
+                    <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
+                      <span>Balance: {entry.balance_after.toLocaleString()} ({creditsToDollars(entry.balance_after)})</span>
+                      {entry.job_id && <span className="font-mono">{entry.job_id.slice(0, 8)}...</span>}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Desktop table view */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="min-w-full divide-y divide-border">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Type</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Credits</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">USD</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Balance After</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Task</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Date</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {ledger.map((entry) => {
+                    const debit = isDebit(entry.type)
+                    const amountColor = debit ? 'text-destructive' : 'text-success'
+                    const dollarPrefix = debit ? '-' : '+'
+
+                    return (
+                      <tr key={entry.id}>
+                        <td className="px-4 py-3 text-sm">
+                          <Badge variant={typeBadgeVariant[entry.type] || 'default'}>
+                            {entry.type.replace(/_/g, ' ')}
+                          </Badge>
+                        </td>
+                        <td className={`px-4 py-3 text-sm font-medium text-right ${amountColor}`}>
+                          {formatAmount(entry.type, entry.amount)}
+                        </td>
+                        <td className={`px-4 py-3 text-sm text-right ${amountColor}`}>
+                          {dollarPrefix}{creditsToDollars(entry.amount).slice(1)}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-foreground text-right">
+                          {entry.balance_after.toLocaleString()}
+                          <span className="text-xs text-muted-foreground ml-1">
+                            ({creditsToDollars(entry.balance_after)})
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-sm text-muted-foreground font-mono">
+                          {entry.job_id ? entry.job_id.slice(0, 8) + '...' : '--'}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-muted-foreground">
+                          {new Date(entry.created_at).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </Card>
     </>
   )

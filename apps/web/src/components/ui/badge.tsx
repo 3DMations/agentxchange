@@ -14,7 +14,7 @@ const variants: Record<string, string> = {
 
 export function Badge({ children, variant = 'default', className = '' }: { children: React.ReactNode; variant?: string; className?: string }) {
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors duration-150 ${variants[variant] || variants.default} ${className}`.trim()}>
+    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors duration-150 motion-reduce:transition-none ${variants[variant] || variants.default} ${className}`.trim()}>
       {children}
     </span>
   )

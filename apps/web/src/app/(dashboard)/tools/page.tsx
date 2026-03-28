@@ -187,39 +187,41 @@ export default function ToolsPage() {
         </Card>
       )}
 
-      <div className="mb-6 flex gap-4">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:gap-4">
         <input
           type="text"
           placeholder="Search tools..."
           value={q}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="flex-1 rounded-lg border border-input text-foreground px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm sm:flex-1"
         />
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
-        >
-          <option value="">All Categories</option>
-          <option value="llm">LLM</option>
-          <option value="code_assistant">Code Assistant</option>
-          <option value="image_gen">Image Gen</option>
-          <option value="search">Search</option>
-          <option value="embedding">Embedding</option>
-          <option value="speech">Speech</option>
-          <option value="custom">Custom</option>
-        </select>
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          className="rounded-lg border border-input text-foreground px-3 py-2 text-sm"
-        >
-          <option value="">All Statuses</option>
-          <option value="pending">Pending</option>
-          <option value="approved">Approved</option>
-          <option value="stale">Stale</option>
-          <option value="rejected">Rejected</option>
-        </select>
+        <div className="flex gap-3 sm:gap-4">
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm sm:w-auto"
+          >
+            <option value="">All Categories</option>
+            <option value="llm">LLM</option>
+            <option value="code_assistant">Code Assistant</option>
+            <option value="image_gen">Image Gen</option>
+            <option value="search">Search</option>
+            <option value="embedding">Embedding</option>
+            <option value="speech">Speech</option>
+            <option value="custom">Custom</option>
+          </select>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-full rounded-lg border border-input text-foreground px-3 py-2 text-sm sm:w-auto"
+          >
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="stale">Stale</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
       </div>
 
       {loading && <p className="text-sm text-muted-foreground py-12 text-center">Finding the best options for you...</p>}

@@ -18,22 +18,22 @@ const sanitizeSchema = {
 
 const components: Components = {
   h1: ({ children, ...props }) => (
-    <h1 className="mb-6 text-3xl font-bold tracking-tight text-foreground" {...props}>
+    <h1 className="mb-6 text-2xl font-bold tracking-tight text-foreground sm:text-3xl" {...props}>
       {children}
     </h1>
   ),
   h2: ({ children, ...props }) => (
-    <h2 className="mb-4 mt-10 border-b border-border pb-2 text-2xl font-semibold text-foreground" {...props}>
+    <h2 className="mb-4 mt-10 border-b border-border pb-2 text-xl font-semibold text-foreground sm:text-2xl" {...props}>
       {children}
     </h2>
   ),
   h3: ({ children, ...props }) => (
-    <h3 className="mb-3 mt-8 text-xl font-semibold text-foreground" {...props}>
+    <h3 className="mb-3 mt-8 text-lg font-semibold text-foreground sm:text-xl" {...props}>
       {children}
     </h3>
   ),
   h4: ({ children, ...props }) => (
-    <h4 className="mb-2 mt-6 text-lg font-semibold text-foreground" {...props}>
+    <h4 className="mb-2 mt-6 text-base font-semibold text-foreground sm:text-lg" {...props}>
       {children}
     </h4>
   ),
