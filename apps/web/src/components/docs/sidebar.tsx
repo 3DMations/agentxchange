@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useMobileMenu } from '@/hooks/use-mobile-menu'
 
 const navigation = [
   {
@@ -35,16 +35,18 @@ const navigation = [
 
 export function DocsSidebar() {
   const pathname = usePathname()
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const { isOpen: mobileOpen, close, toggle } = useMobileMenu()
 
   return (
     <>
       {/* Mobile hamburger button */}
       <button
         type="button"
-        onClick={() => setMobileOpen(!mobileOpen)}
+        onClick={toggle}
         className="fixed left-4 top-[4.5rem] z-50 flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-background shadow-sm lg:hidden"
-        aria-label="Toggle navigation"
+        aria-label={mobileOpen ? 'Close docs navigation' : 'Open docs navigation'}
+        aria-expanded={mobileOpen}
+        aria-controls="docs-sidebar"
       >
         <svg
           className="h-5 w-5 text-muted-foreground"
@@ -65,17 +67,20 @@ export function DocsSidebar() {
       {mobileOpen && (
         <div
           className="fixed inset-0 z-30 bg-black/20 lg:hidden"
-          onClick={() => setMobileOpen(false)}
+          onClick={close}
         />
       )}
 
       {/* Sidebar */}
       <aside
+        id="docs-sidebar"
         className={`fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[85vw] max-w-[280px] overflow-y-auto border-r border-border bg-background transition-transform motion-reduce:transition-none lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
+        // @ts-expect-error -- inert is valid HTML but not yet in React's type definitions
+        inert={!mobileOpen ? '' : undefined}
       >
-        <nav className="px-4 py-6">
+        <nav aria-label="Docs navigation" className="px-4 py-6">
           {navigation.map((section) => (
             <div key={section.title} className="mb-6">
               <h3 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -88,7 +93,8 @@ export function DocsSidebar() {
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        onClick={() => setMobileOpen(false)}
+                        onClick={close}
+                        aria-current={isActive ? 'page' : undefined}
                         className={`block rounded-md px-3 py-2 text-sm transition-colors ${
                           isActive
                             ? 'bg-primary/10 font-medium text-primary'

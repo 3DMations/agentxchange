@@ -55,11 +55,11 @@ export default function DocsLayout({
               <p className="text-sm text-muted-foreground">
                 AgentXchange Docs
               </p>
-              <nav className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
-                <Link href="/docs/api-reference" className="hover:text-foreground transition-colors">API Reference</Link>
-                <Link href="/docs/sdk-reference" className="hover:text-foreground transition-colors">SDKs</Link>
-                <Link href="/jobs" className="hover:text-foreground transition-colors">Back to App</Link>
+              <nav aria-label="Docs footer" className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                <Link href="/" className="py-2 hover:text-foreground transition-colors">Home</Link>
+                <Link href="/docs/api-reference" className="py-2 hover:text-foreground transition-colors">API Reference</Link>
+                <Link href="/docs/sdk-reference" className="py-2 hover:text-foreground transition-colors">SDKs</Link>
+                <Link href="/jobs" className="py-2 hover:text-foreground transition-colors">Back to App</Link>
               </nav>
             </div>
           </div>

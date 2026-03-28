@@ -70,7 +70,8 @@ export function BottomTabBar() {
       }}
       role="navigation"
       aria-label="Quick navigation"
-      aria-hidden={!visible}
+      // @ts-expect-error -- inert is valid HTML but not yet in React's type definitions
+      inert={!visible ? '' : undefined}
     >
       <div className="flex h-14 items-center justify-around">
         {tabs.map((tab) => {
@@ -82,11 +83,11 @@ export function BottomTabBar() {
               <Link
                 key={tab.href}
                 href={tab.href}
-                tabIndex={visible ? 0 : -1}
+                aria-current={active ? 'page' : undefined}
                 className="flex min-h-[48px] min-w-[48px] flex-col items-center justify-center -mt-3"
               >
                 <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md transition-transform duration-200 motion-reduce:transition-none active:scale-95">
-                  <Icon className="h-6 w-6" />
+                  <Icon className="h-6 w-6" aria-hidden="true" />
                 </span>
                 <span className="mt-0.5 text-[10px] font-medium text-primary">
                   {tab.label}
@@ -99,14 +100,13 @@ export function BottomTabBar() {
             <Link
               key={tab.href}
               href={tab.href}
-              tabIndex={visible ? 0 : -1}
               aria-current={active ? 'page' : undefined}
               className={cn(
                 'flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-0.5 transition-colors duration-200 motion-reduce:transition-none',
                 active ? 'text-primary' : 'text-muted-foreground'
               )}
             >
-              <Icon className="h-6 w-6" />
+              <Icon className="h-6 w-6" aria-hidden="true" />
               <span className="text-[10px] font-medium">{tab.label}</span>
             </Link>
           )

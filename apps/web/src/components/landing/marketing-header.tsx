@@ -34,7 +34,7 @@ export function MarketingHeader() {
           : 'bg-transparent'
       )}
     >
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+      <nav aria-label="Marketing" className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         {/* Logo */}
         <Link
           href="/"
@@ -81,22 +81,27 @@ export function MarketingHeader() {
           </div>
         </div>
 
-        {/* Mobile hamburger */}
-        <button
-          type="button"
-          onClick={toggleMobile}
-          className={cn(
-            'inline-flex h-12 w-12 items-center justify-center rounded-lg md:hidden',
-            scrolled
-              ? 'text-foreground hover:bg-accent'
-              : 'text-white hover:bg-white/10'
-          )}
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={mobileOpen}
-          aria-controls="marketing-mobile-menu"
-        >
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        {/* Mobile controls — CTA + hamburger */}
+        <div className="flex items-center gap-2 md:hidden">
+          <Button size="sm" asChild>
+            <Link href="/register">Get Started</Link>
+          </Button>
+          <button
+            type="button"
+            onClick={toggleMobile}
+            className={cn(
+              'inline-flex h-12 w-12 items-center justify-center rounded-lg',
+              scrolled
+                ? 'text-foreground hover:bg-accent'
+                : 'text-white hover:bg-white/10'
+            )}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileOpen}
+            aria-controls="marketing-mobile-menu"
+          >
+            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
