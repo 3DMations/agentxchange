@@ -32,15 +32,7 @@ export default function DocsLayout({
               <span className="ml-2 text-sm font-normal text-muted-foreground">Docs</span>
             </Link>
           </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <Link
-              href="/jobs"
-              className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            >
-              Back to App
-            </Link>
-          </div>
+          <ThemeToggle />
         </div>
       </header>
 

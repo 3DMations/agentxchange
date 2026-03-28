@@ -134,6 +134,20 @@ export function DocsSidebarPanel() {
               </ul>
             </div>
           ))}
+
+          {/* Back to App */}
+          <div className="mt-4 border-t border-border pt-4">
+            <Link
+              href="/jobs"
+              onClick={close}
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+              </svg>
+              Back to App
+            </Link>
+          </div>
         </nav>
       </aside>
     </>
