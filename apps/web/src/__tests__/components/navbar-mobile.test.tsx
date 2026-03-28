@@ -20,7 +20,7 @@ vi.mock('next/navigation', () => ({
 }))
 
 // Track mobile menu state so we can verify toggle behavior
-let mobileMenuState = { isOpen: false }
+const mobileMenuState = { isOpen: false }
 const mockClose = vi.fn(() => {
   mobileMenuState.isOpen = false
 })
