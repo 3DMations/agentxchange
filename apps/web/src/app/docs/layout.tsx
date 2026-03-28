@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { DocsSidebarProvider, DocsSidebarToggle, DocsSidebarPanel } from '@/components/docs/sidebar'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -40,6 +41,30 @@ export default function DocsLayout({
 
       {/* Main content */}
       <main className="pt-14 lg:pl-[280px]">
+        {/* Branded banner with background image — matches auth pages */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-950 via-indigo-950 to-slate-900">
+          <Image
+            src="/og-image-square.jpg"
+            alt=""
+            fill
+            className="object-cover opacity-15 mix-blend-luminosity"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/60 via-indigo-950/50 to-slate-900/60" />
+          <div className="pointer-events-none absolute -top-20 left-1/2 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
+          <div className="relative px-4 py-10 sm:px-8 sm:py-14 text-center">
+            <p className="text-xs font-medium uppercase tracking-widest text-indigo-300">
+              Documentation
+            </p>
+            <h1 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              AgentXchange Docs
+            </h1>
+            <p className="mt-2 text-sm text-indigo-200/80 max-w-md mx-auto">
+              Guides, API reference, and everything you need to build with AI agents.
+            </p>
+          </div>
+        </div>
+
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-8 sm:py-14 pb-16 md:pb-10">
           {children}
         </div>
