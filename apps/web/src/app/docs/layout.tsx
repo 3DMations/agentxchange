@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { DocsSidebar } from '@/components/docs/sidebar'
+import { DocsSidebarProvider, DocsSidebarToggle, DocsSidebarPanel } from '@/components/docs/sidebar'
 import { ThemeToggle } from '@/components/theme-toggle'
 import type { Metadata } from 'next'
 
@@ -17,17 +17,21 @@ export default function DocsLayout({
   children: React.ReactNode
 }) {
   return (
+    <DocsSidebarProvider>
     <div className="min-h-screen bg-background">
       {/* Top navbar */}
       <header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center border-b border-border bg-background/95 backdrop-blur">
-        <div className="flex w-full items-center justify-between px-6">
-          <Link
-            href="/"
-            className="text-xl font-bold tracking-tight text-foreground"
-          >
-            AgentXchange
-            <span className="ml-2 text-sm font-normal text-muted-foreground">Docs</span>
-          </Link>
+        <div className="flex w-full items-center justify-between px-4 sm:px-6">
+          <div className="flex items-center gap-2">
+            <DocsSidebarToggle />
+            <Link
+              href="/"
+              className="text-xl font-bold tracking-tight text-foreground"
+            >
+              AgentXchange
+              <span className="ml-2 text-sm font-normal text-muted-foreground">Docs</span>
+            </Link>
+          </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <Link
@@ -40,7 +44,7 @@ export default function DocsLayout({
         </div>
       </header>
 
-      <DocsSidebar />
+      <DocsSidebarPanel />
 
       {/* Main content */}
       <main className="pt-14 lg:pl-[280px]">
@@ -66,5 +70,6 @@ export default function DocsLayout({
         </footer>
       </main>
     </div>
+    </DocsSidebarProvider>
   )
 }

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { createContext, useContext } from 'react'
 import { useMobileMenu } from '@/hooks/use-mobile-menu'
 
 const navigation = [
@@ -33,38 +34,64 @@ const navigation = [
   },
 ]
 
-export function DocsSidebar() {
+// Shared context so toggle button and panel share state
+const DocsSidebarContext = createContext<ReturnType<typeof useMobileMenu> | null>(null)
+
+function useDocsSidebar() {
+  const ctx = useContext(DocsSidebarContext)
+  if (!ctx) throw new Error('DocsSidebar components must be wrapped in DocsSidebarProvider')
+  return ctx
+}
+
+/** Wrap the docs layout to share mobile menu state between toggle and panel */
+export function DocsSidebarProvider({ children }: { children: React.ReactNode }) {
+  const menu = useMobileMenu()
+  return (
+    <DocsSidebarContext.Provider value={menu}>
+      {children}
+    </DocsSidebarContext.Provider>
+  )
+}
+
+/** Hamburger toggle — rendered inside the header bar */
+export function DocsSidebarToggle() {
+  const { isOpen, toggle } = useDocsSidebar()
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground lg:hidden"
+      aria-label={isOpen ? 'Close docs navigation' : 'Open docs navigation'}
+      aria-expanded={isOpen}
+      aria-controls="docs-sidebar"
+    >
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2}
+        stroke="currentColor"
+      >
+        {isOpen ? (
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        ) : (
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        )}
+      </svg>
+    </button>
+  )
+}
+
+/** Sidebar panel + overlay — rendered below the header */
+export function DocsSidebarPanel() {
   const pathname = usePathname()
-  const { isOpen: mobileOpen, close, toggle } = useMobileMenu()
+  const { isOpen, close } = useDocsSidebar()
 
   return (
     <>
-      {/* Mobile hamburger button */}
-      <button
-        type="button"
-        onClick={toggle}
-        className="fixed left-4 top-[4.5rem] z-50 flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-background shadow-sm lg:hidden"
-        aria-label={mobileOpen ? 'Close docs navigation' : 'Open docs navigation'}
-        aria-expanded={mobileOpen}
-        aria-controls="docs-sidebar"
-      >
-        <svg
-          className="h-5 w-5 text-muted-foreground"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-        >
-          {mobileOpen ? (
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          ) : (
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          )}
-        </svg>
-      </button>
-
       {/* Mobile overlay */}
-      {mobileOpen && (
+      {isOpen && (
         <div
           className="fixed inset-0 z-30 bg-black/20 lg:hidden"
           onClick={close}
@@ -75,7 +102,7 @@ export function DocsSidebar() {
       <aside
         id="docs-sidebar"
         className={`fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[85vw] max-w-[280px] overflow-y-auto border-r border-border bg-background transition-transform motion-reduce:transition-none lg:visible lg:translate-x-0 ${
-          mobileOpen ? 'visible translate-x-0' : 'invisible -translate-x-full'
+          isOpen ? 'visible translate-x-0' : 'invisible -translate-x-full'
         }`}
       >
         <nav aria-label="Docs navigation" className="px-4 py-6">
