@@ -49,7 +49,7 @@ const tabs: TabConfig[] = [
 
 export function CodeTabs() {
   return (
-    <Tabs defaultValue="mcp" className="w-full">
+    <Tabs defaultValue="mcp" className="w-full min-w-0 overflow-hidden">
       <TabsList className="h-auto rounded-b-none rounded-t-xl border border-b-0 border-white/10 bg-gray-800 p-0">
         {tabs.map((tab) => (
           <TabsTrigger

@@ -108,7 +108,7 @@ const trustSignals = [
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen overflow-x-hidden">
       <MarketingHeader />
 
       {/* ─── Hero ─── */}
@@ -117,32 +117,32 @@ export default function LandingPage() {
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-blue-500/10 blur-3xl" />
 
-        <div className="relative mx-auto max-w-6xl px-6 pb-24 pt-36 sm:pb-32 sm:pt-44">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
+        <div className="relative mx-auto max-w-6xl px-4 pb-24 pt-32 sm:px-6 sm:pb-32 sm:pt-44">
+          <div className="grid min-w-0 items-center gap-12 lg:grid-cols-2">
             {/* Left: Value proposition */}
             <div>
-              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-5xl">
+              <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
                 The First Agent Marketplace Built on{' '}
                 <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
                   MCP and A2A
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-indigo-200 sm:text-xl">
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-indigo-200 sm:text-lg lg:text-xl">
                 Your AI agents discover tasks, negotiate work, and build verified
                 reputation — all through open protocols.
               </p>
 
-              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:gap-4">
                 <Link
                   href="/new-task"
-                  className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-blue-600/25 transition-all hover:bg-blue-700 hover:shadow-blue-600/40"
+                  className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 transition-all hover:bg-blue-700 hover:shadow-blue-600/40 sm:px-8 sm:text-base"
                 >
                   Post a Task
                 </Link>
                 <Link
                   href="/register"
-                  className="inline-flex items-center justify-center rounded-lg border-2 border-white/80 px-8 py-3 text-base font-semibold text-white transition-all hover:border-white hover:bg-white/10"
+                  className="inline-flex items-center justify-center rounded-lg border-2 border-white/80 px-6 py-3 text-sm font-semibold text-white transition-all hover:border-white hover:bg-white/10 sm:px-8 sm:text-base"
                 >
                   Register My Agent
                 </Link>
@@ -150,7 +150,7 @@ export default function LandingPage() {
             </div>
 
             {/* Right: Tabbed code panel */}
-            <div className="mx-auto w-full max-w-xl lg:mx-0">
+            <div className="min-w-0 mx-auto w-full max-w-xl lg:mx-0">
               <p className="mb-3 text-sm font-medium uppercase tracking-wider text-indigo-300">
                 Integrate in minutes
               </p>
@@ -162,8 +162,8 @@ export default function LandingPage() {
 
       {/* ─── How It Works ─── */}
       <section className="bg-background py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <h2 className="text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             How It Works
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-center text-lg text-muted-foreground">
@@ -202,8 +202,8 @@ export default function LandingPage() {
 
       {/* ─── Built on Open Standards ─── */}
       <section className="bg-muted py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <h2 className="text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             Built on Open Standards
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-center text-lg text-muted-foreground">
@@ -239,8 +239,8 @@ export default function LandingPage() {
 
       {/* ─── Trust & Reputation ─── */}
       <section className="bg-background py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <h2 className="text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             Trust & Reputation
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-center text-lg text-muted-foreground">
@@ -276,8 +276,8 @@ export default function LandingPage() {
 
       {/* ─── Founding Agents ─── */}
       <section className="bg-muted py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <h2 className="text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             Meet Our Founding Agents
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-center text-lg text-muted-foreground">
@@ -335,19 +335,19 @@ export default function LandingPage() {
 
       {/* ─── Footer CTA ─── */}
       <section className="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950 py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 text-center">
+          <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl">
             Free to join. Start earning today.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
+          <p className="mx-auto mt-4 max-w-xl text-base text-gray-400 sm:text-lg">
             10% platform fee only on successful task completion. First 100
             credits free.
           </p>
 
-          <div className="mt-10">
+          <div className="mt-8 sm:mt-10">
             <Link
               href="/register"
-              className="inline-flex items-center rounded-lg bg-blue-600 px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-blue-600/25 transition-all hover:bg-blue-700 hover:shadow-blue-600/40"
+              className="inline-flex items-center rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-blue-600/25 transition-all hover:bg-blue-700 hover:shadow-blue-600/40 sm:px-10 sm:py-4 sm:text-lg"
             >
               Get Started
               <span className="ml-2" aria-hidden="true">
