@@ -10,6 +10,7 @@ AI Agent Marketplace built as a pnpm monorepo with Next.js 14 (App Router) + Sup
 - **MCP Server**: `apps/mcp-server/` — separate long-running process
 - **Worker**: `apps/worker/` — BullMQ background job processor
 - **Infrastructure**: Redis (cache/queue), Unleash (feature toggles)
+- **Hooks**: `apps/web/src/hooks/` — shared React hooks (useMobileMenu for nav state + iOS scroll lock)
 
 ## Key Commands
 ```bash
@@ -135,6 +136,21 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - [x] Fix feature toggle fail-open — now fail-closed with configurable essential allowlist (FEATURE_TOGGLE_ESSENTIAL_ALLOWLIST env var), non-essential features disabled when Unleash unavailable
 - [x] Architecture audit — docs/architecture-traceability.md: C4 diagrams (3 levels), traceability matrix, data flow diagrams, connection inventory, gap analysis
 
+### Sprint 8: Mobile UI Overhaul (2026-03-28)
+- [x] `useMobileMenu` shared hook — toggle state, Escape key, iOS-safe scroll lock (position:fixed)
+- [x] Navbar: hamburger menu at md: breakpoint, auth-aware mobile dropdown, persistent "Get Started" CTA
+- [x] MarketingHeader: refactored to shared hook, persistent mobile CTA, dark mode fix, aria-label
+- [x] DocsSidebar: adopted useMobileMenu, aria-expanded/controls/current, visibility-based focus prevention
+- [x] BottomTabBar: inert when hidden, aria-current on all tabs, icon aria-hidden, landscape safe-area
+- [x] Filter bars (jobs/skills/tools): flex-col sm:flex-row responsive stacking
+- [x] Wallet: mobile card view (md:hidden) + desktop table (hidden md:block)
+- [x] Docs: sidebar w-[85vw], responsive headings, footer with nav links
+- [x] Button/card/badge/skeleton: motion-reduce compliance, increased touch targets (h-9→h-10)
+- [x] Grid polish: md:grid-cols intermediate breakpoints across dashboard
+- [x] Tests: use-mobile-menu.test.ts (8), navbar-mobile.test.tsx (4) — 537 total passing
+- [ ] Manual viewport testing (375/390/768/1440px) — pending
+- [ ] Lighthouse accessibility audit — pending
+
 ### Known Audit Findings (from 2026-03-20 ten-agent audit)
 - ~~CRITICAL: Supabase service_role key leaked in git history (commit 50932ea, integration.test.ts)~~ RESOLVED Sprint 1
 - ~~CRITICAL: 4 tables missing RLS policies (disputes, deliverables, zone_config, sanctions)~~ RESOLVED Sprint 1
@@ -148,6 +164,8 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - ~~URL param extraction uses unsafe indexOf pattern across 23 routes~~ RESOLVED (all routes use safe extractParam utility)
 - ~~No error boundaries, loading states, or 404 pages in frontend~~ RESOLVED Sprint 3
 - ~~No CI/CD pipeline~~ RESOLVED Sprint 3
+- ~~Mobile UI has no responsive breakpoints, navbar overflows on phones~~ RESOLVED Sprint 8
+- ~~No CI/CD hardening (unpinned actions, no security scanning)~~ RESOLVED Sprint 8
 - OpenAPI ↔ route alignment: EXCELLENT (100% match on all 38+ endpoints)
 - [ ] Production deployment: Vercel Pro + Supabase Pro + Upstash Redis + Railway (worker/MCP) — deferred, requires infrastructure account setup
 

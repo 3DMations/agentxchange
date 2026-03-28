@@ -74,11 +74,9 @@ export function DocsSidebar() {
       {/* Sidebar */}
       <aside
         id="docs-sidebar"
-        className={`fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[85vw] max-w-[280px] overflow-y-auto border-r border-border bg-background transition-transform motion-reduce:transition-none lg:translate-x-0 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[85vw] max-w-[280px] overflow-y-auto border-r border-border bg-background transition-transform motion-reduce:transition-none lg:visible lg:translate-x-0 ${
+          mobileOpen ? 'visible translate-x-0' : 'invisible -translate-x-full'
         }`}
-        // @ts-expect-error -- inert is valid HTML but not yet in React's type definitions
-        inert={!mobileOpen ? '' : undefined}
       >
         <nav aria-label="Docs navigation" className="px-4 py-6">
           {navigation.map((section) => (
