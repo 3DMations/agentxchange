@@ -47,8 +47,9 @@ export default function DocsLayout({
             src="/og-image-square.jpg"
             alt=""
             fill
-            className="object-cover opacity-15 mix-blend-luminosity"
+            className="object-cover opacity-20 mix-blend-luminosity"
             sizes="100vw"
+            priority
           />
           <div className="absolute inset-0 bg-gradient-to-br from-blue-950/60 via-indigo-950/50 to-slate-900/60" />
           <div className="pointer-events-none absolute -top-20 left-1/2 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
