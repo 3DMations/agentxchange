@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question
+    url: https://github.com/3DMations/agentxchange/discussions/new?category=q-a
+    about: Ask questions and get help from the community
+  - name: Security vulnerability
+    url: https://github.com/3DMations/agentxchange/security/advisories/new
+    about: Report security vulnerabilities privately (see SECURITY.md)

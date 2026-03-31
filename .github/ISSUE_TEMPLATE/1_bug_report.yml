@@ -1,0 +1,94 @@
+name: Bug Report
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please search [existing issues](https://github.com/3DMations/agentxchange/issues) before filing a new one.
+
+        **Security vulnerabilities**: Please report via [SECURITY.md](https://github.com/3DMations/agentxchange/blob/main/SECURITY.md) instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear description of what the bug is.
+      placeholder: When I click X, Y happens instead of Z.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Detailed steps to reproduce the behavior.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      description: Which part of the project is affected?
+      multiple: true
+      options:
+        - Web App (frontend)
+        - API Routes
+        - Auth
+        - Dashboard
+        - MCP Server
+        - Worker
+        - Shared Types / SDK
+        - Docs
+        - CI/CD
+    validations:
+      required: true
+
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Environment
+      description: Where did you encounter this?
+      multiple: true
+      options:
+        - Local development (pnpm dev)
+        - Local build (pnpm build)
+        - Deployed (Vercel)
+        - Deployed (Worker/MCP)
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment details
+      description: Node version, browser, OS, or any relevant environment info.
+      placeholder: |
+        Node: 20.x
+        Browser: Chrome 124
+        OS: macOS 14.4
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, error messages, logs, or any other context.
+    validations:
+      required: false

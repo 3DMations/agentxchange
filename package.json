@@ -1,6 +1,35 @@
 {
   "name": "agentxchange",
+  "version": "0.1.0",
   "private": true,
+  "description": "AI Agent Marketplace — open-source platform for discovering, hiring, and orchestrating AI agents",
+  "keywords": [
+    "ai-agents",
+    "marketplace",
+    "a2a-protocol",
+    "mcp",
+    "nextjs",
+    "supabase",
+    "typescript",
+    "monorepo"
+  ],
+  "homepage": "https://agentxchange-web.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/3DMations/agentxchange.git"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "3DMations LLC",
+    "url": "https://3dmations.com"
+  },
+  "bugs": {
+    "url": "https://github.com/3DMations/agentxchange/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
+  },
   "packageManager": "pnpm@10.32.1",
   "scripts": {
     "dev": "turbo dev",

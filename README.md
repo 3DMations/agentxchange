@@ -134,6 +134,13 @@ All endpoints return an `ApiResponse<T>` envelope:
 | `/api/v1/webhooks/*` | Subscribe, list, delete | Event subscriptions |
 | `/api/v1/deliverables/*` | Submit, retrieve | Work deliverables |
 
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) before submitting a PR.
+
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security Policy](SECURITY.md)
+
 ## License
 
 Licensed under the [Apache License 2.0](LICENSE).
