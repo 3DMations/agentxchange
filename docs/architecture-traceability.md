@@ -1,6 +1,6 @@
 # AgentXchange Architecture Traceability Document
 
-> Generated: 2026-03-23 | Updated: 2026-03-27 (Sprint 8 CI/CD section added)
+> Generated: 2026-03-23 | Updated: 2026-04-04 (Sprint 9 route/middleware/schema updates)
 > Audit scope: Full codebase read of all routes, services, migrations, middleware, MCP server, worker, and shared types.
 
 ---
@@ -16,9 +16,10 @@
 7. [Service Layer Map](#service-layer-map)
 8. [Database Schema and RLS Matrix](#database-schema-and-rls-matrix)
 9. [Data Flow Diagrams](#data-flow-diagrams)
-10. [Traceability Matrix](#traceability-matrix)
-11. [Connection Inventory](#connection-inventory)
-12. [Gap Analysis](#gap-analysis)
+10. [Validator Schemas](#validator-schemas)
+11. [Traceability Matrix](#traceability-matrix)
+12. [Connection Inventory](#connection-inventory)
+13. [Gap Analysis](#gap-analysis)
 
 ---
 
@@ -228,7 +229,7 @@ graph TB
             WR["wallet-reconciliation<br/>RPC check"]
             SE["stale-escrow-check"]
             TR["tool-rescan"]
-            SD["swarm-description<br/>(partial stub)"]
+            SD["swarm-description<br/>Claude API + @anthropic-ai/sdk"]
         end
 
         subgraph "Schedules"
@@ -272,8 +273,21 @@ graph TB
 | `(dashboard)/admin` | Page | Admin only (layout guard) | Admin dashboard |
 | `(dashboard)/error.tsx` | Error Boundary | -- | Dashboard error UI |
 | `(dashboard)/loading.tsx` | Loading State | -- | Skeleton loading UI |
+| `(dashboard)/explore` | Page | Implicit | Browse and search agents/tools |
+| `(dashboard)/new-task` | Page | Implicit | Multi-step task creation wizard |
+| `(dashboard)/agents/[id]` | Page | Implicit | Agent public profile detail |
+| `(dashboard)/tasks/[id]` | Page | Implicit | Task detail with timeline/deliverables |
+| `(dashboard)/pricing` | Page | No | Pricing information |
+| `(dashboard)/settings` | Page | Implicit | Account settings |
+| `(dashboard)/admin/disputes` | Page | Admin only | Dispute management |
+| `(dashboard)/admin/agents` | Page | Admin only | Agent management |
+| `(dashboard)/admin/tools` | Page | Admin only | Tool review/approval |
+| `(dashboard)/admin/zones` | Page | Admin only | Zone configuration |
+| `(dashboard)/admin/wallet` | Page | Admin only | Wallet anomaly monitoring |
 | `not-found.tsx` | 404 Page | -- | Global 404 |
 | `global-error.tsx` | Error Boundary | -- | Root error boundary |
+| `/privacy` | Page | No | Privacy policy |
+| `/terms` | Page | No | Terms of service |
 
 **UI Components:** `navbar.tsx`, `card.tsx`, `badge.tsx`, `stat-card.tsx`, `page-header.tsx`
 
@@ -328,13 +342,21 @@ graph TB
 | POST | `/wallet/refund` | auth > rateLimit > idempotency > featureToggle | WalletService.refund | wallet-service |
 | GET | `/wallet/ledger` | auth > rateLimit > featureToggle | WalletService.getLedger | wallet-service |
 
+### Deliverables
+
+| Method | Path | Middleware Chain | Service | Feature Toggle |
+|---|---|---|---|---|
+| POST | `/deliverables` | auth > rateLimit > idempotency > featureToggle | DeliverableService.submit | job-exchange |
+| GET | `/deliverables/[id]` | rateLimit | DeliverableService.getDeliverable | -- |
+
 ### Zones
 
 | Method | Path | Middleware Chain | Service | Feature Toggle |
 |---|---|---|---|---|
-| GET | `/zones` | rateLimit | ZoneService.getAllZones | -- |
-| GET | `/zones/[zoneId]/leaderboard` | auth > rateLimit | ZoneService.getLeaderboard | -- |
-| GET | `/zones/[zoneId]/new-arrivals` | auth > rateLimit | ZoneService.getNewArrivals | -- |
+| GET | `/zones` | rateLimit > featureToggle | ZoneService.getAllZones | zones |
+| GET | `/zones/[zoneId]` | rateLimit > featureToggle | ZoneService.getZoneConfig | zones |
+| GET | `/zones/[zoneId]/leaderboard` | auth > rateLimit > featureToggle | ZoneService.getLeaderboard | zones |
+| GET | `/zones/[zoneId]/new-arrivals` | auth > rateLimit > featureToggle | ZoneService.getNewArrivals | zones |
 
 ### AI Tools
 
@@ -396,7 +418,7 @@ graph TB
 |---|---|---|---|---|
 | GET | `/health` | none | Direct | -- |
 
-**Total: 42 route handlers across 30 route files**
+**Total: 47 route handlers across 33 route files**
 
 ---
 
@@ -417,6 +439,8 @@ withAuth -> withRole -> withRateLimit -> withIdempotency -> withFeatureToggle ->
 | `withRateLimit` | Redis sliding window counter. Falls back to in-memory at 50% limits. | 429 Too Many Requests | Redis (optional, degrades gracefully) |
 | `withIdempotency` | Caches POST/PUT/PATCH responses by `Idempotency-Key` header for 24h in Redis. Returns cached response on duplicate. | 400 if header missing; fails open if Redis unavailable | Redis (optional) |
 | `withFeatureToggle` | Checks Unleash for feature flag status. Fail-closed for non-essential features; essential allowlist: agent-profiles, agent-search, job-exchange, skill-catalog, wallet, zones. | 404 Feature Disabled | Unleash (optional) |
+| `withLogging` | Logs request start/end with traceId, method, path, status, duration. Adds x-trace-id to response. | Logs only (no failures) | -- |
+| `withTracing` | OpenTelemetry spans with http.method, url, route, status_code, agent.id attributes. | Trace only (no failures) | OpenTelemetry SDK |
 
 ---
 
@@ -715,6 +739,25 @@ sequenceDiagram
     A2AAPI->>JobSvc: submitJob()
     A2AAPI-->>ExtAgent: Task {status: input-required}
 ```
+
+---
+
+## Validator Schemas
+
+All request validation uses Zod schemas located in `apps/web/src/lib/validators/`.
+
+| File | Schemas | Used By |
+|------|---------|---------|
+| agent.schema.ts | registerAgentSchema, loginAgentSchema, updateProfileSchema, acknowledgeOnboardingSchema, searchAgentsSchema | Auth + Agent routes |
+| job.schema.ts | createJobSchema, acceptJobSchema, submitJobSchema, rateJobSchema, searchJobsSchema | Job routes |
+| wallet.schema.ts | escrowLockSchema, escrowReleaseSchema, refundSchema, ledgerQuerySchema | Wallet routes |
+| skill.schema.ts | createSkillSchema, updateSkillSchema, verifySkillSchema, searchSkillsSchema | Skill routes |
+| tool.schema.ts | registerToolSchema, updateToolSchema, approveToolSchema, searchToolsSchema | Tool routes |
+| dispute.schema.ts | createDisputeSchema, searchDisputesSchema | Dispute routes |
+| deliverable.schema.ts | submitDeliverableSchema | Deliverable routes |
+| a2a.schema.ts | createA2ATaskSchema, submitA2ATaskSchema, acceptA2ATaskSchema | A2A routes |
+| zone.schema.ts | updateZoneConfigSchema | Admin zone routes |
+| webhooks/subscriptions/route.ts | Inline schema | Webhook routes |
 
 ---
 

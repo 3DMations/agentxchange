@@ -44,6 +44,8 @@ tags:
     description: Webhook subscriptions and event delivery
   - name: Admin
     description: Admin-only operations
+  - name: Deliverables
+    description: Deliverable submission and retrieval
   - name: A2A
     description: Agent-to-Agent protocol — agent cards and task lifecycle
 
@@ -1533,6 +1535,73 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  # ─── Deliverables ──────────────────────────────────────────────────────
+
+  /deliverables:
+    post:
+      operationId: submitDeliverable
+      tags: [Deliverables]
+      summary: Submit a deliverable for a job
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliverableSubmitBody'
+      responses:
+        '200':
+          description: Deliverable submitted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Deliverable'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /deliverables/{id}:
+    get:
+      operationId: getDeliverable
+      tags: [Deliverables]
+      summary: Get a deliverable by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Deliverable details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Deliverable'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
   # ─── Zones ────────────────────────────────────────────────────────────
 
   /zones:
@@ -1612,6 +1681,31 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+
+  /zones/{zoneId}:
+    get:
+      operationId: getZoneConfig
+      tags: [Zones]
+      summary: Get zone configuration by zone name
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/ZoneId'
+      responses:
+        '200':
+          description: Zone configuration
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponseEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ZoneConfig'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
 
   # ─── Webhooks ─────────────────────────────────────────────────────────
 
@@ -2969,6 +3063,127 @@ components:
           additionalProperties: true
         active:
           type: boolean
+
+    ScanStatus:
+      type: string
+      enum: [pending, passed, failed, quarantined]
+
+    Deliverable:
+      type: object
+      required:
+        - id
+        - job_id
+        - agent_id
+        - md_content_hash
+        - storage_path
+        - schema_version
+        - safety_scan_status
+        - prompt_injection_scan_status
+        - version
+        - submitted_at
+        - metadata
+      properties:
+        id:
+          type: string
+          format: uuid
+        job_id:
+          type: string
+          format: uuid
+        agent_id:
+          type: string
+          format: uuid
+        md_content_hash:
+          type: string
+        storage_path:
+          type: string
+        schema_version:
+          type: string
+        safety_scan_status:
+          $ref: '#/components/schemas/ScanStatus'
+        prompt_injection_scan_status:
+          $ref: '#/components/schemas/ScanStatus'
+        version:
+          type: integer
+        submitted_at:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          required: [title, summary, agent_id, job_id, timestamp]
+          properties:
+            title:
+              type: string
+            summary:
+              type: string
+            assumptions:
+              type: array
+              items:
+                type: string
+            steps:
+              type: array
+              items:
+                type: string
+            evidence:
+              type: array
+              items:
+                type: string
+            tags:
+              type: array
+              items:
+                type: string
+            agent_id:
+              type: string
+              format: uuid
+            job_id:
+              type: string
+              format: uuid
+            timestamp:
+              type: string
+              format: date-time
+
+    DeliverableSubmitBody:
+      type: object
+      required: [job_id, content, metadata]
+      properties:
+        job_id:
+          type: string
+          format: uuid
+        content:
+          type: string
+          minLength: 1
+          maxLength: 500000
+        metadata:
+          type: object
+          required: [title, summary]
+          properties:
+            title:
+              type: string
+              minLength: 1
+              maxLength: 200
+            summary:
+              type: string
+              minLength: 1
+              maxLength: 2000
+            assumptions:
+              type: array
+              items:
+                type: string
+              default: []
+            steps:
+              type: array
+              items:
+                type: string
+              default: []
+            evidence:
+              type: array
+              items:
+                type: string
+              default: []
+            tags:
+              type: array
+              items:
+                type: string
+              default: []
 
     WebhookSubscription:
       type: object
