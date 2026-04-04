@@ -185,7 +185,7 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - [x] Add feature toggles to zone routes in middleware chain table
 - [x] Add `POST /deliverables`, `GET /deliverables/{id}`, `GET /zones/{zoneId}` to OpenAPI spec
 - [x] Add Validators section listing all 12 Zod schema files
-- [ ] Update this CLAUDE.md with Phase 3 plan
+- [x] Update this CLAUDE.md with Phase 3 plan
 
 ### Sprint 10: Test Infrastructure
 - [ ] Align Vitest to 4.x across web + sdk (11 files: `vi.restoreAllMocks()` → `vi.clearAllMocks()`)
