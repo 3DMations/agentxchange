@@ -166,8 +166,103 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - ~~No CI/CD pipeline~~ RESOLVED Sprint 3
 - ~~Mobile UI has no responsive breakpoints, navbar overflows on phones~~ RESOLVED Sprint 8
 - ~~No CI/CD hardening (unpinned actions, no security scanning)~~ RESOLVED Sprint 8
-- OpenAPI ↔ route alignment: EXCELLENT (100% match on all 38+ endpoints)
+- ~~OpenAPI ↔ route alignment: EXCELLENT (100% match on all 38+ endpoints)~~ UPDATED Sprint 9 (3 endpoints missing: deliverables POST/GET, zones/[zoneId] GET)
 - [ ] Production deployment: Vercel Pro + Supabase Pro + Upstash Redis + Railway (worker/MCP) — deferred, requires infrastructure account setup
+
+## Phase 3 — Modernization & Dependency Upgrades (2026-04-04)
+
+### Design Principles
+- **One PR per sprint**, feature branch per sprint, commit after each sub-task
+- **Commit gate**: `pnpm type-check && pnpm test && pnpm build` must pass before each commit
+- **Push strategy**: Push branch + create PR when sprint complete (main is protected, requires approval)
+- **Tags**: `v3.sprint-{N}` after each merge for named rollback points
+
+### Sprint 9: Documentation Sync (zero-risk)
+- [x] Add 13 missing frontend routes to architecture-traceability.md Frontend Route Map
+- [x] Add 5 missing API routes to API Route Inventory; fix total from 42 to 47
+- [x] Add `withLogging` and `withTracing` to Middleware table
+- [x] Fix swarm-description label: remove "(partial stub)", note "Claude API + @anthropic-ai/sdk"
+- [x] Add feature toggles to zone routes in middleware chain table
+- [x] Add `POST /deliverables`, `GET /deliverables/{id}`, `GET /zones/{zoneId}` to OpenAPI spec
+- [x] Add Validators section listing all 12 Zod schema files
+- [x] Update this CLAUDE.md with Phase 3 plan
+
+### Sprint 10: Test Infrastructure
+- [ ] Align Vitest to 4.x across web + sdk (11 files: `vi.restoreAllMocks()` → `vi.clearAllMocks()`)
+- [ ] Verify jsdom 29 + Vitest 4 compat (19 component tests at risk; pin jsdom@^26.1.0 if broken)
+- [ ] Add v8 coverage tooling to all vitest.config.ts (start thresholds: 30% statements/lines)
+- [ ] Add coverage reporting to CI (.github/workflows/ci.yml)
+- [ ] Create shared test utilities: `apps/web/src/test-utils/` (mock factories for Supabase, fetch, agents, jobs)
+- [ ] Add vitest config + test script to packages/shared-types
+- [ ] Remove meaningless "should instantiate" / "has all methods" tests
+
+### Sprint 11: Critical Test Coverage
+- [ ] shared-types: type guard tests, API envelope shape, enum completeness (14 files, 0% → target 80%)
+- [ ] Auth pages: register, login, forgot-password, session refresh (5 files, 0%)
+- [ ] Supabase clients: client.ts, server.ts, admin.ts (4 files, 0%)
+- [ ] MCP tool handlers: individual tests for each of 11 tools
+- [ ] Worker jobs (remaining 3): stale-escrow-check, tool-rescan, wallet-reconciliation
+- [ ] Queue client: lib/queue/client.ts (enqueue success + Redis failure fallback)
+- [ ] Ratchet CI coverage thresholds to (actual - 5%)
+
+### Sprint 12: Easy Dependency Upgrades (1 PR each, LOW risk)
+- [ ] pino ^9.x → ^10.x (only drops Node 18; we require ≥20)
+- [ ] GitHub Actions SHA pins → latest v4.x
+- [ ] @types/node → latest ^22.x (NEVER upgrade to 25.x — must match Node 22 runtime)
+- [ ] ioredis → latest ^5.x
+- [ ] bullmq → latest ^5.x
+- [ ] unleash-client → latest ^6.x
+- [ ] @sentry/nextjs → latest ^10.x
+- [ ] @anthropic-ai/sdk → latest ^0.x
+- [ ] @modelcontextprotocol/sdk → latest ^1.x
+- [ ] @supabase/supabase-js → latest ^2.x
+
+### Sprint 13: Medium Dependency Upgrades (MEDIUM risk)
+- [ ] Zod 3 → 4: `z.record()` needs 2 args (3 lines), `.flatten()` → `z.treeifyError()` (31 route files), `.refine({message})` → `{error}` (2 files), string error args (4 lines). Run `npx @zod/codemod --transform v3-to-v4` first.
+- [ ] @supabase/ssr → evaluate 1.x if available
+- [ ] Add dependabot.yml blocking major version PRs globally
+
+### Sprint 14a: Tailwind 3 → 4 (HIGH risk, ~3-4 hours)
+- [ ] Run `@tailwindcss/upgrade` codemod (auto-fixes ~90%: config→CSS, shadow/outline/gradient renames)
+- [ ] Swap tailwindcss-animate → tw-animate-css (4-5 component files, manual)
+- [ ] Add cursor-pointer to button base styles (button.tsx)
+- [ ] Fix bare `border` color in toast.tsx, dialog.tsx (add explicit border-border)
+- [ ] Remove autoprefixer dependency (built into TW4)
+- [ ] Visual regression check at 375/768/1440px
+
+### Sprint 14b: Next.js 14 → 15 → 16 + React 18 → 19 (HIGHEST risk, ~8-12 hours)
+**Phase 1 (Next 15 + React 19):**
+- [ ] Bump react/react-dom/next/@types to 15/19
+- [ ] Fix async params in docs/[slug]/page.tsx + any other server components
+- [ ] Fix next.config.js: serverComponentsExternalPackages → serverExternalPackages
+- [ ] Replace next-themes (semi-abandoned, no React 19 support) — roll own or use alternative
+- [ ] Verify @sentry/nextjs, @supabase/ssr, Radix UI compat
+**Phase 2 (Next 16):**
+- [ ] Rename middleware.ts → proxy.ts (use `npx @next/codemod@latest middleware-to-proxy .`)
+- [ ] Migrate .eslintrc.json → eslint.config.mjs (next lint removed in 16)
+- [ ] Update CI lint command
+- [ ] Optional: remove forwardRef wrappers (9 component files, deprecated not removed)
+- [ ] Full regression: all tests + visual check
+
+### Known Unknown Unknowns (from 2026-04-04 research)
+- ⚠️ `tailwind-merge@3.5` already targets TW4 — may cause latent class merge bugs with current TW3. Resolved by TW4 upgrade.
+- ⚠️ `next-themes@0.4.6` has no React 19 peer dep support, maintainer inactive. Must replace in Sprint 14b.
+- ⚠️ jsdom 29 + Vitest 4 has documented ESM compat risk (vitest-dev/vitest#9279). Test first in Sprint 10.
+- ⚠️ Idempotency middleware fails open when Redis unavailable — accepted risk, documented.
+- ⚠️ DeliverableService.runSafetyScans() is a stub — deferred to future sprint.
+
+### Sprint Dependency Graph
+```
+Sprint 9 (Docs) → Sprint 10 (Test Infra) ��� Sprint 11 (Coverage)
+                                                  ↓
+                                            Sprint 12 (Easy Deps)
+                                                  ↓
+                                            Sprint 13 (Zod 4)
+                                                  ↓
+                                            Sprint 14a (Tailwind 4)
+                                                  ↓
+                                            Sprint 14b (Next 16 + React 19)
+```
 
 ## Memory System
 Read .claude/rules/memory-system.md for full operating rules.
