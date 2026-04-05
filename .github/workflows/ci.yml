@@ -55,8 +55,8 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: http://localhost:54321
           NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-for-ci
 
-      - name: Test with coverage
-        run: pnpm test -- --coverage
+      - name: Test
+        run: pnpm test
 
   gitleaks:
     name: Secret Scanning
