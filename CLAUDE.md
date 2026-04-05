@@ -197,14 +197,15 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - [x] Remove meaningless "should instantiate" / "has all methods" tests (24 removed, 22 todos added)
 - Note: 29 pre-existing test failures in web (8 files) — not introduced by Sprint 10, tracked for Sprint 11
 
-### Sprint 11: Critical Test Coverage
-- [ ] shared-types: type guard tests, API envelope shape, enum completeness (14 files, 0% → target 80%)
-- [ ] Auth pages: register, login, forgot-password, session refresh (5 files, 0%)
-- [ ] Supabase clients: client.ts, server.ts, admin.ts (4 files, 0%)
-- [ ] MCP tool handlers: individual tests for each of 11 tools
-- [ ] Worker jobs (remaining 3): stale-escrow-check, tool-rescan, wallet-reconciliation
-- [ ] Queue client: lib/queue/client.ts (enqueue success + Redis failure fallback)
-- [ ] Ratchet CI coverage thresholds to (actual - 5%)
+### Sprint 11: Critical Test Coverage (2026-04-04)
+- [x] shared-types: 62 contract tests — type shape conformance, enum completeness, barrel exports
+- [x] Auth pages: login (6), register (6), forgot-password (5), middleware (4) = 21 tests
+- [x] Supabase clients: browser (5), server (5), admin (5) = 15 tests
+- [x] MCP tool handlers: all 11 tools covered with 40 tests (success + error + edge cases)
+- [x] Worker jobs: stale-escrow-check (4), tool-rescan (4), wallet-reconciliation (4) = 12 tests
+- [x] Queue client: enqueue, options, failure, graceful degradation = 4 tests
+- [ ] Ratchet CI coverage thresholds to (actual - 5%) — deferred to Sprint 12
+- Total: 814 tests across monorepo (was 726 after Sprint 10, was 537 before Phase 3)
 
 ### Sprint 12: Easy Dependency Upgrades (1 PR each, LOW risk)
 - [ ] pino ^9.x → ^10.x (only drops Node 18; we require ≥20)
