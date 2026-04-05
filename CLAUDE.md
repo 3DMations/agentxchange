@@ -207,17 +207,17 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - [ ] Ratchet CI coverage thresholds to (actual - 5%) — deferred to Sprint 12
 - Total: 814 tests across monorepo (was 726 after Sprint 10, was 537 before Phase 3)
 
-### Sprint 12: Easy Dependency Upgrades (1 PR each, LOW risk)
-- [ ] pino ^9.x → ^10.x (only drops Node 18; we require ≥20)
-- [ ] GitHub Actions SHA pins → latest v4.x
-- [ ] @types/node → latest ^22.x (NEVER upgrade to 25.x — must match Node 22 runtime)
-- [ ] ioredis → latest ^5.x
-- [ ] bullmq → latest ^5.x
-- [ ] unleash-client → latest ^6.x
-- [ ] @sentry/nextjs → latest ^10.x
-- [ ] @anthropic-ai/sdk → latest ^0.x
-- [ ] @modelcontextprotocol/sdk → latest ^1.x
-- [ ] @supabase/supabase-js → latest ^2.x
+### Sprint 12: Easy Dependency Upgrades (2026-04-04)
+- [x] pino 9.x → 10.3.1 (only drops Node 18; we require ≥20)
+- [x] GitHub Actions: checkout v4.3.1, setup-node v4.4.0, pnpm/action-setup v4.4.0
+- [x] ioredis 5.4.0 → 5.10.1
+- [x] bullmq 5.71.0 → 5.73.0
+- [x] unleash-client 6.0.0 → 6.10.1
+- [x] @sentry/nextjs 10.45.0 → 10.47.0
+- [x] @anthropic-ai/sdk 0.39.0 → 0.82.0
+- [x] @modelcontextprotocol/sdk 1.27.1 → 1.29.0
+- [x] @supabase/supabase-js 2.49.0 → 2.101.1
+- Note: @types/node already at ^22.x latest, no change needed
 
 ### Sprint 13: Medium Dependency Upgrades (MEDIUM risk)
 - [ ] Zod 3 → 4: `z.record()` needs 2 args (3 lines), `.flatten()` → `z.treeifyError()` (31 route files), `.refine({message})` → `{error}` (2 files), string error args (4 lines). Run `npx @zod/codemod --transform v3-to-v4` first.
