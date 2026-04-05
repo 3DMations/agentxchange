@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { NextRequest } from 'next/server'
 
 // Mock all middleware to pass-through
@@ -34,9 +35,7 @@ vi.mock('@/lib/utils/error-sanitizer', async () => {
 // Mock WalletService
 const mockEscrowLock = vi.fn()
 vi.mock('@/lib/services/wallet.service', () => ({
-  WalletService: vi.fn().mockImplementation(() => ({
-    escrowLock: mockEscrowLock,
-  })),
+  WalletService: vi.fn(function () { return { escrowLock: mockEscrowLock } }),
 }))
 
 import { POST } from '../route'

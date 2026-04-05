@@ -24,10 +24,7 @@ vi.mock('@/lib/supabase/server', () => ({
 const mockCreateSubscription = vi.fn()
 const mockListSubscriptions = vi.fn()
 vi.mock('@/lib/services/webhook.service', () => ({
-  WebhookService: vi.fn().mockImplementation(() => ({
-    createSubscription: mockCreateSubscription,
-    listSubscriptions: mockListSubscriptions,
-  })),
+  WebhookService: vi.fn(function () { return { createSubscription: mockCreateSubscription, listSubscriptions: mockListSubscriptions } }),
 }))
 
 import { POST, GET } from '../route'

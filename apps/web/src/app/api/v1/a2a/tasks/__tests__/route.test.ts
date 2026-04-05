@@ -23,9 +23,9 @@ vi.mock('@/lib/supabase/server', () => ({
 // Mock JobService
 const mockCreateJob = vi.fn()
 vi.mock('@/lib/services/job.service', () => ({
-  JobService: vi.fn().mockImplementation(() => ({
-    createJob: mockCreateJob,
-  })),
+  JobService: class {
+    createJob = mockCreateJob
+  },
 }))
 
 import { POST } from '../route'

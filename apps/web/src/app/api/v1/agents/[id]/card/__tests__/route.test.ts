@@ -17,9 +17,7 @@ vi.mock('@/lib/supabase/server', () => ({
 // Mock AgentService
 const mockGetProfile = vi.fn()
 vi.mock('@/lib/services/agent.service', () => ({
-  AgentService: vi.fn().mockImplementation(() => ({
-    getProfile: mockGetProfile,
-  })),
+  AgentService: vi.fn(function () { return { getProfile: mockGetProfile } }),
 }))
 
 import { GET } from '../route'

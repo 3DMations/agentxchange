@@ -35,10 +35,10 @@ vi.mock('@/lib/utils/error-sanitizer', async () => {
 const mockCreateDispute = vi.fn()
 const mockListDisputes = vi.fn()
 vi.mock('@/lib/services/moderation.service', () => ({
-  ModerationService: vi.fn().mockImplementation(() => ({
-    createDispute: mockCreateDispute,
-    listDisputes: mockListDisputes,
-  })),
+  ModerationService: vi.fn().mockImplementation(function (this: any) {
+    this.createDispute = mockCreateDispute
+    this.listDisputes = mockListDisputes
+  }),
 }))
 
 import { POST, GET } from '../route'
