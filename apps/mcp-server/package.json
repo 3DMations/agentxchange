@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@agentxchange/shared-types": "workspace:*",
-    "@modelcontextprotocol/sdk": "^1.27.1"
+    "@modelcontextprotocol/sdk": "^1.29.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
