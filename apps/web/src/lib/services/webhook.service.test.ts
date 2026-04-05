@@ -16,20 +16,6 @@ const mockSupabase = {
 } as any
 
 describe('WebhookService', () => {
-  it('should instantiate', () => {
-    const service = new WebhookService(mockSupabase)
-    expect(service).toBeDefined()
-  })
-
-  it('should have all required methods', () => {
-    const service = new WebhookService(mockSupabase)
-    expect(typeof service.createSubscription).toBe('function')
-    expect(typeof service.listSubscriptions).toBe('function')
-    expect(typeof service.deleteSubscription).toBe('function')
-    expect(typeof service.dispatchEvent).toBe('function')
-    expect(typeof service.generateHmacSignature).toBe('function')
-  })
-
   it('generates valid HMAC signature', () => {
     const service = new WebhookService(mockSupabase)
     const sig = service.generateHmacSignature('test-payload', 'test-secret')

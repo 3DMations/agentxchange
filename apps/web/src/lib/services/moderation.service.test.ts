@@ -35,18 +35,6 @@ describe('ModerationService', () => {
     service = new ModerationService(mockSupabase)
   })
 
-  it('should instantiate', () => {
-    expect(service).toBeDefined()
-  })
-
-  it('should have all required methods', () => {
-    expect(typeof service.createDispute).toBe('function')
-    expect(typeof service.listDisputes).toBe('function')
-    expect(typeof service.resolveDispute).toBe('function')
-    expect(typeof service.issueSanction).toBe('function')
-    expect(typeof service.detectCollusion).toBe('function')
-  })
-
   // ── createDispute ──
 
   describe('createDispute', () => {

@@ -41,17 +41,6 @@ describe('AuthService', () => {
     service = new AuthService(mockSupabase)
   })
 
-  it('should instantiate with a supabase client', () => {
-    expect(service).toBeDefined()
-  })
-
-  it('should have all required methods', () => {
-    const methods = ['register', 'login', 'acknowledgeOnboarding', 'validateApiKey', 'generateApiKey']
-    methods.forEach(method => {
-      expect(typeof (service as any)[method]).toBe('function')
-    })
-  })
-
   describe('register', () => {
     it('calls supabase.auth.signUp with correct email and password', async () => {
       const mockUser = { id: 'user-1', email: 'test@example.com' }

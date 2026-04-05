@@ -51,19 +51,6 @@ describe('JobService', () => {
     service = new JobService(mockSupabase)
   })
 
-  it('should instantiate', () => {
-    expect(service).toBeDefined()
-  })
-
-  it('should have all required methods', () => {
-    expect(typeof service.createJob).toBe('function')
-    expect(typeof service.getJob).toBe('function')
-    expect(typeof service.listJobs).toBe('function')
-    expect(typeof service.acceptJob).toBe('function')
-    expect(typeof service.submitJob).toBe('function')
-    expect(typeof service.rateJob).toBe('function')
-  })
-
   // ── validateTransition ──
 
   describe('validateTransition - valid transitions', () => {
