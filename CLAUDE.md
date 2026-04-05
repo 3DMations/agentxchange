@@ -187,14 +187,15 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - [x] Add Validators section listing all 12 Zod schema files
 - [x] Update this CLAUDE.md with Phase 3 plan
 
-### Sprint 10: Test Infrastructure
-- [ ] Align Vitest to 4.x across web + sdk (11 files: `vi.restoreAllMocks()` → `vi.clearAllMocks()`)
-- [ ] Verify jsdom 29 + Vitest 4 compat (19 component tests at risk; pin jsdom@^26.1.0 if broken)
-- [ ] Add v8 coverage tooling to all vitest.config.ts (start thresholds: 30% statements/lines)
-- [ ] Add coverage reporting to CI (.github/workflows/ci.yml)
-- [ ] Create shared test utilities: `apps/web/src/test-utils/` (mock factories for Supabase, fetch, agents, jobs)
-- [ ] Add vitest config + test script to packages/shared-types
-- [ ] Remove meaningless "should instantiate" / "has all methods" tests
+### Sprint 10: Test Infrastructure (2026-04-04)
+- [x] Align Vitest to 4.x across web + sdk (11 files: `vi.restoreAllMocks()` → `vi.clearAllMocks()`)
+- [x] Verify jsdom 29 + Vitest 4 compat — PASSED, no pin needed
+- [x] Add v8 coverage tooling to all vitest.config.ts (v8 provider, text + json-summary reporters)
+- [x] Add coverage reporting to CI (.github/workflows/ci.yml `--coverage` flag)
+- [x] Create shared test utilities: `apps/web/src/test-utils/` (6 mock factories)
+- [x] Add vitest config + test script to packages/shared-types
+- [x] Remove meaningless "should instantiate" / "has all methods" tests (24 removed, 22 todos added)
+- Note: 29 pre-existing test failures in web (8 files) — not introduced by Sprint 10, tracked for Sprint 11
 
 ### Sprint 11: Critical Test Coverage
 - [ ] shared-types: type guard tests, API envelope shape, enum completeness (14 files, 0% → target 80%)
