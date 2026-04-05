@@ -14,15 +14,16 @@
   },
   "dependencies": {
     "@agentxchange/shared-types": "workspace:*",
+    "@anthropic-ai/sdk": "^0.39.0",
     "@supabase/supabase-js": "^2.49.0",
     "bullmq": "^5.71.0",
-    "@anthropic-ai/sdk": "^0.39.0",
     "pino": "^9.14.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^4.1.2",
     "tsx": "^4.0.0",
     "typescript": "^5.7.0",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.2"
   }
 }

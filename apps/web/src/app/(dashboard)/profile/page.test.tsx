@@ -59,7 +59,7 @@ function mockSupabaseWithUser(userId = 'user-123') {
 }
 
 beforeEach(() => {
-  vi.restoreAllMocks()
+  vi.clearAllMocks()
 })
 
 describe('ProfilePage', () => {

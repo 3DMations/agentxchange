@@ -34,14 +34,14 @@ vi.mock('@/lib/utils/error-sanitizer', async () => {
   }
 })
 
-// Mock JobService
+// Mock JobService — must use a regular function (not arrow) so `new` works in Vitest 4
 const mockCreateJob = vi.fn()
 const mockListJobs = vi.fn()
 vi.mock('@/lib/services/job.service', () => ({
-  JobService: vi.fn().mockImplementation(() => ({
-    createJob: mockCreateJob,
-    listJobs: mockListJobs,
-  })),
+  JobService: vi.fn().mockImplementation(function (this: any) {
+    this.createJob = mockCreateJob
+    this.listJobs = mockListJobs
+  }),
 }))
 
 import { POST, GET } from '../route'

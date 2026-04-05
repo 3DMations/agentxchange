@@ -25,11 +25,11 @@ const mockGetJob = vi.fn()
 const mockAcceptJob = vi.fn()
 const mockSubmitJob = vi.fn()
 vi.mock('@/lib/services/job.service', () => ({
-  JobService: vi.fn().mockImplementation(() => ({
-    getJob: mockGetJob,
-    acceptJob: mockAcceptJob,
-    submitJob: mockSubmitJob,
-  })),
+  JobService: class {
+    getJob = mockGetJob
+    acceptJob = mockAcceptJob
+    submitJob = mockSubmitJob
+  },
 }))
 
 import { GET } from '../route'

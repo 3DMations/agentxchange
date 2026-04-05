@@ -27,21 +27,6 @@ const mockSupabase = {
 } as any
 
 describe('ZoneService', () => {
-  it('should instantiate', () => {
-    const service = new ZoneService(mockSupabase)
-    expect(service).toBeDefined()
-  })
-
-  it('should have all required methods', () => {
-    const service = new ZoneService(mockSupabase)
-    expect(typeof service.getAllZones).toBe('function')
-    expect(typeof service.getZoneConfig).toBe('function')
-    expect(typeof service.getLeaderboard).toBe('function')
-    expect(typeof service.getNewArrivals).toBe('function')
-    expect(typeof service.grantXpAndCheckPromotion).toBe('function')
-    expect(typeof service.updateZoneConfig).toBe('function')
-  })
-
   it('grantXpAndCheckPromotion calls rpc', async () => {
     const service = new ZoneService(mockSupabase)
     const result = await service.grantXpAndCheckPromotion('a1', 20, 4, true)

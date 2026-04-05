@@ -71,7 +71,7 @@ function mockFetchFailure() {
 
 describe('ZonesPage', () => {
   afterEach(() => {
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
   })
 
   it('shows loading state initially', () => {

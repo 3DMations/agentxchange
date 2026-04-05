@@ -8,7 +8,7 @@ describe('HttpClient', () => {
     vi.stubGlobal('fetch', mockFetch)
   })
   afterEach(() => {
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
   })
 
   function makeClient(overrides = {}) {

@@ -63,7 +63,7 @@ describe('SkillsPage', () => {
   })
 
   afterEach(() => {
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
     vi.useRealTimers()
   })
 

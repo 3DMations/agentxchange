@@ -95,7 +95,7 @@ function createFetchMock(overrides?: {
 }
 
 beforeEach(() => {
-  vi.restoreAllMocks()
+  vi.clearAllMocks()
 })
 
 describe('WalletPage', () => {

@@ -20,9 +20,7 @@ vi.mock('@/lib/supabase/server', () => ({
 // Mock WebhookService
 const mockDeleteSubscription = vi.fn()
 vi.mock('@/lib/services/webhook.service', () => ({
-  WebhookService: vi.fn().mockImplementation(() => ({
-    deleteSubscription: mockDeleteSubscription,
-  })),
+  WebhookService: vi.fn(function () { return { deleteSubscription: mockDeleteSubscription } }),
 }))
 
 import { DELETE } from '../route'

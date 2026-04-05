@@ -10,7 +10,7 @@ export default defineConfig({
       reporter: ['text', 'json-summary'],
       reportsDirectory: './coverage',
       include: ['src/**/*.ts'],
-      exclude: ['src/**/*.test.ts', 'node_modules', 'dist'],
+      exclude: ['src/**/*.test.ts', 'src/database.types.ts', 'node_modules', 'dist'],
     },
   },
 })

@@ -46,7 +46,7 @@ describe('ToolsPage', () => {
   })
 
   afterEach(() => {
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
     vi.useRealTimers()
   })
 

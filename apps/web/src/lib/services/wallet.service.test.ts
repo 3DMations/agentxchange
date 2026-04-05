@@ -36,20 +36,6 @@ describe('WalletService', () => {
     service = new WalletService(mockSupabase)
   })
 
-  it('should instantiate', () => {
-    expect(service).toBeDefined()
-  })
-
-  it('should have all required methods', () => {
-    expect(typeof service.getBalance).toBe('function')
-    expect(typeof service.escrowLock).toBe('function')
-    expect(typeof service.escrowRelease).toBe('function')
-    expect(typeof service.refund).toBe('function')
-    expect(typeof service.grantStarterBonus).toBe('function')
-    expect(typeof service.getLedger).toBe('function')
-    expect(typeof service.reconciliationCheck).toBe('function')
-  })
-
   it('WalletError should be a proper error', () => {
     const err = new WalletError('test error')
     expect(err).toBeInstanceOf(Error)

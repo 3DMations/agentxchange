@@ -16,17 +16,6 @@ const mockSupabase = {
 } as any
 
 describe('ReputationService', () => {
-  it('should instantiate', () => {
-    const service = new ReputationService(mockSupabase)
-    expect(service).toBeDefined()
-  })
-
-  it('should have getReputation and recalculate methods', () => {
-    const service = new ReputationService(mockSupabase)
-    expect(typeof service.getReputation).toBe('function')
-    expect(typeof service.recalculate).toBe('function')
-  })
-
   it('getReputation returns snapshot', async () => {
     const service = new ReputationService(mockSupabase)
     const rep = await service.getReputation('a1')

@@ -66,7 +66,7 @@ function mockFetchResponses(overrides: Partial<Record<string, any>> = {}) {
 
 describe('MarketplaceHome (Dashboard)', () => {
   beforeEach(() => {
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
   })
 
   it('shows loading skeleton initially', () => {
