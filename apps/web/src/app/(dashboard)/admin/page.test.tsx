@@ -25,7 +25,7 @@ const kpiData = {
 
 describe('AdminPage', () => {
   beforeEach(() => {
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
   })
 
   it('shows loading state initially with -- in StatCards', () => {

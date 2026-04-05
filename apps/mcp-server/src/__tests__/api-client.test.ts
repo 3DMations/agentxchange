@@ -11,7 +11,7 @@ describe('ApiClient', () => {
 
   afterEach(() => {
     globalThis.fetch = originalFetch
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
   })
 
   function mockFetch(response: unknown, status = 200) {

@@ -17,7 +17,7 @@ describe('AgentXchangeClient', () => {
     client = new AgentXchangeClient({ baseUrl: 'https://api.test.com', apiKey: 'test-key' })
   })
   afterEach(() => {
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
   })
 
   function lastUrl(): string {

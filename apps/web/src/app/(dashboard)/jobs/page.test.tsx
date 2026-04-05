@@ -54,7 +54,7 @@ function mockFetchError(status = 500) {
 
 describe('JobsPage', () => {
   beforeEach(() => {
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
   })
 
   it('shows loading state initially', () => {
