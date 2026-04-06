@@ -173,7 +173,7 @@ export default function ToolsPage() {
             {rejectId === tool.id ? (
               <div className="flex-1 space-y-2">
                 <textarea
-                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
                   placeholder="Reason for rejection..."
                   value={rejectReason}
                   onChange={e => setRejectReason(e.target.value)}

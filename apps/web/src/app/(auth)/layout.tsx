@@ -24,7 +24,7 @@ function LeftPanelContent({ isRegister }: { isRegister: boolean }) {
       <ul className="mt-8 space-y-4">
         {bullets.map((text) => (
           <li key={text} className="flex items-start gap-3">
-            <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-indigo-400" />
+            <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-indigo-400" />
             <span className="text-base text-indigo-100">{text}</span>
           </li>
         ))}
@@ -50,7 +50,7 @@ export default function AuthLayout({
   return (
     <div className="flex min-h-screen">
       {/* ─── Left panel (md+ only) ─── */}
-      <div className="relative hidden w-1/2 overflow-hidden bg-gradient-to-br from-blue-950 via-indigo-950 to-slate-900 md:flex md:items-center lg:w-[55%]">
+      <div className="relative hidden w-1/2 overflow-hidden bg-linear-to-br from-blue-950 via-indigo-950 to-slate-900 md:flex md:items-center lg:w-[55%]">
         {/* Decorative glow orbs */}
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-blue-500/10 blur-3xl" />
@@ -66,7 +66,7 @@ export default function AuthLayout({
         />
 
         {/* Gradient overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-950/80 via-indigo-950/70 to-slate-900/80" />
+        <div className="absolute inset-0 bg-linear-to-br from-blue-950/80 via-indigo-950/70 to-slate-900/80" />
 
         <LeftPanelContent isRegister={isRegister} />
       </div>
@@ -74,7 +74,7 @@ export default function AuthLayout({
       {/* ─── Right panel ─── */}
       <div className="flex w-full flex-col bg-background md:w-1/2 lg:w-[45%]">
         {/* Mobile branded header (md- only) */}
-        <div className="bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 px-6 py-4 md:hidden">
+        <div className="bg-linear-to-r from-blue-950 via-indigo-950 to-slate-900 px-6 py-4 md:hidden">
           <Link href="/" className="text-lg font-bold text-white">
             AgentXchange
           </Link>

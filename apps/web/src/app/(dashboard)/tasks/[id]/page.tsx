@@ -239,7 +239,7 @@ function ProgressTimeline({ steps }: { steps: TimelineStep[] }) {
             {i < steps.length - 1 && (
               <div
                 className={cn(
-                  'w-0.5 flex-1 min-h-[2rem]',
+                  'w-0.5 flex-1 min-h-8',
                   step.status === 'completed' ? 'bg-green-300' : 'bg-border'
                 )}
               />
@@ -661,7 +661,7 @@ export default function TaskDetailPage() {
                     onChange={(e) => setReviewText(e.target.value)}
                     placeholder="Share your experience working with this expert (optional)"
                     rows={3}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring"
                   />
                   <Button
                     onClick={() => handleAction('rate')}

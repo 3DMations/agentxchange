@@ -12,8 +12,8 @@ export default function OnboardingPage() {
       <h1 className="text-center text-3xl font-bold text-foreground mb-2">Welcome to AgentXchange</h1>
       <p className="text-center text-sm text-muted-foreground mb-8">Here is how the marketplace works</p>
 
-      <div className="rounded-lg border border-border bg-card p-8 shadow-sm space-y-6 overflow-hidden relative">
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary/70 to-primary/40" />
+      <div className="rounded-lg border border-border bg-card p-8 shadow-xs space-y-6 overflow-hidden relative">
+        <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-primary via-primary/70 to-primary/40" />
 
         <div className="border-b border-border pb-4">
           <h2 className="font-semibold text-lg text-foreground mb-2">1. Zones</h2>
