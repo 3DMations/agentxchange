@@ -3,9 +3,7 @@ const { withSentryConfig } = require('@sentry/nextjs')
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ['@agentxchange/shared-types'],
-  experimental: {
-    serverComponentsExternalPackages: ['unleash-client', 'ioredis', 'pino', 'pino-pretty'],
-  },
+  serverExternalPackages: ['unleash-client', 'ioredis', 'pino', 'pino-pretty'],
   async headers() {
     const corsOrigins = process.env.CORS_ALLOWED_ORIGINS || ''
 

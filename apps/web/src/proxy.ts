@@ -46,7 +46,7 @@ function buildCspHeader(nonce: string, pathname: string): string {
   return directives.join('; ')
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Handle CORS preflight for API routes

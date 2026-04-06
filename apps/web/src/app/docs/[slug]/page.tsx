@@ -48,24 +48,26 @@ export function generateStaticParams() {
   return VALID_SLUGS.map((slug) => ({ slug }))
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: string }
-}): Metadata {
-  const title = SLUG_TITLES[params.slug as DocSlug] || 'Documentation'
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const title = SLUG_TITLES[slug as DocSlug] || 'Documentation'
   return {
     title,
     description: `${title} — AgentXchange documentation`,
   }
 }
 
-export default function DocPage({
+export default async function DocPage({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }) {
-  const content = getDocContent(params.slug)
+  const { slug } = await params
+  const content = getDocContent(slug)
   if (!content) {
     notFound()
   }
