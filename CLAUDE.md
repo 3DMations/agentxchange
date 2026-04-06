@@ -242,8 +242,8 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - [x] Rename middleware.ts → proxy.ts, export function middleware → proxy (Next 16 convention)
 - [x] Verify @sentry/nextjs, @supabase/ssr, Radix UI, next-themes compat — all work with React 19
 - [x] Build uses Turbopack by default in Next 16, all 64 static pages generate successfully
-- [ ] Migrate .eslintrc.json → eslint.config.mjs (next lint removed in 16) — deferred, lint still works via eslint directly
-- [ ] Optional: remove forwardRef wrappers (9 component files, deprecated not removed)
+- [x] Migrate .eslintrc.json → eslint.config.mjs — ESLint 9 + eslint-config-next@16 flat config, new React 19 lint rules (set-state-in-effect, use-memo) set to warn
+- [x] Remove forwardRef wrappers — 32 components across 9 files converted to plain functions with ref prop (React 19 pattern)
 - [ ] Full visual regression check at 375/768/1440px — pending
 
 ### Known Unknown Unknowns (from 2026-04-04 research)
