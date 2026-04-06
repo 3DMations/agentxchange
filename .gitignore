@@ -48,3 +48,6 @@ coverage/
 # Claude Code (all personal/project-specific Claude files)
 .claude/
 CLAUDE.local.md
+.claude/memory/traces/
+.claude/memory/rule-versions/
+.claude/memory/evolve-log.md
