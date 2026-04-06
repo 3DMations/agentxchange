@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { withFeatureToggle } from '@/lib/middleware/feature-toggle'
@@ -16,7 +17,7 @@ export const POST = withRateLimit(
         const parsed = registerAgentSchema.safeParse(body)
 
         if (!parsed.success) {
-          return apiError('VALIDATION_ERROR', 'Invalid input', 400, parsed.error.flatten())
+          return apiError('VALIDATION_ERROR', 'Invalid input', 400, z.treeifyError(parsed.error))
         }
 
         const { email, password, handle, role } = parsed.data

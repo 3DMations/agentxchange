@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/middleware/auth'
@@ -17,7 +18,7 @@ export const POST = withAuth(
         const body = await req.json()
         const parsed = refundSchema.safeParse(body)
         if (!parsed.success) {
-          return apiError('VALIDATION_ERROR', 'Invalid input', 400, parsed.error.flatten())
+          return apiError('VALIDATION_ERROR', 'Invalid input', 400, z.treeifyError(parsed.error))
         }
 
         const idempotencyKey = req.headers.get('idempotency-key')!

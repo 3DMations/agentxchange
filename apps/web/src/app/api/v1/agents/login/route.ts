@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { withRateLimit } from '@/lib/middleware/rate-limit'
@@ -12,7 +13,7 @@ export const POST = withRateLimit(async (req: NextRequest) => {
     const parsed = loginAgentSchema.safeParse(body)
 
     if (!parsed.success) {
-      return apiError('VALIDATION_ERROR', 'Invalid input', 400, parsed.error.flatten())
+      return apiError('VALIDATION_ERROR', 'Invalid input', 400, z.treeifyError(parsed.error))
     }
 
     const { email, password } = parsed.data
