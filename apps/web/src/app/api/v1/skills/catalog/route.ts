@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
@@ -14,7 +15,7 @@ export const GET = withRateLimit(async (req: NextRequest) => {
     const url = new URL(req.url)
     const parsed = searchSkillsSchema.safeParse(Object.fromEntries(url.searchParams))
     if (!parsed.success) {
-      return apiError('VALIDATION_ERROR', 'Invalid query parameters', 400, parsed.error.flatten())
+      return apiError('VALIDATION_ERROR', 'Invalid query parameters', 400, z.treeifyError(parsed.error))
     }
 
     const requestingAgentZone = req.headers.get('x-agent-zone') || 'starter'

@@ -220,17 +220,20 @@ Routes use composable HOFs: `withAuth(withRateLimit(withFeatureToggle('name', ha
 - Note: @types/node already at ^22.x latest, no change needed
 
 ### Sprint 13: Medium Dependency Upgrades (MEDIUM risk)
-- [ ] Zod 3 → 4: `z.record()` needs 2 args (3 lines), `.flatten()` → `z.treeifyError()` (31 route files), `.refine({message})` → `{error}` (2 files), string error args (4 lines). Run `npx @zod/codemod --transform v3-to-v4` first.
-- [ ] @supabase/ssr → evaluate 1.x if available
-- [ ] Add dependabot.yml blocking major version PRs globally
+- [x] Zod 3 → 4: codemod + manual fixes — 33 files changed (31 `.flatten()` → `z.treeifyError()`, 3 `z.record()` 2-arg, 2 `.refine({error})`, 1 `.errors` → `.issues`)
+- [x] @supabase/ssr → evaluated: no 1.x exists, already on latest 0.10.0
+- [x] Add dependabot.yml blocking major version PRs globally — wildcard `*` ignore rule
+- [x] Fix SDK vitest.config.ts — exclude `dist/` from test discovery (was causing 2 false failures)
 
-### Sprint 14a: Tailwind 3 → 4 (HIGH risk, ~3-4 hours)
-- [ ] Run `@tailwindcss/upgrade` codemod (auto-fixes ~90%: config→CSS, shadow/outline/gradient renames)
-- [ ] Swap tailwindcss-animate → tw-animate-css (4-5 component files, manual)
-- [ ] Add cursor-pointer to button base styles (button.tsx)
-- [ ] Fix bare `border` color in toast.tsx, dialog.tsx (add explicit border-border)
-- [ ] Remove autoprefixer dependency (built into TW4)
-- [ ] Visual regression check at 375/768/1440px
+### Sprint 14a: Tailwind 3 → 4 (HIGH risk)
+- [x] Run `@tailwindcss/upgrade` codemod — migrated config→CSS @theme, shadow renames (sm→xs, default→sm), postcss→@tailwindcss/postcss, @tailwind directives→@import, scrollbar-none→@utility, bg-gradient→bg-linear, 37 files changed
+- [x] Swap tailwindcss-animate → tw-animate-css 1.4.0 (CSS import instead of JS plugin)
+- [x] Add cursor-pointer to button base styles (button.tsx) — TW4 buttons default to cursor:auto
+- [x] Fix border color default — compat block uses var(--color-border) instead of gray-200 fallback
+- [x] Remove autoprefixer dependency (built into TW4, replaced by @tailwindcss/postcss)
+- [x] Fix codemod false positive: reverted 7 CVA variant "outline"→"outline-solid" renames (not CSS classes)
+- [x] Delete tailwind.config.ts — theme now in globals.css @theme block
+- [ ] Visual regression check at 375/768/1440px — pending
 
 ### Sprint 14b: Next.js 14 → 15 → 16 + React 18 → 19 (HIGHEST risk, ~8-12 hours)
 **Phase 1 (Next 15 + React 19):**
@@ -268,11 +271,15 @@ Sprint 9 (Docs) → Sprint 10 (Test Infra) ��� Sprint 11 (Coverage)
 
 ## Memory System
 Read .claude/rules/memory-system.md for full operating rules.
-At session start: show memory capacity display.
+At session start: show memory capacity display (Section 1.2 of the prompt).
 After every task: self-assess for mistakes or new insights. If you find one, ask:
 "I noticed [description]. Should I log this to memory?" Wait for confirmation.
 Before every task: read .claude/memory/summaries/gotchas.md. Read domain-specific
 summary files only when relevant to the current task.
-When you encounter a known problem: search .claude/memory/ before attempting a fix.
+When you encounter a known problem: search .claude/memory/ AND .claude/memory/traces/
+before attempting a fix. Trace matches (error messages, stack traces) are often more
+diagnostic than title/tag matches.
+When modifying this file or any .claude/rules/ file: snapshot the previous version
+to .claude/memory/rule-versions/ first. Name: {filename}-{ISO-date}.md.
 Do NOT log learnings about the memory system itself — fix memory issues directly.
 If .claude/memory/ does not exist, inform the user and offer to run the bootstrap.

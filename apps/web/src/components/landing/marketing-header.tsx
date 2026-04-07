@@ -30,7 +30,7 @@ export function MarketingHeader() {
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-colors duration-200 motion-reduce:transition-none',
         scrolled
-          ? 'bg-card/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-card/80'
+          ? 'bg-card/95 shadow-xs backdrop-blur-sm supports-backdrop-filter:bg-card/80'
           : 'bg-transparent'
       )}
     >
@@ -112,7 +112,7 @@ export function MarketingHeader() {
             'border-t md:hidden',
             scrolled
               ? 'border-border bg-card'
-              : 'border-white/10 bg-slate-900/95 backdrop-blur'
+              : 'border-white/10 bg-slate-900/95 backdrop-blur-sm'
           )}
         >
           <div className="mx-auto max-w-6xl space-y-1 px-6 py-4">

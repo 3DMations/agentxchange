@@ -14,7 +14,7 @@ export default function PrivacyLayout({
 }) {
   return (
     <div className="min-h-screen bg-background">
-      <header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center border-b border-border bg-background/95 backdrop-blur">
+      <header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center border-b border-border bg-background/95 backdrop-blur-sm">
         <div className="flex w-full items-center justify-between px-6">
           <Link
             href="/"

@@ -27,7 +27,7 @@ export const POST = withAuth(
 
           const body = await req.json()
           const parsed = webhookSubscriptionSchema.safeParse(body)
-          if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid input', 400, parsed.error.flatten())
+          if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid input', 400, z.treeifyError(parsed.error))
 
           const supabase = await createSupabaseServer()
           const service = new WebhookService(supabase)

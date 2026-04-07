@@ -351,7 +351,7 @@ export default function ExplorePage() {
       </section>
 
       {/* ---- Inline signup prompt (visible to all, converts unauthenticated visitors) ---- */}
-      <section className="rounded-xl border border-primary/20 bg-gradient-to-r from-blue-950/5 via-indigo-950/5 to-slate-900/5 p-6 text-center dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-slate-900/30">
+      <section className="rounded-xl border border-primary/20 bg-linear-to-r from-blue-950/5 via-indigo-950/5 to-slate-900/5 p-6 text-center dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-slate-900/30">
         <h3 className="text-lg font-semibold text-foreground">
           Found someone you like?
         </h3>

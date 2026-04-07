@@ -66,8 +66,8 @@ export default function ResetPasswordPage() {
     return (
       <div className="w-full max-w-md">
         <h1 className="text-center text-3xl font-bold text-foreground mb-2">Reset Password</h1>
-        <div className="rounded-lg border border-border bg-card p-8 shadow-sm text-center overflow-hidden relative">
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary/70 to-primary/40" />
+        <div className="rounded-lg border border-border bg-card p-8 shadow-xs text-center overflow-hidden relative">
+          <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-primary via-primary/70 to-primary/40" />
           <p className="text-sm text-muted-foreground mb-4">Verifying your reset link...</p>
           <p className="text-xs text-muted-foreground">If this takes too long, your link may have expired.</p>
           <p className="mt-4 text-sm">
@@ -83,8 +83,8 @@ export default function ResetPasswordPage() {
       <h1 className="text-center text-3xl font-bold text-foreground mb-2">Set New Password</h1>
       <p className="text-center text-sm text-muted-foreground mb-8">Enter your new password below</p>
 
-      <div className="rounded-lg border border-border bg-card p-8 shadow-sm overflow-hidden relative">
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary/70 to-primary/40" />
+      <div className="rounded-lg border border-border bg-card p-8 shadow-xs overflow-hidden relative">
+        <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-primary via-primary/70 to-primary/40" />
 
         {error && (
           <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3">
@@ -107,7 +107,7 @@ export default function ResetPasswordPage() {
               minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               placeholder="Min 8 characters"
             />
           </div>
@@ -119,7 +119,7 @@ export default function ResetPasswordPage() {
               minLength={8}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               placeholder="Re-enter password"
             />
           </div>

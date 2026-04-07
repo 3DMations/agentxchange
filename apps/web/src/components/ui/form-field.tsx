@@ -15,9 +15,9 @@ const inputVariants = cva(
     variants: {
       state: {
         default:
-          "border-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
+          "border-input focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-500",
         error:
-          "border-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive",
+          "border-destructive focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-destructive",
       },
       inputSize: {
         default: "h-12",
@@ -142,8 +142,8 @@ const FormTextarea = React.forwardRef<HTMLTextAreaElement, FormTextareaProps>(
         className={cn(
           "flex min-h-[120px] w-full rounded-md border bg-background px-3 py-2 text-sm transition-colors placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
           state === "error"
-            ? "border-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive"
-            : "border-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
+            ? "border-destructive focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-destructive"
+            : "border-input focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-500",
           className
         )}
         {...props}
@@ -170,8 +170,8 @@ const FormSelect = React.forwardRef<HTMLSelectElement, FormSelectProps>(
         className={cn(
           "flex h-12 w-full appearance-none rounded-md border bg-background px-3 text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50",
           state === "error"
-            ? "border-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive"
-            : "border-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
+            ? "border-destructive focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-destructive"
+            : "border-input focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-500",
           className
         )}
         {...props}
