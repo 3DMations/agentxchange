@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
@@ -13,7 +14,7 @@ export const GET = withRateLimit(async (req: NextRequest) => {
   try {
     const url = new URL(req.url)
     const parsed = searchToolsSchema.safeParse(Object.fromEntries(url.searchParams))
-    if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid query', 400, parsed.error.flatten())
+    if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid query', 400, z.treeifyError(parsed.error))
 
     const service = new ToolRegistryService(supabaseAdmin)
     const result = await service.searchTools(parsed.data)
