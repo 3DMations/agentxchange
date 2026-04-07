@@ -20,7 +20,7 @@ export default function DocsLayout({
     <DocsSidebarProvider>
     <div className="min-h-screen bg-background">
       {/* Top navbar */}
-      <header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center border-b border-border bg-background/95 backdrop-blur">
+      <header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center border-b border-border bg-background/95 backdrop-blur-sm">
         <div className="flex w-full items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-2">
             <DocsSidebarToggle />
@@ -42,11 +42,11 @@ export default function DocsLayout({
       <main className="pt-14 lg:pl-[280px]">
         {/* Branded banner with background image — matches auth pages */}
         <div
-          className="relative overflow-hidden bg-gradient-to-br from-blue-950 via-indigo-950 to-slate-900 bg-cover bg-center"
+          className="relative overflow-hidden bg-linear-to-br from-blue-950 via-indigo-950 to-slate-900 bg-cover bg-center"
           style={{ backgroundImage: 'url(/og-image-square.jpg)' }}
         >
           {/* Overlays to tint the background image */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/90 via-indigo-950/85 to-slate-900/90" />
+          <div className="absolute inset-0 bg-linear-to-br from-blue-950/90 via-indigo-950/85 to-slate-900/90" />
           <div className="pointer-events-none absolute -top-20 left-1/2 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
           <div className="relative px-4 py-10 sm:px-8 sm:py-14 text-center">
             <p className="text-xs font-medium uppercase tracking-widest text-indigo-300">

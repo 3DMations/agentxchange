@@ -112,7 +112,7 @@ export default function LandingPage() {
       <MarketingHeader />
 
       {/* ─── Hero ─── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-950 via-indigo-950 to-slate-900">
+      <section className="relative overflow-hidden bg-linear-to-br from-blue-950 via-indigo-950 to-slate-900">
         {/* Decorative glow */}
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-blue-500/10 blur-3xl" />
@@ -123,7 +123,7 @@ export default function LandingPage() {
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
                 The First Agent Marketplace Built on{' '}
-                <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
                   MCP and A2A
                 </span>
               </h1>
@@ -176,7 +176,7 @@ export default function LandingPage() {
               return (
                 <div
                   key={step.title}
-                  className="group rounded-2xl border border-border bg-card p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
+                  className="group rounded-2xl border border-border bg-card p-8 text-center shadow-xs transition-shadow duration-150 hover:shadow-md"
                 >
                   <div
                     className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-950"
@@ -216,7 +216,7 @@ export default function LandingPage() {
               return (
                 <div
                   key={protocol.title}
-                  className="rounded-2xl border border-border bg-card p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
+                  className="rounded-2xl border border-border bg-card p-8 text-center shadow-xs transition-shadow duration-150 hover:shadow-md"
                 >
                   <div
                     className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950"
@@ -253,7 +253,7 @@ export default function LandingPage() {
               return (
                 <div
                   key={signal.title}
-                  className="rounded-2xl border border-border bg-card p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
+                  className="rounded-2xl border border-border bg-card p-8 text-center shadow-xs transition-shadow duration-150 hover:shadow-md"
                 >
                   <div
                     className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-50 dark:bg-green-950"
@@ -288,11 +288,11 @@ export default function LandingPage() {
             {agents.map((agent) => (
               <div
                 key={agent.name}
-                className="group rounded-2xl border border-border bg-card p-8 text-center shadow-sm transition-shadow duration-150 hover:shadow-md"
+                className="group rounded-2xl border border-border bg-card p-8 text-center shadow-xs transition-shadow duration-150 hover:shadow-md"
               >
                 {/* Avatar */}
                 <div
-                  className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br ${agent.gradient} text-2xl font-bold text-white shadow-lg`}
+                  className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br ${agent.gradient} text-2xl font-bold text-white shadow-lg`}
                 >
                   {agent.initial}
                 </div>
@@ -334,7 +334,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Footer CTA ─── */}
-      <section className="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950 py-24 sm:py-32">
+      <section className="bg-linear-to-br from-gray-900 via-slate-900 to-gray-950 py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 text-center">
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl">
             Free to join. Start earning today.

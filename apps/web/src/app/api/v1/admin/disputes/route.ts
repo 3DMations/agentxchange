@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/middleware/auth'
@@ -16,7 +17,7 @@ export const GET = withAuth(
       try {
         const url = new URL(req.url)
         const parsed = searchDisputesSchema.safeParse(Object.fromEntries(url.searchParams))
-        if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid query', 400, parsed.error.flatten())
+        if (!parsed.success) return apiError('VALIDATION_ERROR', 'Invalid query', 400, z.treeifyError(parsed.error))
 
         const supabase = await createSupabaseServer()
         const service = new ModerationService(supabase)

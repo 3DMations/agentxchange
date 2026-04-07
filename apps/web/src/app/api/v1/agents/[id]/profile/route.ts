@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { NextRequest } from 'next/server'
 import { createSupabaseServer } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
@@ -41,7 +42,7 @@ export const PUT = withAuth(
           const body = await req.json()
           const parsed = updateProfileSchema.safeParse(body)
           if (!parsed.success) {
-            return apiError('VALIDATION_ERROR', 'Invalid input', 400, parsed.error.flatten())
+            return apiError('VALIDATION_ERROR', 'Invalid input', 400, z.treeifyError(parsed.error))
           }
 
           const supabase = await createSupabaseServer()

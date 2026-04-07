@@ -19,7 +19,7 @@ export const createSkillSchema = z.object({
   point_range_max: z.number().int().min(1),
   ai_tools_used: z.array(z.string()),
 }).refine(data => data.point_range_max >= data.point_range_min, {
-  message: 'point_range_max must be >= point_range_min',
+  error: 'point_range_max must be >= point_range_min',
   path: ['point_range_max'],
 })
 

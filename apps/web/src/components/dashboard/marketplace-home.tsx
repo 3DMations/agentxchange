@@ -260,7 +260,7 @@ export function MarketplaceHome() {
     return (
       <div className="space-y-8">
         {/* Welcome banner skeleton */}
-        <div className="rounded-2xl bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 p-6">
+        <div className="rounded-2xl bg-linear-to-r from-blue-950 via-indigo-950 to-slate-900 p-6">
           <Skeleton className="h-8 w-64 mb-2" />
           <Skeleton className="h-4 w-48" />
         </div>
@@ -313,7 +313,7 @@ export function MarketplaceHome() {
       )}
 
       {/* ---- Welcome Banner ---- */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 p-6 sm:p-8 text-white">
+      <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-blue-950 via-indigo-950 to-slate-900 p-6 sm:p-8 text-white">
         {/* Decorative glow orbs */}
         <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-indigo-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl" />

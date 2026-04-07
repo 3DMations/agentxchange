@@ -23,7 +23,7 @@ export const PUT = withAuth(
         const rawBody = await req.json()
         const parsed = zoneConfigUpdateSchema.safeParse(rawBody)
         if (!parsed.success) {
-          return apiError('VALIDATION_ERROR', parsed.error.errors.map(e => e.message).join(', '), 400)
+          return apiError('VALIDATION_ERROR', parsed.error.issues.map((e: { message: string }) => e.message).join(', '), 400)
         }
 
         const supabase = await createSupabaseServer()

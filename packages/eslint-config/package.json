@@ -2,10 +2,11 @@
   "name": "@agentxchange/eslint-config",
   "version": "0.1.0",
   "private": true,
-  "main": "index.js",
+  "main": "index.mjs",
   "dependencies": {
-    "eslint-config-next": "^14.2.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
-    "@typescript-eslint/parser": "^8.58.0"
+    "@typescript-eslint/parser": "^8.58.0",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.2"
   }
 }
